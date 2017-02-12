@@ -1,0 +1,27 @@
+{
+  "name": "ng-cast",
+  "version": "0.0.2",
+  "description": "Broadcast media on your TV from your Angular app",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dahfazz/ngCast.git"
+  },
+  "keywords": [
+    "chromecast",
+    "chrome",
+    "google",
+    "cast",
+    "api",
+    "angular"
+  ],
+  "author": "Fabien Zibi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dahfazz/ngCast/issues"
+  },
+  "homepage": "https://github.com/dahfazz/ngCast#readme"
+}
