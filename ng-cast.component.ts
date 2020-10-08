@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { NgCastService } from './shared/ng-cast.service';
 
+let window: any;
+
 @Component({
   selector: 'ng-cast',
   templateUrl: './ng-cast.component.html',

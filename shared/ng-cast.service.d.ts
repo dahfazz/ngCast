@@ -11,7 +11,7 @@ export declare class NgCastService {
     onGCastApiAvailable(url: string, type: string): void;
     onInitSuccess: () => void;
     onError: (err: any) => void;
-    discoverDevices: () => Subject<{}>;
+    discoverDevices: () => Subject<unknown>;
     launchMedia: (media: any) => boolean;
     onMediaDiscovered: (media: any) => void;
     play: () => void;

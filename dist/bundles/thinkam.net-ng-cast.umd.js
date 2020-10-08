@@ -296,6 +296,7 @@
         return value;
     }
 
+    var window;
     exports.ɵa = /** @class */ (function () {
         function NgCastComponent(ngCastService) {
             this.ngCastService = ngCastService;
@@ -329,21 +330,25 @@
         })
     ], exports.ɵa);
 
+    var window$1;
+    var cast;
+    var chrome;
     exports.NgCastService = /** @class */ (function () {
         function NgCastService() {
+            var _this = this;
             this.status = {
                 casting: false
             };
-            this.onInitSuccess = function (e) {
+            this.onInitSuccess = function () {
                 console.log('GCast initialization success');
             };
             this.onError = function (err) {
                 console.log('GCast initialization failed', err);
             };
             this.discoverDevices = function () {
-                var self = this;
+                var self = _this;
                 var subj = new rxjs.Subject();
-                this.cast.requestSession(function (s) {
+                _this.cast.requestSession(function (s) {
                     self.session = s;
                     self.setCasting(true);
                     subj.next('CONNECTED');
@@ -360,27 +365,27 @@
                 return subj;
             };
             this.launchMedia = function (media) {
-                var mediaInfo = new this.cast.media.MediaInfo(media);
-                var request = new this.cast.media.LoadRequest(mediaInfo);
-                console.log('launch media with session', this.session);
-                if (!this.session) {
-                    window.open(media);
+                var mediaInfo = new _this.cast.media.MediaInfo(media);
+                var request = new _this.cast.media.LoadRequest(mediaInfo);
+                console.log('launch media with session', _this.session);
+                if (!_this.session) {
+                    window$1.open(media);
                     return false;
                 }
-                this.session.loadMedia(request, this.onMediaDiscovered.bind(this, 'loadMedia'), this.onMediaError);
+                _this.session.loadMedia(request, _this.onMediaDiscovered.bind(_this, 'loadMedia'), _this.onMediaError);
                 return true;
             };
-            this.onMediaDiscovered = function (how, media) {
-                this.currentMedia = media;
+            this.onMediaDiscovered = function (media) {
+                _this.currentMedia = media;
             };
             this.play = function () {
-                this.currentMedia.play(null);
+                _this.currentMedia.play(null);
             };
             this.pause = function () {
-                this.currentMedia.pause(null);
+                _this.currentMedia.pause(null);
             };
             this.stop = function () {
-                this.currentMedia.stop(null);
+                _this.currentMedia.stop(null);
             };
             this.onMediaError = function (err) {
                 console.error('Error launching media', err);
@@ -388,12 +393,38 @@
         }
         NgCastService.prototype.initializeCastApi = function () {
             var _this = this;
-            this.cast = window['chrome'].cast;
+            this.cast = window$1['chrome'].cast;
             var sessionRequest = new this.cast.SessionRequest(this.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID);
-            var apiConfig = new this.cast.ApiConfig(sessionRequest, function (s) { }, function (status) { if (status === _this.cast.ReceiverAvailability.AVAILABLE) { } });
+            var apiConfig = new this.cast.ApiConfig(sessionRequest, function () { }, function (status) { if (status === _this.cast.ReceiverAvailability.AVAILABLE) { } });
             var x = this.cast.initialize(apiConfig, this.onInitSuccess, this.onError);
         };
         ;
+        NgCastService.prototype.onGCastApiAvailable = function (url, type) {
+            window$1.__onGCastApiAvailable = function (isAvailable) {
+                if (!isAvailable) {
+                    return false;
+                }
+                var castContext = cast.framework.CastContext.getInstance();
+                castContext.setOptions({
+                    autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED,
+                    receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID
+                });
+                var stateChanged = cast.framework.CastContextEventType.CAST_STATE_CHANGED;
+                castContext.addEventListener(stateChanged, function () {
+                    var castSession = castContext.getCurrentSession();
+                    var media = new chrome.cast.media.MediaInfo(url, type);
+                    var request = new chrome.cast.media.LoadRequest(media);
+                    castSession && castSession
+                        .loadMedia(request)
+                        .then(function () {
+                        console.log('Success');
+                    })
+                        .catch(function (error) {
+                        console.log('Error: ' + error);
+                    });
+                });
+            };
+        };
         NgCastService.prototype.setCasting = function (value) {
             this.status.casting = value;
         };
