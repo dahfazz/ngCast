@@ -374,6 +374,7 @@
                 return true;
             };
             this.onMediaDiscovered = function (url, type) {
+                _this.chrome = _this.window['chrome'];
                 var media = new _this.chrome.cast.media.MediaInfo(url, type);
                 _this.currentMedia = media;
             };

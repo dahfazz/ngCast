@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/ng-packagr/package.schema.json",
   "name": "@thinkam.net/ng-cast",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "ngPackage": {
     "lib": {
       "entryFile": "index.ts"

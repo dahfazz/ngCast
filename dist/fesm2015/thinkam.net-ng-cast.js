@@ -79,6 +79,7 @@ let NgCastService = class NgCastService {
             return true;
         };
         this.onMediaDiscovered = (url, type) => {
+            this.chrome = this.window['chrome'];
             let media = new this.chrome.cast.media.MediaInfo(url, type);
             this.currentMedia = media;
         };
