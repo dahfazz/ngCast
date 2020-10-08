@@ -10,7 +10,6 @@ export declare class NgCastService {
     };
     constructor();
     initializeCastApi(): void;
-    onGCastApiAvailable(url: string, type: string): void;
     onInitSuccess: () => void;
     onError: (err: any) => void;
     discoverDevices: () => Subject<{}>;
