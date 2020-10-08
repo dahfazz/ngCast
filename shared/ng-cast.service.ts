@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 import { Subject } from 'rxjs';
 
-let window: any;
 let cast: any;
 let chrome: any;
 
@@ -11,6 +10,7 @@ export class NgCastService {
   private cast: any;
   private session: any;
   private currentMedia: any;
+  private window: any = window;
   public status = {
     casting: false
   };
@@ -18,7 +18,7 @@ export class NgCastService {
   constructor() {}
 
   initializeCastApi() {
-    this.cast = window['chrome'].cast;
+    this.cast = this.window['chrome'].cast;
     let sessionRequest = new this.cast.SessionRequest(this.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID);
     let apiConfig = new this.cast.ApiConfig(sessionRequest,
       () => { },
@@ -28,7 +28,7 @@ export class NgCastService {
   };
 
   onGCastApiAvailable(url: string, type: string): void {
-    window.__onGCastApiAvailable = function(isAvailable: boolean){
+    this.window.__onGCastApiAvailable = (isAvailable: boolean) => {
       if(!isAvailable){
           return false;
       }

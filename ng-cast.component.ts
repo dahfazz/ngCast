@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 
 import { NgCastService } from './shared/ng-cast.service';
 
-let window: any;
-
 @Component({
   selector: 'ng-cast',
   templateUrl: './ng-cast.component.html',
@@ -17,6 +15,8 @@ export class NgCastComponent implements OnInit {
     private ngCastService: NgCastService
   ) { }
 
+  private window: any = window;
+
   ngOnInit() {
 
     let script = window['document'].createElement('script');
@@ -25,7 +25,7 @@ export class NgCastComponent implements OnInit {
     window['document'].body.appendChild(script);
 
     let ngCastService = this.ngCastService;
-    window['__onGCastApiAvailable'] = function (isAvailable: any) {
+    this.window['__onGCastApiAvailable'] = function (isAvailable: any) {
       if (isAvailable) {
         ngCastService.initializeCastApi();
       }

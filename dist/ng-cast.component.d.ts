@@ -4,6 +4,7 @@ export declare class NgCastComponent implements OnInit {
     private ngCastService;
     castingStatus: any;
     constructor(ngCastService: NgCastService);
+    private window;
     ngOnInit(): void;
     openSession(): void;
     closeSession(): void;

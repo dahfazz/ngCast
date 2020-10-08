@@ -296,10 +296,10 @@
         return value;
     }
 
-    var window;
     exports.ɵa = /** @class */ (function () {
         function NgCastComponent(ngCastService) {
             this.ngCastService = ngCastService;
+            this.window = window;
         }
         NgCastComponent.prototype.ngOnInit = function () {
             var script = window['document'].createElement('script');
@@ -307,7 +307,7 @@
             script.setAttribute('src', 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
             window['document'].body.appendChild(script);
             var ngCastService = this.ngCastService;
-            window['__onGCastApiAvailable'] = function (isAvailable) {
+            this.window['__onGCastApiAvailable'] = function (isAvailable) {
                 if (isAvailable) {
                     ngCastService.initializeCastApi();
                 }
@@ -330,12 +330,12 @@
         })
     ], exports.ɵa);
 
-    var window$1;
     var cast;
     var chrome;
     exports.NgCastService = /** @class */ (function () {
         function NgCastService() {
             var _this = this;
+            this.window = window;
             this.status = {
                 casting: false
             };
@@ -369,7 +369,7 @@
                 var request = new _this.cast.media.LoadRequest(mediaInfo);
                 console.log('launch media with session', _this.session);
                 if (!_this.session) {
-                    window$1.open(media);
+                    window.open(media);
                     return false;
                 }
                 _this.session.loadMedia(request, _this.onMediaDiscovered.bind(_this, 'loadMedia'), _this.onMediaError);
@@ -393,14 +393,14 @@
         }
         NgCastService.prototype.initializeCastApi = function () {
             var _this = this;
-            this.cast = window$1['chrome'].cast;
+            this.cast = this.window['chrome'].cast;
             var sessionRequest = new this.cast.SessionRequest(this.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID);
             var apiConfig = new this.cast.ApiConfig(sessionRequest, function () { }, function (status) { if (status === _this.cast.ReceiverAvailability.AVAILABLE) { } });
             var x = this.cast.initialize(apiConfig, this.onInitSuccess, this.onError);
         };
         ;
         NgCastService.prototype.onGCastApiAvailable = function (url, type) {
-            window$1.__onGCastApiAvailable = function (isAvailable) {
+            this.window.__onGCastApiAvailable = function (isAvailable) {
                 if (!isAvailable) {
                     return false;
                 }

@@ -3,6 +3,7 @@ export declare class NgCastService {
     private cast;
     private session;
     private currentMedia;
+    private window;
     status: {
         casting: boolean;
     };

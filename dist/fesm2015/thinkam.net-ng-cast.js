@@ -3,10 +3,10 @@ import { Component, Injectable, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 
-let window;
 let NgCastComponent = class NgCastComponent {
     constructor(ngCastService) {
         this.ngCastService = ngCastService;
+        this.window = window;
     }
     ngOnInit() {
         let script = window['document'].createElement('script');
@@ -14,7 +14,7 @@ let NgCastComponent = class NgCastComponent {
         script.setAttribute('src', 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
         window['document'].body.appendChild(script);
         let ngCastService = this.ngCastService;
-        window['__onGCastApiAvailable'] = function (isAvailable) {
+        this.window['__onGCastApiAvailable'] = function (isAvailable) {
             if (isAvailable) {
                 ngCastService.initializeCastApi();
             }
@@ -36,11 +36,11 @@ NgCastComponent = __decorate([
     })
 ], NgCastComponent);
 
-let window$1;
 let cast;
 let chrome;
 let NgCastService = class NgCastService {
     constructor() {
+        this.window = window;
         this.status = {
             casting: false
         };
@@ -74,7 +74,7 @@ let NgCastService = class NgCastService {
             let request = new this.cast.media.LoadRequest(mediaInfo);
             console.log('launch media with session', this.session);
             if (!this.session) {
-                window$1.open(media);
+                window.open(media);
                 return false;
             }
             this.session.loadMedia(request, this.onMediaDiscovered.bind(this, 'loadMedia'), this.onMediaError);
@@ -97,14 +97,14 @@ let NgCastService = class NgCastService {
         };
     }
     initializeCastApi() {
-        this.cast = window$1['chrome'].cast;
+        this.cast = this.window['chrome'].cast;
         let sessionRequest = new this.cast.SessionRequest(this.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID);
         let apiConfig = new this.cast.ApiConfig(sessionRequest, () => { }, (status) => { if (status === this.cast.ReceiverAvailability.AVAILABLE) { } });
         let x = this.cast.initialize(apiConfig, this.onInitSuccess, this.onError);
     }
     ;
     onGCastApiAvailable(url, type) {
-        window$1.__onGCastApiAvailable = function (isAvailable) {
+        this.window.__onGCastApiAvailable = (isAvailable) => {
             if (!isAvailable) {
                 return false;
             }
