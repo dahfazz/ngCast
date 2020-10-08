@@ -47,4 +47,4 @@ You can modify cast button appearance editing ng-cast/ng-cast.component.scss
 *If you use CSS files in your project, you just need to change ng-cast.component.scss file extension*
 
 ## Online demo
-https://gif-caster.firebaseapp.com/
+TODO
