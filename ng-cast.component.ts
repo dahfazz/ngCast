@@ -10,7 +10,7 @@ import { NgCastService } from './shared/ng-cast.service';
   ]
 })
 export class NgCastComponent implements OnInit {
-  castingStatus: Object;
+  castingStatus: any;
   constructor(
     private ngCastService: NgCastService
   ) { }
@@ -23,7 +23,7 @@ export class NgCastComponent implements OnInit {
     window['document'].body.appendChild(script);
 
     let ngCastService = this.ngCastService;
-    window['__onGCastApiAvailable'] = function (isAvailable) {
+    window['__onGCastApiAvailable'] = function (isAvailable: any) {
       if (isAvailable) {
         ngCastService.initializeCastApi();
       }

@@ -2,17 +2,8 @@
   "$schema": "./node_modules/ng-packagr/package.schema.json",
   "name": "@thinkam.net/ng-cast",
   "version": "0.0.13",
-  "ngPackage": {
-    "lib": {
-      "entryFile": "index.ts"
-    }
-  },
   "description": "Broadcast media on your TV from your Angular app",
-  "main": "index.ts",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "ng-packagr -p package.json"
-  },
+  "main": "bundles/thinkam.net-ng-cast.umd.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ThinkAM/ngCast.git"
@@ -31,15 +22,14 @@
     "url": "https://github.com/ThinkAM/ngCast/issues"
   },
   "homepage": "https://github.com/ThinkAM/ngCast#readme",
-  "devDependencies": {
-    "@angular-devkit/build-angular": "^0.1001.5",
-    "@angular/cli": "^8.3.29",
-    "@angular/common": "^8.2.5",
-    "@angular/compiler": "^8.2.14",
-    "@angular/compiler-cli": "^8.2.14",
-    "@angular/core": "^8.2.5",
-    "ng-packagr": "^10.1.2",
-    "typescript": "^3.4.5"
+  "dependencies": {
+    "tslib": "^1.9.0"
   },
-  "dependencies": {}
+  "module": "fesm2015/thinkam.net-ng-cast.js",
+  "es2015": "fesm2015/thinkam.net-ng-cast.js",
+  "esm2015": "esm2015/thinkam.net-ng-cast.js",
+  "fesm2015": "fesm2015/thinkam.net-ng-cast.js",
+  "typings": "thinkam.net-ng-cast.d.ts",
+  "metadata": "thinkam.net-ng-cast.metadata.json",
+  "sideEffects": false
 }
