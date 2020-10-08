@@ -330,8 +330,6 @@
         })
     ], exports.ɵa);
 
-    var cast;
-    var chrome;
     exports.NgCastService = /** @class */ (function () {
         function NgCastService() {
             var _this = this;
@@ -400,20 +398,23 @@
         };
         ;
         NgCastService.prototype.onGCastApiAvailable = function (url, type) {
+            var _this = this;
             this.window.__onGCastApiAvailable = function (isAvailable) {
                 if (!isAvailable) {
                     return false;
                 }
-                var castContext = cast.framework.CastContext.getInstance();
+                _this.cast = _this.window['chrome'].cast;
+                _this.chrome = _this.window['chrome'];
+                var castContext = _this.cast.framework.CastContext.getInstance();
                 castContext.setOptions({
-                    autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED,
-                    receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID
+                    autoJoinPolicy: _this.chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED,
+                    receiverApplicationId: _this.chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID
                 });
-                var stateChanged = cast.framework.CastContextEventType.CAST_STATE_CHANGED;
+                var stateChanged = _this.cast.framework.CastContextEventType.CAST_STATE_CHANGED;
                 castContext.addEventListener(stateChanged, function () {
                     var castSession = castContext.getCurrentSession();
-                    var media = new chrome.cast.media.MediaInfo(url, type);
-                    var request = new chrome.cast.media.LoadRequest(media);
+                    var media = new _this.chrome.cast.media.MediaInfo(url, type);
+                    var request = new _this.chrome.cast.media.LoadRequest(media);
                     castSession && castSession
                         .loadMedia(request)
                         .then(function () {

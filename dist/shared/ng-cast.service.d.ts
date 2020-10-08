@@ -1,6 +1,7 @@
 import { Subject } from 'rxjs';
 export declare class NgCastService {
     private cast;
+    private chrome;
     private session;
     private currentMedia;
     private window;

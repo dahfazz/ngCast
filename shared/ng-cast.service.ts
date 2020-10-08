@@ -2,12 +2,10 @@ import { Injectable } from '@angular/core';
 
 import { Subject } from 'rxjs';
 
-let cast: any;
-let chrome: any;
-
 @Injectable()
 export class NgCastService {
   private cast: any;
+  private chrome: any;
   private session: any;
   private currentMedia: any;
   private window: any = window;
@@ -32,19 +30,22 @@ export class NgCastService {
       if(!isAvailable){
           return false;
       }
-  
-      var castContext = cast.framework.CastContext.getInstance();
+      
+      this.cast = this.window['chrome'].cast;
+      this.chrome = this.window['chrome'];
+
+      var castContext = this.cast.framework.CastContext.getInstance();
   
       castContext.setOptions({
-          autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED,
-          receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID
+          autoJoinPolicy: this.chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED,
+          receiverApplicationId: this.chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID
       });
   
-      var stateChanged = cast.framework.CastContextEventType.CAST_STATE_CHANGED;
+      var stateChanged = this.cast.framework.CastContextEventType.CAST_STATE_CHANGED;
       castContext.addEventListener(stateChanged, () => {
           var castSession = castContext.getCurrentSession();
-          var media = new chrome.cast.media.MediaInfo(url, type);
-          var request = new chrome.cast.media.LoadRequest(media);
+          var media = new this.chrome.cast.media.MediaInfo(url, type);
+          var request = new this.chrome.cast.media.LoadRequest(media);
   
           castSession && castSession
               .loadMedia(request)
