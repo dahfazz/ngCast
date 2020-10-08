@@ -15,7 +15,7 @@ export declare class NgCastService {
     onError: (err: any) => void;
     discoverDevices: () => Subject<{}>;
     launchMedia: (media: any) => boolean;
-    onMediaDiscovered: (media: any) => void;
+    onMediaDiscovered: (url: string, type: string) => void;
     play: () => void;
     pause: () => void;
     stop: () => void;

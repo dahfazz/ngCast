@@ -99,8 +99,40 @@ export class NgCastService {
     return true;
   };
 
-  onMediaDiscovered = (media: any) => {
-    this.currentMedia = media;
+  onMediaDiscovered = (url: string, type: string) => {
+    if (this.window.__onGCastApiAvailable) {
+      this.cast = this.window['chrome'].cast;
+      this.chrome = this.window['chrome'];
+
+      var castContext = this.cast.framework.CastContext.getInstance();
+  
+      castContext.setOptions({
+          autoJoinPolicy: this.chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED,
+          receiverApplicationId: this.chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID
+      });
+
+      var stateChanged = this.cast.framework.CastContextEventType.CAST_STATE_CHANGED;
+        castContext.addEventListener(stateChanged, () => {
+            var castSession = castContext.getCurrentSession();
+            var media = new this.chrome.cast.media.MediaInfo(url, type);
+            var request = new this.chrome.cast.media.LoadRequest(media);
+    
+            castSession && castSession
+                .loadMedia(request)
+                .then(() => {
+                    console.log('Success');
+                })
+                .catch((error: any) => {
+                    console.log('Error: ' + error);
+                });
+
+            this.currentMedia = media;
+        });
+    } else {
+      setInterval(() => {
+        this.onMediaDiscovered(url, type);
+      }, 500);
+    }    
   };
 
   play = () => {

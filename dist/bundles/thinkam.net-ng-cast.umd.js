@@ -373,8 +373,36 @@
                 _this.session.loadMedia(request, _this.onMediaDiscovered.bind(_this, 'loadMedia'), _this.onMediaError);
                 return true;
             };
-            this.onMediaDiscovered = function (media) {
-                _this.currentMedia = media;
+            this.onMediaDiscovered = function (url, type) {
+                if (_this.window.__onGCastApiAvailable) {
+                    _this.cast = _this.window['chrome'].cast;
+                    _this.chrome = _this.window['chrome'];
+                    var castContext = _this.cast.framework.CastContext.getInstance();
+                    castContext.setOptions({
+                        autoJoinPolicy: _this.chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED,
+                        receiverApplicationId: _this.chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID
+                    });
+                    var stateChanged = _this.cast.framework.CastContextEventType.CAST_STATE_CHANGED;
+                    castContext.addEventListener(stateChanged, function () {
+                        var castSession = castContext.getCurrentSession();
+                        var media = new _this.chrome.cast.media.MediaInfo(url, type);
+                        var request = new _this.chrome.cast.media.LoadRequest(media);
+                        castSession && castSession
+                            .loadMedia(request)
+                            .then(function () {
+                            console.log('Success');
+                        })
+                            .catch(function (error) {
+                            console.log('Error: ' + error);
+                        });
+                        _this.currentMedia = media;
+                    });
+                }
+                else {
+                    setInterval(function () {
+                        _this.onMediaDiscovered(url, type);
+                    }, 500);
+                }
             };
             this.play = function () {
                 _this.currentMedia.play(null);
