@@ -1725,20 +1725,22 @@ CastPlayer.prototype.initializeUI = function () {
  * Add video thumbnails div's to UI for media JSON contents
  */
 CastPlayer.prototype.addVideoThumbs = function () {
-  this.mediaContents = mediaJSON$1['categories'][0]['videos'];
-  var ni = document.getElementById('carousel');
-  var newdiv = null;
-  var divIdName = null;
-  for (var i = 0; i < this.mediaContents.length; i++) {
-    newdiv = document.createElement('div');
-    divIdName = 'thumb' + i + 'Div';
-    newdiv.setAttribute('id', divIdName);
-    newdiv.setAttribute('class', 'thumb');
-    newdiv.innerHTML =
-      '<img src="' + MEDIA_SOURCE_ROOT + this.mediaContents[i]['thumb'] +
-      '" class="thumbnail">';
-    newdiv.addEventListener('click', this.selectMedia.bind(this, i));
-    ni.appendChild(newdiv);
+  if (mediaJSON$1 && mediaJSON$1['categories'] && mediaJSON$1['categories'].length > 0) {
+    this.mediaContents = mediaJSON$1['categories'][0]['videos'];
+    var ni = document.getElementById('carousel');
+    var newdiv = null;
+    var divIdName = null;
+    for (var i = 0; i < this.mediaContents.length; i++) {
+      newdiv = document.createElement('div');
+      divIdName = 'thumb' + i + 'Div';
+      newdiv.setAttribute('id', divIdName);
+      newdiv.setAttribute('class', 'thumb');
+      newdiv.innerHTML =
+        '<img src="' + MEDIA_SOURCE_ROOT + this.mediaContents[i]['thumb'] +
+        '" class="thumbnail">';
+      newdiv.addEventListener('click', this.selectMedia.bind(this, i));
+      ni.appendChild(newdiv);
+    }
   }
 };
 
