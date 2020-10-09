@@ -1394,8 +1394,12 @@
         this.stopProgressTimer();
         this.playerState = PLAYER_STATE.IDLE;
         this.playerHandler.updateDisplay();
-        document.getElementById('play').style.display = 'block';
-        document.getElementById('pause').style.display = 'none';
+        var play = document.getElementById('play');
+        if (play && play.style && play.display)
+            play.style.display = 'block';
+        var pause = document.getElementById('pause');
+        if (pause && pause.style && pause.style.display)
+            pause.style.display = 'none';
     };
     /**
      * @param {?number} timestamp Linux timestamp
@@ -1504,7 +1508,9 @@
      */
     CastPlayer.prototype.onBreakClipIdChanged = function () {
         // Hide skip button when switching to a new breakClip
-        document.getElementById('skip').style.display = 'none';
+        var skip = document.getElementById('skip');
+        if (skip && skip.style && skip.style.display)
+            skip.style.display = 'none';
     };
     /**
      * Disable progress bar if playing a break.
@@ -1522,20 +1528,24 @@
      * Handle CURRENT_BREAK_CLIP_TIME_CHANGED event
      */
     CastPlayer.prototype.onCurrentBreakClipTimeChanged = function (currentBreakClipTime) {
+        var skip = document.getElementById('skip');
         // Unskippable
         if (this.whenSkippable == undefined || this.whenSkippable < 0) {
-            // Hide skip button
-            document.getElementById('skip').style.display = 'none';
+            // Hide skip button    
+            if (skip && skip.style && skip.style.display)
+                skip.style.display = 'none';
         }
         // Skippable
         else if (this.whenSkippable !== undefined || currentBreakClipTime >= this.whenSkippable) {
-            // Show skip button
-            document.getElementById('skip').style.display = 'block';
+            // Show skip button    
+            if (skip && skip.style && skip.style.display)
+                skip.style.display = 'block';
         }
         // Not ready to be skipped
         else {
             // Hide skip button
-            document.getElementById('skip').style.display = 'none';
+            if (skip && skip.style && skip.style.display)
+                skip.style.display = 'none';
         }
     };
     /**
@@ -1609,27 +1619,39 @@
      * Show expand/collapse fullscreen button
      */
     CastPlayer.prototype.showFullscreenButton = function () {
+        var fullscreen_expand = document.getElementById('fullscreen_expand');
+        var fullscreen_collapse = document.getElementById('fullscreen_collapse');
         if (this.fullscreen) {
-            document.getElementById('fullscreen_expand').style.display = 'none';
-            document.getElementById('fullscreen_collapse').style.display = 'block';
+            if (fullscreen_expand && fullscreen_expand.style && fullscreen_expand.style.display)
+                fullscreen_expand.style.display = 'none';
+            if (fullscreen_collapse && fullscreen_collapse.style && fullscreen_collapse.style.display)
+                fullscreen_collapse.style.display = 'block';
         }
         else {
-            document.getElementById('fullscreen_expand').style.display = 'block';
-            document.getElementById('fullscreen_collapse').style.display = 'none';
+            if (fullscreen_expand && fullscreen_expand.style && fullscreen_expand.style.display)
+                fullscreen_expand.style.display = 'block';
+            if (fullscreen_collapse && fullscreen_collapse.style && fullscreen_collapse.style.display)
+                fullscreen_collapse.style.display = 'none';
         }
     };
     /**
      * Hide expand/collapse fullscreen button
      */
     CastPlayer.prototype.hideFullscreenButton = function () {
-        document.getElementById('fullscreen_expand').style.display = 'none';
-        document.getElementById('fullscreen_collapse').style.display = 'none';
+        var fullscreen_expand = document.getElementById('fullscreen_expand');
+        var fullscreen_collapse = document.getElementById('fullscreen_collapse');
+        if (fullscreen_expand && fullscreen_expand.style && fullscreen_expand.style.display)
+            fullscreen_expand.style.display = 'none';
+        if (fullscreen_collapse && fullscreen_collapse.style && fullscreen_collapse.style.display)
+            fullscreen_collapse.style.display = 'none';
     };
     /**
      * Show the media control
      */
     CastPlayer.prototype.showMediaControl = function () {
-        document.getElementById('media_control').style.opacity = 0.7;
+        var media_control = document.getElementById('media_control');
+        if (media_control && media_control.style && media_control.opacity)
+            media_control.style.opacity = 0.7;
     };
     /**
      * Hide the media control
