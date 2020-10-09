@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { Subject } from 'rxjs';
 
-declare var mediaJSON: any;
+declare global {
+  var CastPlayer: any;
+}
 
 @Injectable()
 export class NgCastService {
@@ -15,7 +17,9 @@ export class NgCastService {
   };
 
   constructor() {
-    
+    globalThis.CastPlayer.mediaJSON = {
+      categories: []
+    };
   }
 
   initializeCastApi() {
@@ -61,10 +65,10 @@ export class NgCastService {
     script.setAttribute('src', 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
     window['document'].body.appendChild(script);
 
-    mediaJSON.categories = categories;
+    globalThis.CastPlayer.mediaJSON.categories = categories;
   };
 
-  play = () => {
+  play = () => {    
     this.currentMedia.play(null);
   };
 
@@ -81,6 +85,7 @@ export class NgCastService {
   };
 
   setCasting(value: any) {
+    globalThis.CastPlayer.addVideoThumbs();
     this.status.casting = value;
   }
 

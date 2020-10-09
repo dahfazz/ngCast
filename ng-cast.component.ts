@@ -35,7 +35,7 @@ export class NgCastComponent implements OnInit {
   }
 
   closeSession() {
-    this.ngCastService.stop();
+    this.ngCastService.discoverDevices();
   }
 
 }

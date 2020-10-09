@@ -1,9 +1,5 @@
 'use strict';
 
-var mediaJSON = { 
-  'categories': []
-};
-
 /** Cleaner UI for demo purposes. */
 const DEMO_MODE = false;
 
@@ -142,6 +138,10 @@ var CastPlayer = function () {
   this.setupLocalPlayer();
   this.addVideoThumbs();
   this.initializeUI();
+
+  this.mediaJSON = {
+    'categories': []
+  };
 };
 
 CastPlayer.prototype.initializeCastPlayer = function () {
@@ -357,8 +357,9 @@ CastPlayer.prototype.setupLocalPlayer = function () {
   document.getElementById('skip').style.display = 'none';
 
   var localPlayer = document.getElementById('video_element');
-  localPlayer.addEventListener(
-    'loadeddata', this.onMediaLoadedLocally.bind(this));
+  if (typeof localPlayer !== 'undefined' && localPlayer)
+    localPlayer.addEventListener(
+      'loadeddata', this.onMediaLoadedLocally.bind(this));
 
   // This object will implement PlayerHandler callbacks with localPlayer
   var playerTarget = {};
@@ -434,11 +435,16 @@ CastPlayer.prototype.setupLocalPlayer = function () {
   }.bind(this);
 
   playerTarget.setVolume = function (volumeSliderPosition) {
-    localPlayer.volume = volumeSliderPosition < FULL_VOLUME_HEIGHT ?
-      volumeSliderPosition / FULL_VOLUME_HEIGHT : 1;
+    if (localPlayer) {
+      localPlayer.volume = volumeSliderPosition < FULL_VOLUME_HEIGHT ?
+        volumeSliderPosition / FULL_VOLUME_HEIGHT : 1;
+    }
+
     var p = document.getElementById('audio_bg_level');
-    p.style.height = volumeSliderPosition + 'px';
-    p.style.marginTop = -volumeSliderPosition + 'px';
+    if (typeof p !== 'undefined' && p) {
+      p.style.height = volumeSliderPosition + 'px';
+      p.style.marginTop = -volumeSliderPosition + 'px';
+    }
   };
 
   playerTarget.mute = function () {
@@ -450,7 +456,8 @@ CastPlayer.prototype.setupLocalPlayer = function () {
   };
 
   playerTarget.isMuted = function () {
-    return localPlayer.muted;
+    if (localPlayer)
+      return localPlayer.muted;
   };
 
   playerTarget.seekTo = function (time) {
@@ -1464,7 +1471,7 @@ CastPlayer.prototype.showMediaControl = function () {
  * Hide the media control
  */
 CastPlayer.prototype.hideMediaControl = function () {
-  if (cast && cast.framework && cast.framework.CastContext) {
+  if (typeof cast !== 'undefined') {
     let context = cast.framework.CastContext.getInstance();
     if (context && context.getCurrentSession()) {
       // Do not hide controls during an active cast session.
@@ -1550,10 +1557,15 @@ CastPlayer.prototype.initializeUI = function () {
     'mouseout', this.hideVolumeSlider.bind(this));
   document.getElementById('audio_on').addEventListener(
     'mouseout', this.hideVolumeSlider.bind(this));
-  document.getElementById('main_video').addEventListener(
-    'mouseover', this.showMediaControl.bind(this));
-  document.getElementById('main_video').addEventListener(
-    'mouseout', this.hideMediaControl.bind(this));
+
+  let main_video = document.getElementById('main_video');
+  if (typeof main_video !== 'undefined' && main_video) {
+    main_video.addEventListener(
+      'mouseover', this.showMediaControl.bind(this));
+    main_video.addEventListener(
+      'mouseout', this.hideMediaControl.bind(this));
+  }
+  
   document.getElementById('media_control').addEventListener(
     'mouseover', this.showMediaControl.bind(this));
   document.getElementById('media_control').addEventListener(
@@ -1614,8 +1626,8 @@ CastPlayer.prototype.initializeUI = function () {
  * Add video thumbnails div's to UI for media JSON contents
  */
 CastPlayer.prototype.addVideoThumbs = function () {
-  if (mediaJSON && mediaJSON['categories'] && mediaJSON['categories'].length > 0) {
-    this.mediaContents = mediaJSON['categories'][0]['videos'];
+  if (typeof this.mediaJSON !== 'undefined' && this.mediaJSON['categories'] && this.mediaJSON['categories'].length > 0) {
+    this.mediaContents = this.mediaJSON['categories'][0]['videos'];
     var ni = document.getElementById('carousel');
     var newdiv = null;
     var divIdName = null;
@@ -1669,9 +1681,11 @@ CastPlayer.getErrorMessage = function (error) {
   }
 };
 
-let castPlayer = new CastPlayer();
+var castPlayer = new CastPlayer();
 window['__onGCastApiAvailable'] = function (isAvailable) {
   if (isAvailable) {
     castPlayer.initializeCastPlayer();
   }
 };
+
+window.CastPlayer = castPlayer;

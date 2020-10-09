@@ -3,123 +3,7 @@ import { Component, Injectable, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angula
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 
-let NgCastComponent = class NgCastComponent {
-    constructor(ngCastService) {
-        this.ngCastService = ngCastService;
-    }
-    ngOnInit() {
-        this.window = window;
-        let ngCastService = this.ngCastService;
-        this.window['__onGCastApiAvailable'] = function (isAvailable) {
-            if (isAvailable) {
-                ngCastService.initializeCastApi();
-            }
-        };
-        this.castingStatus = this.ngCastService.getStatus();
-    }
-    openSession() {
-        this.ngCastService.discoverDevices();
-    }
-    closeSession() {
-        this.ngCastService.stop();
-    }
-};
-NgCastComponent = __decorate([
-    Component({
-        selector: 'ng-cast',
-        template: "<i *ngIf=\"!castingStatus.casting\" class=\"material-icons\" (click)=\"openSession()\">cast</i>\n<i *ngIf=\"castingStatus.casting\" class=\"material-icons\" (click)=\"closeSession()\">cast_connected</i>",
-        styles: [""]
-    })
-], NgCastComponent);
-
-let NgCastService = class NgCastService {
-    constructor() {
-        this.window = window;
-        this.status = {
-            casting: false
-        };
-        this.onInitSuccess = function () {
-            console.log('GCast initialization success');
-        };
-        this.onError = function (err) {
-            console.log('GCast initialization failed', err);
-        };
-        this.discoverDevices = () => {
-            let self = this;
-            let subj = new Subject();
-            this.cast.requestSession((s) => {
-                self.session = s;
-                self.setCasting(true);
-                subj.next('CONNECTED');
-            }, function (err) {
-                self.setCasting(false);
-                if (err.code === 'cancel') {
-                    self.session = undefined;
-                    subj.next('CANCEL');
-                }
-                else {
-                    console.error('Error selecting a cast device', err);
-                }
-            });
-            return subj;
-        };
-        this.onMediaDiscovered = (categories) => {
-            let script = window['document'].createElement('script');
-            script.setAttribute('type', 'text/javascript');
-            script.setAttribute('src', 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
-            window['document'].body.appendChild(script);
-            mediaJSON.categories = categories;
-        };
-        this.play = () => {
-            this.currentMedia.play(null);
-        };
-        this.pause = () => {
-            this.currentMedia.pause(null);
-        };
-        this.stop = () => {
-            this.currentMedia.stop(null);
-        };
-        this.onMediaError = (err) => {
-            console.error('Error launching media', err);
-        };
-    }
-    initializeCastApi() {
-        this.cast = this.window['chrome'].cast;
-        let sessionRequest = new this.cast.SessionRequest(this.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID);
-        let apiConfig = new this.cast.ApiConfig(sessionRequest, () => { }, (status) => { if (status === this.cast.ReceiverAvailability.AVAILABLE) { } });
-        let x = this.cast.initialize(apiConfig, this.onInitSuccess, this.onError);
-    }
-    ;
-    setCasting(value) {
-        this.status.casting = value;
-    }
-    getStatus() {
-        return this.status;
-    }
-};
-NgCastService = __decorate([
-    Injectable()
-], NgCastService);
-
-let NgCastModule = class NgCastModule {
-};
-NgCastModule = __decorate([
-    NgModule({
-        schemas: [CUSTOM_ELEMENTS_SCHEMA],
-        imports: [
-            CommonModule
-        ],
-        exports: [NgCastComponent],
-        providers: [NgCastService],
-        declarations: [NgCastComponent]
-    })
-], NgCastModule);
-
 'use strict';
-
-var mediaJSON$1 = { 
-  'categories': []
-};
 
 /** Cleaner UI for demo purposes. */
 const DEMO_MODE = false;
@@ -259,6 +143,10 @@ var CastPlayer = function () {
   this.setupLocalPlayer();
   this.addVideoThumbs();
   this.initializeUI();
+
+  this.mediaJSON = {
+    'categories': []
+  };
 };
 
 CastPlayer.prototype.initializeCastPlayer = function () {
@@ -474,8 +362,9 @@ CastPlayer.prototype.setupLocalPlayer = function () {
   document.getElementById('skip').style.display = 'none';
 
   var localPlayer = document.getElementById('video_element');
-  localPlayer.addEventListener(
-    'loadeddata', this.onMediaLoadedLocally.bind(this));
+  if (typeof localPlayer !== 'undefined' && localPlayer)
+    localPlayer.addEventListener(
+      'loadeddata', this.onMediaLoadedLocally.bind(this));
 
   // This object will implement PlayerHandler callbacks with localPlayer
   var playerTarget = {};
@@ -551,11 +440,16 @@ CastPlayer.prototype.setupLocalPlayer = function () {
   }.bind(this);
 
   playerTarget.setVolume = function (volumeSliderPosition) {
-    localPlayer.volume = volumeSliderPosition < FULL_VOLUME_HEIGHT ?
-      volumeSliderPosition / FULL_VOLUME_HEIGHT : 1;
+    if (localPlayer) {
+      localPlayer.volume = volumeSliderPosition < FULL_VOLUME_HEIGHT ?
+        volumeSliderPosition / FULL_VOLUME_HEIGHT : 1;
+    }
+
     var p = document.getElementById('audio_bg_level');
-    p.style.height = volumeSliderPosition + 'px';
-    p.style.marginTop = -volumeSliderPosition + 'px';
+    if (typeof p !== 'undefined' && p) {
+      p.style.height = volumeSliderPosition + 'px';
+      p.style.marginTop = -volumeSliderPosition + 'px';
+    }
   };
 
   playerTarget.mute = function () {
@@ -567,7 +461,8 @@ CastPlayer.prototype.setupLocalPlayer = function () {
   };
 
   playerTarget.isMuted = function () {
-    return localPlayer.muted;
+    if (localPlayer)
+      return localPlayer.muted;
   };
 
   playerTarget.seekTo = function (time) {
@@ -1581,7 +1476,7 @@ CastPlayer.prototype.showMediaControl = function () {
  * Hide the media control
  */
 CastPlayer.prototype.hideMediaControl = function () {
-  if (cast && cast.framework && cast.framework.CastContext) {
+  if (typeof cast !== 'undefined') {
     let context = cast.framework.CastContext.getInstance();
     if (context && context.getCurrentSession()) {
       // Do not hide controls during an active cast session.
@@ -1667,10 +1562,15 @@ CastPlayer.prototype.initializeUI = function () {
     'mouseout', this.hideVolumeSlider.bind(this));
   document.getElementById('audio_on').addEventListener(
     'mouseout', this.hideVolumeSlider.bind(this));
-  document.getElementById('main_video').addEventListener(
-    'mouseover', this.showMediaControl.bind(this));
-  document.getElementById('main_video').addEventListener(
-    'mouseout', this.hideMediaControl.bind(this));
+
+  let main_video = document.getElementById('main_video');
+  if (typeof main_video !== 'undefined' && main_video) {
+    main_video.addEventListener(
+      'mouseover', this.showMediaControl.bind(this));
+    main_video.addEventListener(
+      'mouseout', this.hideMediaControl.bind(this));
+  }
+  
   document.getElementById('media_control').addEventListener(
     'mouseover', this.showMediaControl.bind(this));
   document.getElementById('media_control').addEventListener(
@@ -1731,8 +1631,8 @@ CastPlayer.prototype.initializeUI = function () {
  * Add video thumbnails div's to UI for media JSON contents
  */
 CastPlayer.prototype.addVideoThumbs = function () {
-  if (mediaJSON$1 && mediaJSON$1['categories'] && mediaJSON$1['categories'].length > 0) {
-    this.mediaContents = mediaJSON$1['categories'][0]['videos'];
+  if (typeof this.mediaJSON !== 'undefined' && this.mediaJSON['categories'] && this.mediaJSON['categories'].length > 0) {
+    this.mediaContents = this.mediaJSON['categories'][0]['videos'];
     var ni = document.getElementById('carousel');
     var newdiv = null;
     var divIdName = null;
@@ -1786,12 +1686,132 @@ CastPlayer.getErrorMessage = function (error) {
   }
 };
 
-let castPlayer = new CastPlayer();
+var castPlayer = new CastPlayer();
 window['__onGCastApiAvailable'] = function (isAvailable) {
   if (isAvailable) {
     castPlayer.initializeCastPlayer();
   }
 };
+
+window.CastPlayer = castPlayer;
+
+let NgCastComponent = class NgCastComponent {
+    constructor(ngCastService) {
+        this.ngCastService = ngCastService;
+    }
+    ngOnInit() {
+        this.window = window;
+        let ngCastService = this.ngCastService;
+        this.window['__onGCastApiAvailable'] = function (isAvailable) {
+            if (isAvailable) {
+                ngCastService.initializeCastApi();
+            }
+        };
+        this.castingStatus = this.ngCastService.getStatus();
+    }
+    openSession() {
+        this.ngCastService.discoverDevices();
+    }
+    closeSession() {
+        this.ngCastService.discoverDevices();
+    }
+};
+NgCastComponent = __decorate([
+    Component({
+        selector: 'ng-cast',
+        template: "<i *ngIf=\"!castingStatus.casting\" class=\"material-icons\" (click)=\"openSession()\">cast</i>\n<i *ngIf=\"castingStatus.casting\" class=\"material-icons\" (click)=\"closeSession()\">cast_connected</i>",
+        styles: [""]
+    })
+], NgCastComponent);
+
+let NgCastService = class NgCastService {
+    constructor() {
+        this.window = window;
+        this.status = {
+            casting: false
+        };
+        this.onInitSuccess = function () {
+            console.log('GCast initialization success');
+        };
+        this.onError = function (err) {
+            console.log('GCast initialization failed', err);
+        };
+        this.discoverDevices = () => {
+            let self = this;
+            let subj = new Subject();
+            this.cast.requestSession((s) => {
+                self.session = s;
+                self.setCasting(true);
+                subj.next('CONNECTED');
+            }, function (err) {
+                self.setCasting(false);
+                if (err.code === 'cancel') {
+                    self.session = undefined;
+                    subj.next('CANCEL');
+                }
+                else {
+                    console.error('Error selecting a cast device', err);
+                }
+            });
+            return subj;
+        };
+        this.onMediaDiscovered = (categories) => {
+            let script = window['document'].createElement('script');
+            script.setAttribute('type', 'text/javascript');
+            script.setAttribute('src', 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
+            window['document'].body.appendChild(script);
+            globalThis.CastPlayer.mediaJSON.categories = categories;
+        };
+        this.play = () => {
+            this.currentMedia.play(null);
+        };
+        this.pause = () => {
+            this.currentMedia.pause(null);
+        };
+        this.stop = () => {
+            this.currentMedia.stop(null);
+        };
+        this.onMediaError = (err) => {
+            console.error('Error launching media', err);
+        };
+        globalThis.CastPlayer.mediaJSON = {
+            categories: []
+        };
+    }
+    initializeCastApi() {
+        this.cast = this.window['chrome'].cast;
+        let sessionRequest = new this.cast.SessionRequest(this.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID);
+        let apiConfig = new this.cast.ApiConfig(sessionRequest, () => { }, (status) => { if (status === this.cast.ReceiverAvailability.AVAILABLE) { } });
+        let x = this.cast.initialize(apiConfig, this.onInitSuccess, this.onError);
+    }
+    ;
+    setCasting(value) {
+        globalThis.CastPlayer.addVideoThumbs();
+        this.status.casting = value;
+    }
+    getStatus() {
+        return this.status;
+    }
+};
+NgCastService = __decorate([
+    Injectable()
+], NgCastService);
+
+let NgCastModule = class NgCastModule {
+};
+NgCastModule = __decorate([
+    NgModule({
+        schemas: [CUSTOM_ELEMENTS_SCHEMA],
+        imports: [
+            CommonModule
+        ],
+        exports: [NgCastComponent],
+        providers: [NgCastService],
+        declarations: [NgCastComponent]
+    })
+], NgCastModule);
+
+// ------ project path -------- | --- lib ---
 
 /**
  * Generated bundle index. Do not edit.

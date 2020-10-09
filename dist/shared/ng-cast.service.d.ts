@@ -1,4 +1,7 @@
 import { Subject } from 'rxjs';
+declare global {
+    var CastPlayer: any;
+}
 export declare class NgCastService {
     private cast;
     private currentMedia;

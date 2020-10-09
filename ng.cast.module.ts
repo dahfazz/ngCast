@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgCastComponent } from './ng-cast.component';
 import { NgCastService } from './shared/ng-cast.service';
 
+
 @NgModule({
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   imports: [
