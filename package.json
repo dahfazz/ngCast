@@ -1,7 +1,10 @@
 {
   "$schema": "./node_modules/ng-packagr/package.schema.json",
   "name": "@thinkam.net/ng-cast",
-  "version": "0.0.20",
+  "assets": [
+    "assets"
+  ],
+  "version": "0.0.26",
   "ngPackage": {
     "lib": {
       "entryFile": "index.ts"
@@ -11,7 +14,8 @@
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "ng-packagr -p package.json"
+    "build": "ng-packagr -p package.json",
+    "assets-copy": "node assets-copy.js"
   },
   "repository": {
     "type": "git",
@@ -39,7 +43,8 @@
     "@angular/compiler-cli": "^8.2.14",
     "@angular/core": "^8.2.5",
     "ng-packagr": "^10.1.2",
-    "typescript": "^3.4.5"
+    "typescript": "^3.4.5",
+    "wrench": "^1.5.9"
   },
   "dependencies": {}
 }

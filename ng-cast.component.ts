@@ -4,7 +4,7 @@ import { NgCastService } from './shared/ng-cast.service';
 
 @Component({
   selector: 'ng-cast',
-  templateUrl: './ng-cast.component.html',
+  template: '<google-cast-launcher id="castbutton"></google-cast-launcher>',
   styleUrls: [
     './ng-cast.component.scss'
   ]
@@ -15,23 +15,8 @@ export class NgCastComponent implements OnInit {
     private ngCastService: NgCastService
   ) { }
 
-  private window: any = window;
-
   ngOnInit() {
 
-    let script = window['document'].createElement('script');
-    script.setAttribute('type', 'text/javascript');
-    script.setAttribute('src', 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
-    window['document'].body.appendChild(script);
-
-    let ngCastService = this.ngCastService;
-    this.window['__onGCastApiAvailable'] = function (isAvailable: any) {
-      if (isAvailable) {
-        ngCastService.initializeCastApi();
-      }
-    };
-
-    this.castingStatus = this.ngCastService.getStatus();
   }
 
   openSession() {

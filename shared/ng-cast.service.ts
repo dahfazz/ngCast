@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { Subject } from 'rxjs';
 
+declare var mediaJSON: any;
+
 @Injectable()
 export class NgCastService {
   private cast: any;
@@ -9,42 +11,13 @@ export class NgCastService {
   private session: any;
   private currentMedia: any;
   private window: any = window;
+
   public status = {
     casting: false
   };
 
   constructor() {
-    this.window.__onGCastApiAvailable = (isAvailable: boolean) => {
-      if(!isAvailable){
-          return false;
-      }
-      
-      this.cast = this.window['chrome'].cast;
-      this.chrome = this.window['chrome'];
-
-      var castContext = this.cast.framework.CastContext.getInstance();
-  
-      castContext.setOptions({
-          autoJoinPolicy: this.chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED,
-          receiverApplicationId: this.chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID
-      });
-  
-      var stateChanged = this.cast.framework.CastContextEventType.CAST_STATE_CHANGED;
-      castContext.addEventListener(stateChanged, () => {
-          var castSession = castContext.getCurrentSession();
-          var media = new this.chrome.cast.media.MediaInfo(this.currentMedia);
-          var request = new this.chrome.cast.media.LoadRequest(media);
-  
-          castSession && castSession
-              .loadMedia(request)
-              .then(() => {
-                  console.log('Success');
-              })
-              .catch((error: any) => {
-                  console.log('Error: ' + error);
-              });
-      });
-    };
+    
   }
 
   initializeCastApi() {
@@ -55,7 +28,7 @@ export class NgCastService {
       (status: any) => { if (status === this.cast.ReceiverAvailability.AVAILABLE) { } }
     );
     let x = this.cast.initialize(apiConfig, this.onInitSuccess, this.onError);
-  };    
+  };
 
   onInitSuccess = function () {
     console.log('GCast initialization success');
@@ -84,25 +57,28 @@ export class NgCastService {
     return subj;
   };
 
-  launchMedia = (media: any) =>  {
-    let mediaInfo = new this.cast.media.MediaInfo(media);
-    let request = new this.cast.media.LoadRequest(mediaInfo);
-    console.log('launch media with session', this.session);
+  onMediaDiscovered = (categories: any[]) => {
+    let script = window['document'].createElement('script');
+    script.setAttribute('type', 'text/javascript');
+    script.setAttribute('src', 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
+    window['document'].body.appendChild(script);
 
-    if (!this.session) {
-      window.open(media);
-      return false;
-    }
-    this.session.loadMedia(request, this.onMediaDiscovered.bind(this, 'loadMedia'), this.onMediaError);
-    return true;
-  };
+    let media = window['document'].createElement('script');
+    media.setAttribute('type', 'text/javascript');
+    media.setAttribute('src', '/assets/lib/media.js');
+    window['document'].body.appendChild(media);
 
-  onMediaDiscovered = (url: string, type: string) => {
-    this.chrome = this.window['chrome'];
-    
-    let media = new this.chrome.cast.media.MediaInfo(url, type);
-    
-    this.currentMedia = media;
+    let castVideo = window['document'].createElement('script');
+    media.setAttribute('type', 'text/javascript');
+    media.setAttribute('src', '/assets/lib/castVideo.js');
+    window['document'].body.appendChild(castVideo);
+
+    let ads = window['document'].createElement('script');
+    media.setAttribute('type', 'text/javascript');
+    media.setAttribute('src', '/assets/lib/ads.js');
+    window['document'].body.appendChild(ads);
+
+    mediaJSON.categories = categories;
   };
 
   play = () => {

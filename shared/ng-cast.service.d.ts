@@ -1,19 +1,19 @@
 import { Subject } from 'rxjs';
 export declare class NgCastService {
     private cast;
+    private chrome;
     private session;
     private currentMedia;
+    private window;
     status: {
         casting: boolean;
     };
     constructor();
     initializeCastApi(): void;
-    onGCastApiAvailable(url: string, type: string): void;
     onInitSuccess: () => void;
     onError: (err: any) => void;
     discoverDevices: () => Subject<unknown>;
-    launchMedia: (media: any) => boolean;
-    onMediaDiscovered: (media: any) => void;
+    onMediaDiscovered: (categories: any[]) => void;
     play: () => void;
     pause: () => void;
     stop: () => void;

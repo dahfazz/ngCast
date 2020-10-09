@@ -16,6 +16,7 @@ var NgCastModule = /** @class */ (function () {
     }
     NgCastModule = __decorate([
         core_1.NgModule({
+            schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
             imports: [
                 common_1.CommonModule
             ],

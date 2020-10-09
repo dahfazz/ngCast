@@ -17,7 +17,10 @@
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.json",
             "polyfills": "src/polyfills.ts",
-            "preserveSymlinks": true
+            "preserveSymlinks": true,
+            "assets": [
+              "assets"
+            ]
           },
           "configurations": {
             "hmr": {
@@ -72,7 +75,7 @@
       }
     }
   },
-  "defaultProject": "@thinkam.net/ng-cast",
+  "defaultProject": "ng-cast",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NgCastComponent = void 0;
 var core_1 = require("@angular/core");
-var window;
 var NgCastComponent = /** @class */ (function () {
     function NgCastComponent(ngCastService) {
         this.ngCastService = ngCastService;
@@ -18,13 +17,6 @@ var NgCastComponent = /** @class */ (function () {
         script.setAttribute('type', 'text/javascript');
         script.setAttribute('src', 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
         window['document'].body.appendChild(script);
-        var ngCastService = this.ngCastService;
-        window['__onGCastApiAvailable'] = function (isAvailable) {
-            if (isAvailable) {
-                ngCastService.initializeCastApi();
-            }
-        };
-        this.castingStatus = this.ngCastService.getStatus();
     };
     NgCastComponent.prototype.openSession = function () {
         this.ngCastService.discoverDevices();

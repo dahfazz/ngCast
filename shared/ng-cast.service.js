@@ -9,12 +9,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.NgCastService = void 0;
 var core_1 = require("@angular/core");
 var rxjs_1 = require("rxjs");
-var window;
-var cast;
-var chrome;
 var NgCastService = /** @class */ (function () {
     function NgCastService() {
         var _this = this;
+        this.window = window;
         this.status = {
             casting: false
         };
@@ -43,19 +41,8 @@ var NgCastService = /** @class */ (function () {
             });
             return subj;
         };
-        this.launchMedia = function (media) {
-            var mediaInfo = new _this.cast.media.MediaInfo(media);
-            var request = new _this.cast.media.LoadRequest(mediaInfo);
-            console.log('launch media with session', _this.session);
-            if (!_this.session) {
-                window.open(media);
-                return false;
-            }
-            _this.session.loadMedia(request, _this.onMediaDiscovered.bind(_this, 'loadMedia'), _this.onMediaError);
-            return true;
-        };
-        this.onMediaDiscovered = function (media) {
-            _this.currentMedia = media;
+        this.onMediaDiscovered = function (categories) {
+            mediaJSON.categories = categories;
         };
         this.play = function () {
             _this.currentMedia.play(null);
@@ -72,38 +59,12 @@ var NgCastService = /** @class */ (function () {
     }
     NgCastService.prototype.initializeCastApi = function () {
         var _this = this;
-        this.cast = window['chrome'].cast;
+        this.cast = this.window['chrome'].cast;
         var sessionRequest = new this.cast.SessionRequest(this.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID);
         var apiConfig = new this.cast.ApiConfig(sessionRequest, function () { }, function (status) { if (status === _this.cast.ReceiverAvailability.AVAILABLE) { } });
         var x = this.cast.initialize(apiConfig, this.onInitSuccess, this.onError);
     };
     ;
-    NgCastService.prototype.onGCastApiAvailable = function (url, type) {
-        window.__onGCastApiAvailable = function (isAvailable) {
-            if (!isAvailable) {
-                return false;
-            }
-            var castContext = cast.framework.CastContext.getInstance();
-            castContext.setOptions({
-                autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED,
-                receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID
-            });
-            var stateChanged = cast.framework.CastContextEventType.CAST_STATE_CHANGED;
-            castContext.addEventListener(stateChanged, function () {
-                var castSession = castContext.getCurrentSession();
-                var media = new chrome.cast.media.MediaInfo(url, type);
-                var request = new chrome.cast.media.LoadRequest(media);
-                castSession && castSession
-                    .loadMedia(request)
-                    .then(function () {
-                    console.log('Success');
-                })
-                    .catch(function (error) {
-                    console.log('Error: ' + error);
-                });
-            });
-        };
-    };
     NgCastService.prototype.setCasting = function (value) {
         this.status.casting = value;
     };
