@@ -42,6 +42,10 @@ var NgCastService = /** @class */ (function () {
             return subj;
         };
         this.onMediaDiscovered = function (categories) {
+            var script = window['document'].createElement('script');
+            script.setAttribute('type', 'text/javascript');
+            script.setAttribute('src', 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
+            window['document'].body.appendChild(script);
             mediaJSON.categories = categories;
         };
         this.play = function () {

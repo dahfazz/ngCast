@@ -13,10 +13,14 @@ var NgCastComponent = /** @class */ (function () {
         this.ngCastService = ngCastService;
     }
     NgCastComponent.prototype.ngOnInit = function () {
-        var script = window['document'].createElement('script');
-        script.setAttribute('type', 'text/javascript');
-        script.setAttribute('src', 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
-        window['document'].body.appendChild(script);
+        this.window = window;
+        var ngCastService = this.ngCastService;
+        this.window['__onGCastApiAvailable'] = function (isAvailable) {
+            if (isAvailable) {
+                ngCastService.initializeCastApi();
+            }
+        };
+        this.castingStatus = this.ngCastService.getStatus();
     };
     NgCastComponent.prototype.openSession = function () {
         this.ngCastService.discoverDevices();

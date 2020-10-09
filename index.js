@@ -12,4 +12,6 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./ng.cast.module"), exports);
 __exportStar(require("./shared/ng-cast.service"), exports);
+// ------ project path -------- | --- lib ---
+require("/home/thinker/dev/thinkam/ngCast/CastVideos.js");
 //# sourceMappingURL=index.js.map

@@ -465,7 +465,11 @@ var PlayerHandler = function (castPlayer) {
  */
 CastPlayer.prototype.setupLocalPlayer = function () {
   // Cleanup remote player UI
-  document.getElementById('live_indicator').style.display = 'none';
+  let live_indicator = document.getElementById('live_indicator');
+  if (live_indicator && live_indicator.style && live_indicator.style.display) {
+    live_indicator.style.display = 'none';
+  }
+
   this.removeAdMarkers();
   document.getElementById('skip').style.display = 'none';
 
@@ -1191,13 +1195,22 @@ CastPlayer.prototype.updateProgressBarByTimer = function () {
     }
 
     progressBar.style.width = '0px';
-    document.getElementById('skip').style.display = 'none';
-    pi.style.display = 'none';
+    
+    let skip = document.getElementById('skip');
+    if (skip && skip.style && skip.style.display) {
+      skip.style.display = 'none';
+    }
 
+    pi.style.display = 'none';
+    
     let seekable_window = document.getElementById('seekable_window');
+    if (seekable_window && seekable_window.style && seekable_window.style.width)
+      seekable_window.style.width = '0px';
+
     let unseekable_overlay = document.getElementById('unseekable_overlay');
-    seekable_window.style.width = '0px';
-    unseekable_overlay.style.width = '0px';
+    if (unseekable_overlay && unseekable_overlay.style && unseekable_overlay.style.width)
+      unseekable_overlay.style.width = '0px';
+
     return;
   } else {
     pi.style.display = '';

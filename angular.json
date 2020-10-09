@@ -18,11 +18,8 @@
             "tsConfig": "src/tsconfig.json",
             "polyfills": "src/polyfills.ts",
             "preserveSymlinks": true,
-            "assets": [
-              "assets/*"
-            ],
             "scripts": [
-              "assets/lib/CastVideos.js"
+              "./CastVideos.js"
             ]
           },
           "configurations": {

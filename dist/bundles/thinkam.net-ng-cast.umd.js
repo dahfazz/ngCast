@@ -711,7 +711,10 @@
      */
     CastPlayer.prototype.setupLocalPlayer = function () {
         // Cleanup remote player UI
-        document.getElementById('live_indicator').style.display = 'none';
+        var live_indicator = document.getElementById('live_indicator');
+        if (live_indicator && live_indicator.style && live_indicator.style.display) {
+            live_indicator.style.display = 'none';
+        }
         this.removeAdMarkers();
         document.getElementById('skip').style.display = 'none';
         var localPlayer = document.getElementById('video_element');
@@ -1312,12 +1315,17 @@
                 console.log('Error - Duration is not defined for a VOD stream.');
             }
             progressBar.style.width = '0px';
-            document.getElementById('skip').style.display = 'none';
+            var skip = document.getElementById('skip');
+            if (skip && skip.style && skip.style.display) {
+                skip.style.display = 'none';
+            }
             pi.style.display = 'none';
             var seekable_window_1 = document.getElementById('seekable_window');
+            if (seekable_window_1 && seekable_window_1.style && seekable_window_1.style.width)
+                seekable_window_1.style.width = '0px';
             var unseekable_overlay_1 = document.getElementById('unseekable_overlay');
-            seekable_window_1.style.width = '0px';
-            unseekable_overlay_1.style.width = '0px';
+            if (unseekable_overlay_1 && unseekable_overlay_1.style && unseekable_overlay_1.style.width)
+                unseekable_overlay_1.style.width = '0px';
             return;
         }
         else {
