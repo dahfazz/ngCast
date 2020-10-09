@@ -1,44 +1,49 @@
-import { NgControlStatus } from '@angular/forms/src/directives';
 import { Injectable } from '@angular/core';
 
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
+
+declare var mediaJSON: any;
 
 @Injectable()
 export class NgCastService {
-  private castSession;
-  private cast;
+  private cast: any;
+  private currentMedia: any;
+  private window: any = window;
+
   public status = {
     casting: false
   };
 
-  constructor() {}
+  constructor() {
+    
+  }
 
   initializeCastApi() {
-    this.cast = window['chrome'].cast;
+    this.cast = this.window['chrome'].cast;
     let sessionRequest = new this.cast.SessionRequest(this.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID);
     let apiConfig = new this.cast.ApiConfig(sessionRequest,
-      s => { },
-      status => { if (status === this.cast.ReceiverAvailability.AVAILABLE) { } }
+      () => { },
+      (status: any) => { if (status === this.cast.ReceiverAvailability.AVAILABLE) { } }
     );
     let x = this.cast.initialize(apiConfig, this.onInitSuccess, this.onError);
   };
 
-  onInitSuccess = function (e) {
+  onInitSuccess = function () {
     console.log('GCast initialization success');
   };
 
-  onError = function (err) {
+  onError = function (err: any) {
     console.log('GCast initialization failed', err);
   };
 
-  discoverDevices = function () {
-    let self = this;
+  discoverDevices = () => {
+    let self: any = this;
     let subj = new Subject();
-    this.cast.requestSession(function (s) {
+    this.cast.requestSession((s: any) => {
       self.session = s;
       self.setCasting(true);
       subj.next('CONNECTED');
-    }, function (err) {
+    }, function (err: any) {
       self.setCasting(false);
       if (err.code === 'cancel') {
         self.session = undefined;
@@ -50,45 +55,36 @@ export class NgCastService {
     return subj;
   };
 
-  launchMedia = function (media) {
-    let mediaInfo = new this.cast.media.MediaInfo(media);
-    let request = new this.cast.media.LoadRequest(mediaInfo);
-    console.log('launch media with session', this.session);
+  onMediaDiscovered = (categories: any[]) => {
+    let script = window['document'].createElement('script');
+    script.setAttribute('type', 'text/javascript');
+    script.setAttribute('src', 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
+    window['document'].body.appendChild(script);
 
-    if (!this.session) {
-      window.open(media);
-      return false;
-    }
-    this.session.loadMedia(request, this.onMediaDiscovered.bind(this, 'loadMedia'), this.onMediaError);
-    return true;
+    mediaJSON.categories = categories;
   };
 
-  onMediaDiscovered = function (how, media) {
-    this.currentMedia = media;
-  };
-
-  play = function () {
+  play = () => {
     this.currentMedia.play(null);
   };
 
-  pause = function () {
+  pause = () => {
     this.currentMedia.pause(null);
   };
 
-  stop = function () {
+  stop = () => {
     this.currentMedia.stop(null);
   };
 
-  onMediaError = function (err) {
+  onMediaError = (err: any) => {
     console.error('Error launching media', err);
   };
 
-  setCasting(value) {
+  setCasting(value: any) {
     this.status.casting = value;
   }
 
   getStatus() {
     return this.status
   }
-
 }

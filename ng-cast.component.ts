@@ -10,20 +10,18 @@ import { NgCastService } from './shared/ng-cast.service';
   ]
 })
 export class NgCastComponent implements OnInit {
-  castingStatus: Object;
+  castingStatus: any;
+  window: any;
+
   constructor(
     private ngCastService: NgCastService
   ) { }
 
   ngOnInit() {
-
-    let script = window['document'].createElement('script');
-    script.setAttribute('type', 'text/javascript');
-    script.setAttribute('src', 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
-    window['document'].body.appendChild(script);
+    this.window = window;
 
     let ngCastService = this.ngCastService;
-    window['__onGCastApiAvailable'] = function (isAvailable) {
+    this.window['__onGCastApiAvailable'] = function (isAvailable: boolean) {
       if (isAvailable) {
         ngCastService.initializeCastApi();
       }
