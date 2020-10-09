@@ -7,8 +7,6 @@ declare var mediaJSON: any;
 @Injectable()
 export class NgCastService {
   private cast: any;
-  private chrome: any;
-  private session: any;
   private currentMedia: any;
   private window: any = window;
 
@@ -62,21 +60,6 @@ export class NgCastService {
     script.setAttribute('type', 'text/javascript');
     script.setAttribute('src', 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
     window['document'].body.appendChild(script);
-
-    let media = window['document'].createElement('script');
-    media.setAttribute('type', 'text/javascript');
-    media.setAttribute('src', '/assets/lib/media.js');
-    window['document'].body.appendChild(media);
-
-    let castVideo = window['document'].createElement('script');
-    media.setAttribute('type', 'text/javascript');
-    media.setAttribute('src', '/assets/lib/castVideo.js');
-    window['document'].body.appendChild(castVideo);
-
-    let ads = window['document'].createElement('script');
-    media.setAttribute('type', 'text/javascript');
-    media.setAttribute('src', '/assets/lib/ads.js');
-    window['document'].body.appendChild(ads);
 
     mediaJSON.categories = categories;
   };

@@ -2,9 +2,9 @@
   "$schema": "./node_modules/ng-packagr/package.schema.json",
   "name": "@thinkam.net/ng-cast",
   "assets": [
-    "assets"
+    "./CastVideos.js"
   ],
-  "version": "0.0.26",
+  "version": "0.1.0",
   "description": "Broadcast media on your TV from your Angular app",
   "main": "bundles/thinkam.net-ng-cast.umd.js",
   "repository": {

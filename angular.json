@@ -19,7 +19,10 @@
             "polyfills": "src/polyfills.ts",
             "preserveSymlinks": true,
             "assets": [
-              "assets"
+              "assets/*"
+            ],
+            "scripts": [
+              "assets/lib/CastVideos.js"
             ]
           },
           "configurations": {

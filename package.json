@@ -2,9 +2,9 @@
   "$schema": "./node_modules/ng-packagr/package.schema.json",
   "name": "@thinkam.net/ng-cast",
   "assets": [
-    "assets"
+    "./CastVideos.js"
   ],
-  "version": "0.0.26",
+  "version": "0.1.0",
   "ngPackage": {
     "lib": {
       "entryFile": "index.ts"
@@ -14,8 +14,7 @@
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "ng-packagr -p package.json",
-    "assets-copy": "node assets-copy.js"
+    "build": "ng-packagr -p package.json"
   },
   "repository": {
     "type": "git",
