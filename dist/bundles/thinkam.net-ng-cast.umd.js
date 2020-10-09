@@ -1563,7 +1563,7 @@
         var seekable_window = document.getElementById('seekable_window');
         if (enable) {
             // Enable UI
-            progress.style.backgroundImage = "url('./imagefiles/timeline_bg_progress.png')";
+            progress.style.backgroundImage = "url('./assets/imagefiles/timeline_bg_progress.png')";
             progress.style.cursor = "pointer";
             seekable_window.style.cursor = "pointer";
             progress_indicator.style.cursor = "pointer";
@@ -1575,7 +1575,7 @@
         }
         else {
             // Disable UI
-            progress.style.backgroundImage = "url('./imagefiles/timeline_bg_buffer.png')";
+            progress.style.backgroundImage = "url('./assets/imagefiles/timeline_bg_buffer.png')";
             progress.style.cursor = "default";
             seekable_window.style.cursor = "default";
             progress_indicator.style.cursor = "default";
@@ -1657,13 +1657,15 @@
      * Hide the media control
      */
     CastPlayer.prototype.hideMediaControl = function () {
-        var context = cast.framework.CastContext.getInstance();
-        if (context && context.getCurrentSession()) {
-            // Do not hide controls during an active cast session.
-            document.getElementById('media_control').style.opacity = 0.7;
-        }
-        else {
-            document.getElementById('media_control').style.opacity = 0;
+        if (cast && cast.framework && cast.framework.CastContext) {
+            var context = cast.framework.CastContext.getInstance();
+            if (context && context.getCurrentSession()) {
+                // Do not hide controls during an active cast session.
+                document.getElementById('media_control').style.opacity = 0.7;
+            }
+            else {
+                document.getElementById('media_control').style.opacity = 0;
+            }
         }
     };
     /**
@@ -1702,10 +1704,12 @@
      */
     CastPlayer.prototype.initializeUI = function () {
         // Set initial values for title and subtitle.
-        document.getElementById('media_title').innerHTML =
-            this.mediaContents[0]['title'];
-        document.getElementById('media_subtitle').innerHTML =
-            this.mediaContents[this.currentMediaIndex]['subtitle'];
+        if (this.mediaContents && this.mediaContents.length > 0) {
+            document.getElementById('media_title').innerHTML =
+                this.mediaContents[0]['title'];
+            document.getElementById('media_subtitle').innerHTML =
+                this.mediaContents[this.currentMediaIndex]['subtitle'];
+        }
         document.getElementById('seekable_window').addEventListener('click', this.seekMediaListener);
         document.getElementById('progress').addEventListener('click', this.seekMediaListener);
         document.getElementById('progress_indicator').addEventListener('dragend', this.seekMediaListener);
