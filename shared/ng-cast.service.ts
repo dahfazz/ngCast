@@ -67,12 +67,17 @@ export class NgCastService {
 
     globalThis.CastPlayer.mediaJSON.categories = categories;
 
-    globalThis.CastPlayer.addMediaContents();
-    globalThis.CastPlayer.setupLocalPlayer();
-    globalThis.CastPlayer.initializeUI();
+    return globalThis.CastPlayer.addMediaContents();
   };
 
-  play = () => {    
+  initialize(mediaContents: any): void {
+    if (mediaContents) {
+      globalThis.CastPlayer.initializeUI();
+      globalThis.CastPlayer.setupLocalPlayer();
+    }
+  }
+
+  play = () => {
     this.currentMedia.play(null);
   };
 
@@ -89,7 +94,6 @@ export class NgCastService {
   };
 
   setCasting(value: any) {
-    globalThis.CastPlayer.addMediaContents();
     this.status.casting = value;
   }
 

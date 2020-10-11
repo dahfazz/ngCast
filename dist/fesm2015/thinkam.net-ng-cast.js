@@ -40,7 +40,7 @@ NgCastComponent = __decorate([
     Component({
         selector: 'ng-cast',
         template: "<div *ngIf=\"!imageOffline\" id=\"main_video\">\n  <div class=\"imageSub\"> <!-- Put Your Image Width -->\n     <div class=\"blackbg\" id=\"playerstatebg\">IDLE</div>\n     <div class=label id=\"playerstate\">IDLE</div>\n     <img [src]=\"videoImage\" id=\"video_image\">\n     <div id=\"video_image_overlay\"></div>\n     <video id=\"video_element\">\n     </video>\n  </div>\n\n  <div id=\"media_control\">\n     <div id=\"play\"></div>\n     <div id=\"pause\"></div>\n     <div id=\"progress_bg\"></div>\n     <div id=\"progress\"></div>\n     <div id=\"progress_indicator\"></div>\n     <div id=\"fullscreen_expand\"></div>\n     <div id=\"fullscreen_collapse\"></div>\n     <google-cast-launcher id=\"castbutton\"></google-cast-launcher>\n     <div id=\"audio_bg\"></div>\n     <div id=\"audio_bg_track\"></div>\n     <div id=\"audio_indicator\"></div>\n     <div id=\"audio_bg_level\"></div>\n     <div id=\"audio_on\"></div>\n     <div id=\"audio_off\"></div>\n     <div id=\"duration\">00:00:00</div>\n  </div>\n</div>\n<div *ngIf=\"!imageOffline\" id=\"media_info\">\n  <div id=\"media_title\">\n  </div>\n  <div id=\"media_subtitle\">\n  </div>\n  <div id=\"media_desc\">\n  </div>\n</div>\n\n<div *ngIf=\"!imageOffline\" id=\"carousel\">\n</div>\n\n<img \n  width=\"100%\" \n  *ngIf=\"imageOffline\" \n  [src]=\"srcImageOffline\"\n  alt=\"TV Offline\"\n/>\n",
-        styles: [""]
+        styles: ["body{background-color:#f2f2f2;font-family:Roboto,OpenSans,Verdana,Georgia,Serif}#msg{-webkit-transition:opacity 0 2s;color:#fff;display:none;font-size:90%;font-weight:400;margin-left:200px;transition:opacity 0 2s}#top_header_bar{background-image:url(/assets/imagefiles/header_bg-top.png);background-repeat:repeat-x;height:10px;margin:0;width:100%}#top_header{background-image:url(/assets/imagefiles/header_bg.png);height:71px;z-index:1000}#footer,#top_header{background-repeat:repeat-x;float:left;margin:0;width:100%}#footer{background-image:url(/assets/imagefiles/footer_bg.png);height:81px}#copyright{width:300px}#copyright,#footer_content{color:#fff;float:left;font-size:13px;margin:10px}#footer_content{width:400px}#footer_content_link{color:#fff}#footer_language{color:#fff;float:right;font-size:13px;margin:10px;width:200px}#logo{background-image:url(/assets/imagefiles/logo.png);float:left;height:71px;margin:10px 25px 0;width:201px}.header_tab{-moz-transition:all .6s ease-in-out;-o-transition:all .6s ease-in-out;-webkit-transition:all .6s ease-in-out;float:left;font-family:Roboto,OpenSans;font-size:20px;font-weight:700;height:31px;margin-top:10px;padding:20px}#title_text{text-align:center;width:100%}#main_video{float:left;width:1100px}#video_image{height:536px;margin:20px auto 0 40px;width:960px}#video_image_overlay{background:linear-gradient(0deg,rgba(0,0,0,.9),transparent 72%,transparent);margin:0 0 0 40px;position:absolute;z-index:0}#video_element,#video_image_overlay{display:none;height:540px;width:960px}#video_element{background-color:#000;margin:20px auto 0 40px}#media_info{background-color:#dde0e5;clear:both;color:#000;display:block;float:left;height:116px;margin:-4px 0 0 40px;opacity:.9;padding:10px;width:940px}#media_title{font-size:30px;font-weight:700;margin:0 10px 0 0}#media_subtitle,#media_title{float:left;font-family:Roboto,Open Sans,Verdana,Georgia,Serif;padding:0}#media_subtitle{font-size:18px;margin:13px 0 0 30px}#media_desc{float:left;font-size:12px;margin:5px;width:95%}#media_control,#media_desc{font-family:Roboto,Open Sans,Verdana,Georgia,Serif}#media_control{-webkit-transition:opacity 1s;background-color:#000;height:60px;left:8px;margin:-60px 0 0 40px;opacity:.7;padding:0;position:absolute;top:650px;transition:opacity 1s;width:960px;z-index:1000}#media_control:hover{opacity:.7}#play{background-image:url(/assets/imagefiles/play.png);float:left;height:40px;margin:10px 20px 10px 10px;width:65px}#play:hover{background-image:url(/assets/imagefiles/play-hover.png)}#play:press{background-image:url(/assets/imagefiles/play-press.png)}#pause{background-image:url(/assets/imagefiles/pause.png);display:none;float:left;height:40px;margin:10px 20px 10px 10px;width:65px}#pause:hover{background-image:url(/assets/imagefiles/pause-hover.png)}.button{font-family:Roboto,Open Sans,Verdana,Georgia,Serif;font-size:100%;margin:5px}.volume{margin-left:8px;width:60px}#muteText{margin-left:3px;width:30px}.muteButton{font-family:Roboto,Open Sans,Verdana,Georgia,Serif;font-size:110%}.imageIcon{padding:3px 0 0;width:25px}#progress{background-image:url(/assets/imagefiles/timeline_bg_progress.png);width:1px;z-index:10}#progress,#progress_indicator{background-repeat:repeat-x;cursor:pointer;float:left;height:36px;margin:20px 0 10px -620px}#progress_indicator{background-image:url(/assets/imagefiles/timeline_indicator.png);width:6px;z-index:1000}#progress_bg{background-image:url(/assets/imagefiles/timeline_bg_track.png);background-repeat:repeat-x;cursor:pointer;float:left;height:36px;margin:20px 20px 10px 0;width:600px}#castbutton{background-color:#000;border:none;float:right;height:32px;margin:10px 6px 14px 0;opacity:.7;outline:none;width:40px}#castbutton:hover{--connected-color:#fff;--disconnected-color:#fff}#audio_off{background-image:url(/assets/imagefiles/audio_off.png);display:none}#audio_off,#audio_on{float:right;height:32px;margin:10px 4px 10px 0;width:32px}#audio_on{background-image:url(/assets/imagefiles/audio_on.png);display:block}#audio_bg{background-image:url(/assets/imagefiles/audio_bg.png);height:124px;margin:-115px 8px -10px 0;opacity:.1;width:41px;z-index:10}#audio_bg,#audio_bg_track{display:block;float:right;position:relative}#audio_bg_track{background-image:url(/assets/imagefiles/audio_bg_track.png);height:100px;margin:-100px 20px -30px 0;opacity:0;width:16px;z-index:1000}#audio_indicator{background-image:url(/assets/imagefiles/audio_indicator.png);display:none;height:5px}#audio_bg_level,#audio_indicator{float:right;margin:-50px 20px -30px 0;opacity:0;position:relative;width:16px;z-index:1000}#audio_bg_level{background-image:url(/assets/imagefiles/audio_bg_level.png);display:block;height:50px}#fullscreen_expand{background-image:url(/assets/imagefiles/fullscreen_expand.png);display:block}#fullscreen_collapse,#fullscreen_expand{cursor:pointer;float:right;height:32px;margin:10px 20px 10px 0;width:32px}#fullscreen_collapse{background-image:url(/assets/imagefiles/fullscreen_collapse.png);display:none}#duration{color:#fff;display:block;float:right;height:32px;margin:18px 15px 10px;width:60px}div.imageSub{position:relative}div.imageSub img{z-index:1}div.imageSub div{bottom:0;left:0;padding:0;position:absolute;right:0}div.imageSub div.blackbg{-ms-filter:\"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)\";background-color:#000;color:#000;filter:alpha(opacity=50);opacity:.5;z-index:2000}div.imageSub div.blackbg,div.imageSub div.label{bottom:60px;display:none;font-size:120%;height:30px;left:300px;padding:10px;width:400px}div.imageSub div.label{color:#fff;z-index:3000}#carousel{margin:20px 10px 10px 40px;width:990px}.thumb{cursor:pointer;float:left;margin:10px 10px 10px 0}.thumbnail{height:127px;margin-right:10px;width:225px}.vertical{-webkit-transform:rotate(90deg)}"]
     })
 ], NgCastComponent);
 
@@ -81,9 +81,7 @@ let NgCastService = class NgCastService {
             script.setAttribute('src', 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
             window['document'].body.appendChild(script);
             globalThis.CastPlayer.mediaJSON.categories = categories;
-            globalThis.CastPlayer.addMediaContents();
-            globalThis.CastPlayer.setupLocalPlayer();
-            globalThis.CastPlayer.initializeUI();
+            return globalThis.CastPlayer.addMediaContents();
         };
         this.play = () => {
             this.currentMedia.play(null);
@@ -108,8 +106,13 @@ let NgCastService = class NgCastService {
         let x = this.cast.initialize(apiConfig, this.onInitSuccess, this.onError);
     }
     ;
+    initialize(mediaContents) {
+        if (mediaContents) {
+            globalThis.CastPlayer.initializeUI();
+            globalThis.CastPlayer.setupLocalPlayer();
+        }
+    }
     setCasting(value) {
-        globalThis.CastPlayer.addMediaContents();
         this.status.casting = value;
     }
     getStatus() {
@@ -248,7 +251,7 @@ var CastPlayer = function () {
   };
 };
 
-CastPlayer.prototype.initializeCastPlayer = function () {
+CastPlayer.prototype.initializeCastPlayer = () => {
   var options = {};
 
   // Set the receiver application ID to your own (created in the
@@ -264,33 +267,29 @@ CastPlayer.prototype.initializeCastPlayer = function () {
 
   cast.framework.CastContext.getInstance().setOptions(options);
 
-  this.remotePlayer = new cast.framework.RemotePlayer();
-  this.remotePlayerController = new cast.framework.RemotePlayerController(this.remotePlayer);
-  this.remotePlayerController.addEventListener(
-    cast.framework.RemotePlayerEventType.IS_CONNECTED_CHANGED,
-    function (e) {
-      this.switchPlayer(e.value);
-    }.bind(this)
+  castPlayer.remotePlayer = new cast.framework.RemotePlayer();
+  castPlayer.remotePlayerController = new cast.framework.RemotePlayerController(castPlayer.remotePlayer);
+  castPlayer.remotePlayerController.addEventListener(
+      cast.framework.RemotePlayerEventType.IS_CONNECTED_CHANGED,
+      castPlayer.switchPlayer.bind(castPlayer)
   );
 };
 
 /**
  * Switch between the remote and local players.
  */
-CastPlayer.prototype.switchPlayer = function () {
-  this.playerStateBeforeSwitch = this.playerState;
-
-  this.stopProgressTimer();
-  this.resetVolumeSlider();
-
-  // Session is active
-  if (cast && cast.framework && this.remotePlayer.isConnected) {
-    // Pause local playback
-    this.playerHandler.pause();
-    this.setupRemotePlayer();
-  } else {
-    this.setupLocalPlayer();
+CastPlayer.prototype.switchPlayer = () => {
+  castPlayer.stopProgressTimer();
+  castPlayer.resetVolumeSlider();
+  castPlayer.playerHandler.stop();
+  castPlayer.playerState = PLAYER_STATE.IDLE;
+  if (cast && cast.framework) {
+      if (castPlayer.remotePlayer.isConnected) {
+        castPlayer.setupRemotePlayer();
+          return;
+      }
   }
+  castPlayer.setupLocalPlayer();
 };
 
 /**
@@ -411,10 +410,6 @@ var PlayerHandler = function (castPlayer) {
     this.target.updateCurrentTimeDisplay();
   };
 
-  this.updateDurationDisplay = function () {
-    this.target.updateDurationDisplay();
-  };
-
   /**
    * Determines the correct time string (media or clock) and sets it for the given element.
    */
@@ -450,82 +445,82 @@ var PlayerHandler = function (castPlayer) {
 /**
  * Set the PlayerHandler target to use the video-element player
  */
-CastPlayer.prototype.setupLocalPlayer = function () {
+CastPlayer.prototype.setupLocalPlayer = () => {
   var localPlayer = document.getElementById('video_element');
   localPlayer.addEventListener(
-      'loadeddata', this.onMediaLoadedLocally.bind(this));
+    'loadeddata', castPlayer.onMediaLoadedLocally.bind(castPlayer));
 
   // This object will implement PlayerHandler callbacks with localPlayer
   var playerTarget = {};
 
-  playerTarget.play = function() {
-      localPlayer.play();
+  playerTarget.play = function () {
+    localPlayer.play();
 
-      var vi = document.getElementById('video_image');
-      vi.style.display = 'none';
-      localPlayer.style.display = 'block';
+    var vi = document.getElementById('video_image');
+    vi.style.display = 'none';
+    localPlayer.style.display = 'block';
   };
 
   playerTarget.pause = function () {
-      localPlayer.pause();
+    localPlayer.pause();
   };
 
   playerTarget.stop = function () {
-      localPlayer.stop();
+    localPlayer.stop();
   };
 
-  playerTarget.load = function(mediaIndex) {
-      localPlayer.src =
-          this.mediaContents[mediaIndex]['sources'][0];
-      localPlayer.load();
-  }.bind(this);
+  playerTarget.load = function (mediaIndex) {
+    localPlayer.src =
+      castPlayer.mediaContents[mediaIndex]['sources'][0];
+    localPlayer.load();
+  }.bind(castPlayer);
 
-  playerTarget.getCurrentMediaTime = function() {
-      return localPlayer.currentTime;
+  playerTarget.getCurrentMediaTime = function () {
+    return localPlayer.currentTime;
   };
 
-  playerTarget.getMediaDuration = function() {
-      return localPlayer.duration;
+  playerTarget.getMediaDuration = function () {
+    return localPlayer.duration;
   };
 
   playerTarget.updateDisplayMessage = function () {
-      document.getElementById('playerstate').style.display = 'none';
-      document.getElementById('playerstatebg').style.display = 'none';
-      document.getElementById('video_image_overlay').style.display = 'none';
+    document.getElementById('playerstate').style.display = 'none';
+    document.getElementById('playerstatebg').style.display = 'none';
+    document.getElementById('video_image_overlay').style.display = 'none';
   };
 
-  playerTarget.setVolume = function(volumeSliderPosition) {
-      localPlayer.volume = volumeSliderPosition < FULL_VOLUME_HEIGHT ?
-          volumeSliderPosition / FULL_VOLUME_HEIGHT : 1;
-      var p = document.getElementById('audio_bg_level');
-      p.style.height = volumeSliderPosition + 'px';
-      p.style.marginTop = -volumeSliderPosition + 'px';
+  playerTarget.setVolume = function (volumeSliderPosition) {
+    localPlayer.volume = volumeSliderPosition < FULL_VOLUME_HEIGHT ?
+      volumeSliderPosition / FULL_VOLUME_HEIGHT : 1;
+    var p = document.getElementById('audio_bg_level');
+    p.style.height = volumeSliderPosition + 'px';
+    p.style.marginTop = -volumeSliderPosition + 'px';
   };
 
-  playerTarget.mute = function() {
-      localPlayer.muted = true;
+  playerTarget.mute = function () {
+    localPlayer.muted = true;
   };
 
-  playerTarget.unMute = function() {
-      localPlayer.muted = false;
+  playerTarget.unMute = function () {
+    localPlayer.muted = false;
   };
 
-  playerTarget.isMuted = function() {
-      return localPlayer.muted;
+  playerTarget.isMuted = function () {
+    return localPlayer.muted;
   };
 
-  playerTarget.seekTo = function(time) {
-      localPlayer.currentTime = time;
+  playerTarget.seekTo = function (time) {
+    localPlayer.currentTime = time;
   };
 
-  this.playerHandler.setTarget(playerTarget);
+  castPlayer.playerHandler.setTarget(playerTarget);
 
-  this.playerHandler.setVolume(DEFAULT_VOLUME * FULL_VOLUME_HEIGHT);
+  castPlayer.playerHandler.setVolume(DEFAULT_VOLUME * FULL_VOLUME_HEIGHT);
 
-  this.showFullscreenButton();
+  castPlayer.showFullscreenButton();
 
-  if (this.currentMediaTime > 0) {
-      this.playerHandler.play();
+  if (castPlayer.currentMediaTime > 0) {
+    castPlayer.playerHandler.play();
   }
 };
 
@@ -535,121 +530,121 @@ CastPlayer.prototype.setupLocalPlayer = function () {
  */
 CastPlayer.prototype.setupRemotePlayer = function () {
   // Triggers when the media info or the player state changes
-  this.remotePlayerController.addEventListener(
+  castPlayer.remotePlayerController.addEventListener(
     cast.framework.RemotePlayerEventType.MEDIA_INFO_CHANGED,
     function (event) {
       let session = cast.framework.CastContext.getInstance().getCurrentSession();
       if (!session) {
-        this.mediaInfo = null;
-        this.isLiveContent = false;
-        this.playerHandler.updateDisplay();
+        castPlayer.mediaInfo = null;
+        castPlayer.isLiveContent = false;
+        castPlayer.playerHandler.updateDisplay();
         return;
       }
 
       let media = session.getMediaSession();
       if (!media) {
-        this.mediaInfo = null;
-        this.isLiveContent = false;
-        this.playerHandler.updateDisplay();
+        castPlayer.mediaInfo = null;
+        castPlayer.isLiveContent = false;
+        castPlayer.playerHandler.updateDisplay();
         return;
       }
 
-      this.mediaInfo = media.media;
+      castPlayer.mediaInfo = media.media;
 
-      if (this.mediaInfo) {
-        this.isLiveContent = (this.mediaInfo.streamType ==
+      if (castPlayer.mediaInfo) {
+        castPlayer.isLiveContent = (castPlayer.mediaInfo.streamType ==
           chrome.cast.media.StreamType.LIVE);
       } else {
-        this.isLiveContent = false;
+        castPlayer.isLiveContent = false;
       }
 
-      if (media.playerState == PLAYER_STATE.PLAYING && this.playerState !== PLAYER_STATE.PLAYING) {
-        this.playerHandler.prepareToPlay();
+      if (media.playerState == PLAYER_STATE.PLAYING && castPlayer.playerState !== PLAYER_STATE.PLAYING) {
+        castPlayer.playerHandler.prepareToPlay();
       }
 
-      this.removeAdMarkers();
-      this.updateAdMarkers();
+      castPlayer.removeAdMarkers();
+      castPlayer.updateAdMarkers();
 
-      this.playerHandler.updateDisplay();
-    }.bind(this)
+      castPlayer.playerHandler.updateDisplay();
+    }.bind(castPlayer)
   );
 
-  this.remotePlayerController.addEventListener(
+  castPlayer.remotePlayerController.addEventListener(
     cast.framework.RemotePlayerEventType.CAN_SEEK_CHANGED,
     function (event) {
-      this.enableProgressBar(event.value);
-    }.bind(this)
+      castPlayer.enableProgressBar(event.value);
+    }.bind(castPlayer)
   );
 
-  this.remotePlayerController.addEventListener(
+  castPlayer.remotePlayerController.addEventListener(
     cast.framework.RemotePlayerEventType.IS_PAUSED_CHANGED,
     function () {
-      if (this.remotePlayer.isPaused) {
-        this.playerHandler.pause();
-      } else if (this.playerState !== PLAYER_STATE.PLAYING) {
+      if (castPlayer.remotePlayer.isPaused) {
+        castPlayer.playerHandler.pause();
+      } else if (castPlayer.playerState !== PLAYER_STATE.PLAYING) {
         // If currently not playing, start to play.
         // This occurs if starting to play from local, but this check is
         // required if the state is changed remotely.
-        this.playerHandler.play();
+        castPlayer.playerHandler.play();
       }
-    }.bind(this)
+    }.bind(castPlayer)
   );
 
-  this.remotePlayerController.addEventListener(
+  castPlayer.remotePlayerController.addEventListener(
     cast.framework.RemotePlayerEventType.IS_MUTED_CHANGED,
     function () {
-      if (this.remotePlayer.isMuted) {
-        this.playerHandler.mute();
+      if (castPlayer.remotePlayer.isMuted) {
+        castPlayer.playerHandler.mute();
       } else {
-        this.playerHandler.unMute();
+        castPlayer.playerHandler.unMute();
       }
-    }.bind(this)
+    }.bind(castPlayer)
   );
 
-  this.remotePlayerController.addEventListener(
+  castPlayer.remotePlayerController.addEventListener(
     cast.framework.RemotePlayerEventType.VOLUME_LEVEL_CHANGED,
     function () {
-      var newVolume = this.remotePlayer.volumeLevel * FULL_VOLUME_HEIGHT;
+      var newVolume = castPlayer.remotePlayer.volumeLevel * FULL_VOLUME_HEIGHT;
       var p = document.getElementById('audio_bg_level');
       p.style.height = newVolume + 'px';
       p.style.marginTop = -newVolume + 'px';
-    }.bind(this)
+    }.bind(castPlayer)
   );
 
-  this.remotePlayerController.addEventListener(
+  castPlayer.remotePlayerController.addEventListener(
     cast.framework.RemotePlayerEventType.IS_PLAYING_BREAK_CHANGED,
     function (event) {
-      this.isPlayingBreak(event.value);
-    }.bind(this)
+      castPlayer.isPlayingBreak(event.value);
+    }.bind(castPlayer)
   );
 
-  this.remotePlayerController.addEventListener(
+  castPlayer.remotePlayerController.addEventListener(
     cast.framework.RemotePlayerEventType.WHEN_SKIPPABLE_CHANGED,
     function (event) {
-      this.onWhenSkippableChanged(event.value);
-    }.bind(this)
+      castPlayer.onWhenSkippableChanged(event.value);
+    }.bind(castPlayer)
   );
 
-  this.remotePlayerController.addEventListener(
+  castPlayer.remotePlayerController.addEventListener(
     cast.framework.RemotePlayerEventType.CURRENT_BREAK_CLIP_TIME_CHANGED,
     function (event) {
-      this.onCurrentBreakClipTimeChanged(event.value);
-    }.bind(this)
+      castPlayer.onCurrentBreakClipTimeChanged(event.value);
+    }.bind(castPlayer)
   );
 
-  this.remotePlayerController.addEventListener(
+  castPlayer.remotePlayerController.addEventListener(
     cast.framework.RemotePlayerEventType.BREAK_CLIP_ID_CHANGED,
     function (event) {
-      this.onBreakClipIdChanged(event.value);
-    }.bind(this)
+      castPlayer.onBreakClipIdChanged(event.value);
+    }.bind(castPlayer)
   );
 
-  this.remotePlayerController.addEventListener(
+  castPlayer.remotePlayerController.addEventListener(
     cast.framework.RemotePlayerEventType.LIVE_SEEKABLE_RANGE_CHANGED,
     function (event) {
       console.log('LIVE_SEEKABLE_RANGE_CHANGED');
-      this.liveSeekableRange = event.value;
-    }.bind(this)
+      castPlayer.liveSeekableRange = event.value;
+    }.bind(castPlayer)
   );
 
   // This object will implement PlayerHandler callbacks with
@@ -658,92 +653,47 @@ CastPlayer.prototype.setupRemotePlayer = function () {
   var playerTarget = {};
 
   playerTarget.play = function () {
-    if (this.remotePlayer.isPaused) {
-      this.remotePlayerController.playOrPause();
+    if (castPlayer.remotePlayer.isPaused) {
+      castPlayer.remotePlayerController.playOrPause();
     }
 
     var vi = document.getElementById('video_image');
     vi.style.display = '';
     var localPlayer = document.getElementById('video_element');
     localPlayer.style.display = 'none';
-  }.bind(this);
+  }.bind(castPlayer);
 
   playerTarget.pause = function () {
-    if (!this.remotePlayer.isPaused) {
-      this.remotePlayerController.playOrPause();
+    if (!castPlayer.remotePlayer.isPaused) {
+      castPlayer.remotePlayerController.playOrPause();
     }
-  }.bind(this);
+  }.bind(castPlayer);
 
   playerTarget.stop = function () {
-    this.remotePlayerController.stop();
-  }.bind(this);
+    castPlayer.remotePlayerController.stop();
+  }.bind(castPlayer);
 
   // Load request for local -> remote
   playerTarget.load = function (mediaIndex) {
     console.log('Loading...' + this.mediaContents[mediaIndex]['title']);
+    var mediaInfo = new chrome.cast.media.MediaInfo(
+        this.mediaContents[mediaIndex]['sources'][0], 'video/mp4');
 
-    let mediaInfo = new chrome.cast.media.MediaInfo(this.mediaContents[mediaIndex]['sources'][0], 'video/mp4');
-    mediaInfo.streamType = chrome.cast.media.StreamType.BUFFERED;
-    mediaInfo.metadata = new chrome.cast.media.TvShowMediaMetadata();
+    mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
+    mediaInfo.metadata.metadataType = chrome.cast.media.MetadataType.GENERIC;
     mediaInfo.metadata.title = this.mediaContents[mediaIndex]['title'];
-    mediaInfo.metadata.subtitle = this.mediaContents[mediaIndex]['subtitle'];
-    mediaInfo.metadata.images = [{
-      'url': MEDIA_SOURCE_ROOT + this.mediaContents[mediaIndex]['thumb']
-    }];
+    mediaInfo.metadata.images = [
+        {'url': MEDIA_SOURCE_ROOT + this.mediaContents[mediaIndex]['thumb']}];
 
-    let request = new chrome.cast.media.LoadRequest(mediaInfo);
-    request.currentTime = this.currentMediaTime;
-
-    if (ENABLE_ADS) {
-      // Add sample breaks and breakClips.
-      mediaInfo.breakClips = breakClipsJSON;
-      mediaInfo.breaks = breaksJSON;
-    } else if (ENABLE_LIVE) {
-      // Change the streamType and add live specific metadata.
-      mediaInfo.streamType = chrome.cast.media.StreamType.LIVE;
-      // TODO: Set the metadata on the receiver side in your implementation.
-      // startAbsoluteTime and sectionStartTimeInMedia will be set for you.
-      // See https://developers.google.com/cast/docs/caf_receiver/live.
-
-      // TODO: Start time, is a fake timestamp. Use correct values for your implementation.
-      let currentTime = new Date();
-      // Convert from milliseconds to seconds.
-      currentTime = currentTime / 1000;
-      let sectionStartAbsoluteTime = currentTime;
-
-      // Duration should be -1 for live streams.
-      mediaInfo.duration = -1;
-      // TODO: Set on the receiver for your implementation.
-      mediaInfo.startAbsoluteTime = currentTime;
-      mediaInfo.metadata.sectionStartAbsoluteTime = sectionStartAbsoluteTime;
-      // TODO: Set on the receiver for your implementation.
-      mediaInfo.metadata.sectionStartTimeInMedia = 0;
-      mediaInfo.metadata.sectionDuration = this.mediaContents[mediaIndex]['duration'];
-
-      let item = new chrome.cast.media.QueueItem(mediaInfo);
-      request.queueData = new chrome.cast.media.QueueData();
-      request.queueData.items = [item];
-      request.queueData.name = "Sample Queue for Live";
-    }
-
-    // Do not immediately start playing if the player was previously PAUSED.
-    if (!this.playerStateBeforeSwitch || this.playerStateBeforeSwitch == PLAYER_STATE.PAUSED) {
-      request.autoplay = false;
-    } else {
-      request.autoplay = true;
-    }
-
-    cast.framework.CastContext.getInstance().getCurrentSession().loadMedia(request).then(
-      function () {
-        console.log('Remote media loaded');
-      }.bind(this),
-      function (errorCode) {
-        this.playerState = PLAYER_STATE.IDLE;
-        console.log('Remote media load error: ' +
-          CastPlayer.getErrorMessage(errorCode));
-        this.playerHandler.updateDisplay();
-      }.bind(this));
-  }.bind(this);
+    var request = new chrome.cast.media.LoadRequest(mediaInfo);
+    castSession.loadMedia(request).then(
+        this.playerHandler.loaded.bind(this.playerHandler),
+        function (errorCode) {
+            this.playerState = PLAYER_STATE.ERROR;
+            console.log('Remote media load error: ' +
+                CastPlayer.getErrorMessage(errorCode));
+        }.bind(castPlayer));
+  }.bind(castPlayer);
 
   playerTarget.isMediaLoaded = function (mediaIndex) {
     let session = cast.framework.CastContext.getInstance().getCurrentSession();
@@ -758,40 +708,40 @@ CastPlayer.prototype.setupRemotePlayer = function () {
 
     // No need to verify local mediaIndex content.
     return true;
-  }.bind(this);
+  }.bind(castPlayer);
 
   /**
    * @return {number?} Current media time for the content. Always returns
    *      media time even if in clock time (conversion done when displaying).
    */
   playerTarget.getCurrentMediaTime = function () {
-    if (this.isLiveContent && this.mediaInfo.metadata &&
-      this.mediaInfo.metadata.sectionStartTimeInMedia) {
-      return this.remotePlayer.currentTime - this.mediaInfo.metadata.sectionStartTimeInMedia;
+    if (castPlayer.isLiveContent && castPlayer.mediaInfo.metadata &&
+      castPlayer.mediaInfo.metadata.sectionStartTimeInMedia) {
+      return castPlayer.remotePlayer.currentTime - castPlayer.mediaInfo.metadata.sectionStartTimeInMedia;
     } else {
       // VOD and live scenerios where live metadata is not provided.
-      return this.remotePlayer.currentTime;
+      return castPlayer.remotePlayer.currentTime;
     }
-  }.bind(this);
+  }.bind(castPlayer);
 
   /**
    * @return {number?} media time duration for the content. Always returns
    *      media time even if in clock time (conversion done when displaying).
    */
   playerTarget.getMediaDuration = function () {
-    if (this.isLiveContent) {
+    if (castPlayer.isLiveContent) {
       // Scenerios when live metadata is not provided.
-      if (this.mediaInfo.metadata == undefined ||
-        this.mediaInfo.metadata.sectionDuration == undefined ||
-        this.mediaInfo.metadata.sectionStartTimeInMedia == undefined) {
+      if (castPlayer.mediaInfo.metadata == undefined ||
+        castPlayer.mediaInfo.metadata.sectionDuration == undefined ||
+        castPlayer.mediaInfo.metadata.sectionStartTimeInMedia == undefined) {
         return null;
       }
 
-      return this.mediaInfo.metadata.sectionDuration;
+      return castPlayer.mediaInfo.metadata.sectionDuration;
     } else {
-      return this.remotePlayer.duration;
+      return castPlayer.remotePlayer.duration;
     }
-  }.bind(this);
+  }.bind(castPlayer);
 
   playerTarget.updateDisplay = function () {
     let castSession = cast.framework.CastContext.getInstance().getCurrentSession();
@@ -845,14 +795,14 @@ CastPlayer.prototype.setupRemotePlayer = function () {
 
       // live information
       if (mediaInfo.streamType == chrome.cast.media.StreamType.LIVE) {
-        this.liveSeekableRange = media.liveSeekableRange;
+        castPlayer.liveSeekableRange = media.liveSeekableRange;
 
         let live_indicator = document.getElementById('live_indicator');
         live_indicator.style.display = 'block';
 
         // Display indicator if current time is close to the end of
         // the seekable range.
-        if (this.liveSeekableRange && (Math.abs(media.getEstimatedTime() - this.liveSeekableRange.end) < LIVE_INDICATOR_BUFFER)) {
+        if (castPlayer.liveSeekableRange && (Math.abs(media.getEstimatedTime() - castPlayer.liveSeekableRange.end) < LIVE_INDICATOR_BUFFER)) {
           live_indicator.src = "imagefiles/live_indicator_active.png";
         } else {
           live_indicator.src = "imagefiles/live_indicator_inactive.png";
@@ -870,29 +820,25 @@ CastPlayer.prototype.setupRemotePlayer = function () {
       document.getElementById('media_title').innerHTML = "";
       document.getElementById('media_subtitle').innerHTML = "";
     }
-  }.bind(this);
+  }.bind(castPlayer);
 
   playerTarget.updateCurrentTimeDisplay = function () {
-    this.playerHandler.setTimeString(document.getElementById('currentTime'), this.playerHandler.getCurrentMediaTime());
-  }.bind(this);
-
-  playerTarget.updateDurationDisplay = function () {
-    this.playerHandler.setTimeString(document.getElementById('duration'), this.playerHandler.getMediaDuration());
-  }.bind(this);
+    castPlayer.playerHandler.setTimeString(document.getElementById('currentTime'), castPlayer.playerHandler.getCurrentMediaTime());
+  }.bind(castPlayer);
 
   playerTarget.setTimeString = function (element, time) {
-    let currentTimeString = this.getMediaTimeString(time);
+    let currentTimeString = castPlayer.getMediaTimeString(time);
 
-    if (this.isLiveContent) {
+    if (castPlayer.isLiveContent) {
       if (currentTimeString == null) {
         element.style.display = 'none';
         return;
       }
 
       // clock time
-      if (this.mediaInfo.metadata && this.mediaInfo.metadata.sectionStartAbsoluteTime !== undefined) {
+      if (castPlayer.mediaInfo.metadata && castPlayer.mediaInfo.metadata.sectionStartAbsoluteTime !== undefined) {
         element.style.display = 'flex';
-        element.innerHTML = this.getClockTimeString(time + this.mediaInfo.metadata.sectionStartAbsoluteTime);
+        element.innerHTML = castPlayer.getClockTimeString(time + castPlayer.mediaInfo.metadata.sectionStartAbsoluteTime);
       } else {
         // media time
         element.style.display = 'flex';
@@ -906,10 +852,10 @@ CastPlayer.prototype.setupRemotePlayer = function () {
         element.style.display = 'none';
       }
     }
-  }.bind(this);
+  }.bind(castPlayer);
 
   playerTarget.setVolume = function (volumeSliderPosition) {
-    var currentVolume = this.remotePlayer.volumeLevel;
+    var currentVolume = castPlayer.remotePlayer.volumeLevel;
     var p = document.getElementById('audio_bg_level');
     if (volumeSliderPosition < FULL_VOLUME_HEIGHT) {
       p.style.height = volumeSliderPosition + 'px';
@@ -918,40 +864,40 @@ CastPlayer.prototype.setupRemotePlayer = function () {
     } else {
       currentVolume = 1;
     }
-    this.remotePlayer.volumeLevel = currentVolume;
-    this.remotePlayerController.setVolumeLevel();
-  }.bind(this);
+    castPlayer.remotePlayer.volumeLevel = currentVolume;
+    castPlayer.remotePlayerController.setVolumeLevel();
+  }.bind(castPlayer);
 
   playerTarget.mute = function () {
-    if (!this.remotePlayer.isMuted) {
-      this.remotePlayerController.muteOrUnmute();
+    if (!castPlayer.remotePlayer.isMuted) {
+      castPlayer.remotePlayerController.muteOrUnmute();
     }
-  }.bind(this);
+  }.bind(castPlayer);
 
   playerTarget.unMute = function () {
-    if (this.remotePlayer.isMuted) {
-      this.remotePlayerController.muteOrUnmute();
+    if (castPlayer.remotePlayer.isMuted) {
+      castPlayer.remotePlayerController.muteOrUnmute();
     }
-  }.bind(this);
+  }.bind(castPlayer);
 
   playerTarget.isMuted = function () {
-    return this.remotePlayer.isMuted;
-  }.bind(this);
+    return castPlayer.remotePlayer.isMuted;
+  }.bind(castPlayer);
 
   playerTarget.seekTo = function (time) {
-    this.remotePlayer.currentTime = time;
-    this.remotePlayerController.seek();
-  }.bind(this);
+    castPlayer.remotePlayer.currentTime = time;
+    castPlayer.remotePlayerController.seek();
+  }.bind(castPlayer);
 
-  this.playerHandler.setTarget(playerTarget);
+  castPlayer.playerHandler.setTarget(playerTarget);
 
   // Setup remote player properties on setup
-  if (this.remotePlayer.isMuted) {
-    this.playerHandler.mute();
+  if (castPlayer.remotePlayer.isMuted) {
+    castPlayer.playerHandler.mute();
   }
-  this.enableProgressBar(this.remotePlayer.canSeek);
+  castPlayer.enableProgressBar(castPlayer.remotePlayer.canSeek);
   // The remote player may have had a volume set from previous playback
-  var currentVolume = this.remotePlayer.volumeLevel * FULL_VOLUME_HEIGHT;
+  var currentVolume = castPlayer.remotePlayer.volumeLevel * FULL_VOLUME_HEIGHT;
   var p = document.getElementById('audio_bg_level');
   p.style.height = currentVolume + 'px';
   p.style.marginTop = -currentVolume + 'px';
@@ -959,21 +905,21 @@ CastPlayer.prototype.setupRemotePlayer = function () {
   // Show media_control
   document.getElementById('media_control').style.opacity = 0.7;
 
-  this.hideFullscreenButton();
+  castPlayer.hideFullscreenButton();
 
   // If resuming a session, take the remote properties and continue the existing
   // playback. Otherwise, load local content.
   if (cast.framework.CastContext.getInstance().getCurrentSession().getSessionState() ==
     cast.framework.SessionState.SESSION_RESUMED) {
     console.log('Resuming session');
-    this.playerHandler.prepareToPlay();
+    castPlayer.playerHandler.prepareToPlay();
 
     // New media has been loaded so the previous ad markers should
     // be removed.
-    this.removeAdMarkers();
-    this.updateAdMarkers();
+    castPlayer.removeAdMarkers();
+    castPlayer.updateAdMarkers();
   } else {
-    this.playerHandler.load();
+    castPlayer.playerHandler.load();
   }
 };
 
@@ -982,9 +928,9 @@ CastPlayer.prototype.setupRemotePlayer = function () {
  */
 CastPlayer.prototype.onMediaLoadedLocally = function () {
   var localPlayer = document.getElementById('video_element');
-  localPlayer.currentTime = this.currentMediaTime;
+  localPlayer.currentTime = castPlayer.currentMediaTime;
 
-  this.playerHandler.prepareToPlay();
+  castPlayer.playerHandler.prepareToPlay();
 };
 
 /**
@@ -994,13 +940,13 @@ CastPlayer.prototype.onMediaLoadedLocally = function () {
 CastPlayer.prototype.selectMedia = function (mediaIndex) {
   console.log('Media index selected: ' + mediaIndex);
 
-  this.currentMediaIndex = mediaIndex;
+  castPlayer.currentMediaIndex = mediaIndex;
   // Clear currentMediaInfo when playing content from the sender.
-  this.playerHandler.currentMediaInfo = undefined;
+  castPlayer.playerHandler.currentMediaInfo = undefined;
 
   // Set video image
   var vi = document.getElementById('video_image');
-  vi.src = MEDIA_SOURCE_ROOT + this.mediaContents[mediaIndex]['thumb'];
+  vi.src = MEDIA_SOURCE_ROOT + castPlayer.mediaContents[mediaIndex]['thumb'];
 
   // Reset progress bar
   var pi = document.getElementById('progress_indicator');
@@ -1014,13 +960,13 @@ CastPlayer.prototype.selectMedia = function (mediaIndex) {
   unseekable_overlay.style.width = '0px';
 
   // Stop timer and reset time displays
-  this.stopProgressTimer();
-  this.currentMediaTime = 0;
-  this.playerHandler.setTimeString(document.getElementById('currentTime'), 0);
-  this.playerHandler.setTimeString(document.getElementById('duration'), 0);
+  castPlayer.stopProgressTimer();
+  castPlayer.currentMediaTime = 0;
+  castPlayer.playerHandler.setTimeString(document.getElementById('currentTime'), 0);
+  castPlayer.playerHandler.setTimeString(document.getElementById('duration'), 0);
 
-  this.playerState = PLAYER_STATE.IDLE;
-  this.playerHandler.play();
+  castPlayer.playerState = PLAYER_STATE.IDLE;
+  castPlayer.playerHandler.play();
 };
 
 /**
@@ -1028,12 +974,12 @@ CastPlayer.prototype.selectMedia = function (mediaIndex) {
  * @param {Event} event An event object from seek
  */
 CastPlayer.prototype.seekMedia = function (event) {
-  if (this.mediaDuration == null || (cast.framework.CastContext.getInstance().getCurrentSession() && !this.remotePlayer.canSeek)) {
+  if (castPlayer.mediaDuration == null || (cast.framework.CastContext.getInstance().getCurrentSession() && !castPlayer.remotePlayer.canSeek)) {
     console.log('Error - Not seekable');
     return;
   }
 
-  if (this.isLiveContent && !this.liveSeekableRange) {
+  if (castPlayer.isLiveContent && !castPlayer.liveSeekableRange) {
     console.log('Live content has no seekable range.');
     return;
   }
@@ -1045,28 +991,28 @@ CastPlayer.prototype.seekMedia = function (event) {
   let pp = 0;
   let pw = 0;
   if (event.currentTarget.id == 'progress_indicator') {
-    seekTime = parseInt(this.currentMediaTime + this.mediaDuration * position /
+    seekTime = parseInt(castPlayer.currentMediaTime + castPlayer.mediaDuration * position /
       PROGRESS_BAR_WIDTH, 10);
     pp = parseInt(pi.style.marginLeft, 10) + position;
     pw = parseInt(progress.style.width, 10) + position;
   } else {
-    seekTime = parseInt(position * this.mediaDuration / PROGRESS_BAR_WIDTH, 10);
+    seekTime = parseInt(position * castPlayer.mediaDuration / PROGRESS_BAR_WIDTH, 10);
     pp = position;
     pw = position;
   }
 
-  if (this.playerState === PLAYER_STATE.PLAYING ||
-    this.playerState === PLAYER_STATE.PAUSED) {
-    this.currentMediaTime = seekTime;
+  if (castPlayer.playerState === PLAYER_STATE.PLAYING ||
+    castPlayer.playerState === PLAYER_STATE.PAUSED) {
+    castPlayer.currentMediaTime = seekTime;
     progress.style.width = pw + 'px';
     pi.style.marginLeft = pp + 'px';
   }
 
-  if (this.isLiveContent) {
-    seekTime += this.mediaInfo.metadata.sectionStartTimeInMedia;
+  if (castPlayer.isLiveContent) {
+    seekTime += castPlayer.mediaInfo.metadata.sectionStartTimeInMedia;
   }
 
-  this.playerHandler.seekTo(seekTime);
+  castPlayer.playerHandler.seekTo(seekTime);
 };
 
 /**
@@ -1081,26 +1027,26 @@ CastPlayer.prototype.setVolume = function (mouseEvent) {
   } else {
     pos = parseInt(p.clientHeight, 10) - parseInt(mouseEvent.offsetY, 10);
   }
-  this.playerHandler.setVolume(pos);
+  castPlayer.playerHandler.setVolume(pos);
 };
 
 /**
  * Starts the timer to increment the media progress bar
  */
 CastPlayer.prototype.startProgressTimer = function () {
-  this.stopProgressTimer();
+  castPlayer.stopProgressTimer();
 
   // Start progress timer
-  this.timer = setInterval(this.incrementMediaTimeHandler, TIMER_STEP);
+  castPlayer.timer = setInterval(castPlayer.incrementMediaTimeHandler, TIMER_STEP);
 };
 
 /**
  * Stops the timer to increment the media progress bar
  */
 CastPlayer.prototype.stopProgressTimer = function () {
-  if (this.timer) {
-    clearInterval(this.timer);
-    this.timer = null;
+  if (castPlayer.timer) {
+    clearInterval(castPlayer.timer);
+    castPlayer.timer = null;
   }
 };
 
@@ -1109,16 +1055,16 @@ CastPlayer.prototype.stopProgressTimer = function () {
  */
 CastPlayer.prototype.incrementMediaTime = function () {
   // First sync with the current player's time
-  this.currentMediaTime = this.playerHandler.getCurrentMediaTime();
-  this.mediaDuration = this.playerHandler.getMediaDuration();
+  castPlayer.currentMediaTime = castPlayer.playerHandler.getCurrentMediaTime();
+  castPlayer.mediaDuration = castPlayer.playerHandler.getMediaDuration();
 
-  this.playerHandler.updateDurationDisplay();
+  castPlayer.playerHandler.updateDurationDisplay();
 
-  if (this.mediaDuration == null || this.currentMediaTime < this.mediaDuration || this.isLiveContent) {
-    this.playerHandler.updateCurrentTimeDisplay();
-    this.updateProgressBarByTimer();
-  } else if (this.mediaDuration > 0) {
-    this.endPlayback();
+  if (castPlayer.mediaDuration == null || castPlayer.currentMediaTime < castPlayer.mediaDuration || castPlayer.isLiveContent) {
+    castPlayer.playerHandler.updateCurrentTimeDisplay();
+    castPlayer.updateProgressBarByTimer();
+  } else if (castPlayer.mediaDuration > 0) {
+    castPlayer.endPlayback();
   }
 };
 
@@ -1130,20 +1076,20 @@ CastPlayer.prototype.updateProgressBarByTimer = function () {
   var pi = document.getElementById('progress_indicator');
 
   // Live situation where the progress and duration is unknown.
-  if (this.mediaDuration == null) {
-    if (!this.isLiveContent) {
+  if (castPlayer.mediaDuration == null) {
+    if (!castPlayer.isLiveContent) {
       console.log('Error - Duration is not defined for a VOD stream.');
     }
 
     progressBar.style.width = '0px';
-    
+
     let skip = document.getElementById('skip');
     if (skip && skip.style && skip.style.display) {
       skip.style.display = 'none';
     }
 
     pi.style.display = 'none';
-    
+
     let seekable_window = document.getElementById('seekable_window');
     if (seekable_window && seekable_window.style && seekable_window.style.width)
       seekable_window.style.width = '0px';
@@ -1163,7 +1109,7 @@ CastPlayer.prototype.updateProgressBarByTimer = function () {
 
   // Prevent indicator from exceeding the max width. Happens during
   // short media when each progress step is large
-  var pp = Math.floor(PROGRESS_BAR_WIDTH * this.currentMediaTime / this.mediaDuration);
+  var pp = Math.floor(PROGRESS_BAR_WIDTH * castPlayer.currentMediaTime / castPlayer.mediaDuration);
   if (pp > PROGRESS_BAR_WIDTH) {
     pp = PROGRESS_BAR_WIDTH;
   } else if (pp < 0) {
@@ -1175,12 +1121,12 @@ CastPlayer.prototype.updateProgressBarByTimer = function () {
 
   let seekable_window = document.getElementById('seekable_window');
   let unseekable_overlay = document.getElementById('unseekable_overlay');
-  if (this.isLiveContent) {
-    if (this.liveSeekableRange) {
+  if (castPlayer.isLiveContent) {
+    if (castPlayer.liveSeekableRange) {
       // Use the liveSeekableRange to draw the seekable and unseekable windows
-      let seekableMediaPosition = Math.max(this.mediaInfo.metadata.sectionStartTimeInMedia, this.liveSeekableRange.end) -
-        this.mediaInfo.metadata.sectionStartTimeInMedia;
-      let seekableWidth = Math.floor(PROGRESS_BAR_WIDTH * seekableMediaPosition / this.mediaDuration);
+      let seekableMediaPosition = Math.max(castPlayer.mediaInfo.metadata.sectionStartTimeInMedia, castPlayer.liveSeekableRange.end) -
+        castPlayer.mediaInfo.metadata.sectionStartTimeInMedia;
+      let seekableWidth = Math.floor(PROGRESS_BAR_WIDTH * seekableMediaPosition / castPlayer.mediaDuration);
       if (seekableWidth > PROGRESS_BAR_WIDTH) {
         seekableWidth = PROGRESS_BAR_WIDTH;
       } else if (seekableWidth < 0) {
@@ -1188,9 +1134,9 @@ CastPlayer.prototype.updateProgressBarByTimer = function () {
       }
       seekable_window.style.width = seekableWidth + 'px';
 
-      let unseekableMediaPosition = Math.max(this.mediaInfo.metadata.sectionStartTimeInMedia, this.liveSeekableRange.start) -
-        this.mediaInfo.metadata.sectionStartTimeInMedia;
-      let unseekableWidth = Math.floor(PROGRESS_BAR_WIDTH * unseekableMediaPosition / this.mediaDuration);
+      let unseekableMediaPosition = Math.max(castPlayer.mediaInfo.metadata.sectionStartTimeInMedia, castPlayer.liveSeekableRange.start) -
+        castPlayer.mediaInfo.metadata.sectionStartTimeInMedia;
+      let unseekableWidth = Math.floor(PROGRESS_BAR_WIDTH * unseekableMediaPosition / castPlayer.mediaDuration);
       if (unseekableWidth > PROGRESS_BAR_WIDTH) {
         unseekableWidth = PROGRESS_BAR_WIDTH;
       } else if (unseekableWidth < 0) {
@@ -1208,8 +1154,8 @@ CastPlayer.prototype.updateProgressBarByTimer = function () {
     unseekable_overlay.style.width = '0px';
   }
 
-  if (pp >= PROGRESS_BAR_WIDTH && !this.isLiveContent) {
-    this.endPlayback();
+  if (pp >= PROGRESS_BAR_WIDTH && !castPlayer.isLiveContent) {
+    castPlayer.endPlayback();
   }
 };
 
@@ -1217,10 +1163,10 @@ CastPlayer.prototype.updateProgressBarByTimer = function () {
  *  End playback. Called when media ends.
  */
 CastPlayer.prototype.endPlayback = function () {
-  this.currentMediaTime = 0;
-  this.stopProgressTimer();
-  this.playerState = PLAYER_STATE.IDLE;
-  this.playerHandler.updateDisplay();
+  castPlayer.currentMediaTime = 0;
+  castPlayer.stopProgressTimer();
+  castPlayer.playerState = PLAYER_STATE.IDLE;
+  castPlayer.playerHandler.updateDisplay();
 
   let play = document.getElementById('play');
   if (play && play.style && play.display)
@@ -1312,7 +1258,7 @@ CastPlayer.prototype.updateAdMarkers = function () {
       var div = document.getElementById('progress');
       div.innerHTML += '<div class="adMarker" id="ad' + adBreak.position +
         '" style="margin-left: ' +
-        this.adPositionToMargin(adBreak.position, contentDuration) + 'px"></div>';
+        castPlayer.adPositionToMargin(adBreak.position, contentDuration) + 'px"></div>';
     }
   }
 };
@@ -1359,14 +1305,14 @@ CastPlayer.prototype.onBreakClipIdChanged = function () {
  * Disable progress bar if playing a break.
  */
 CastPlayer.prototype.isPlayingBreak = function (isPlayingBreak) {
-  this.enableProgressBar(!isPlayingBreak);
+  castPlayer.enableProgressBar(!isPlayingBreak);
 };
 
 /**
  * Handle WHEN_SKIPPABLE_CHANGED event
  */
 CastPlayer.prototype.onWhenSkippableChanged = function (whenSkippable) {
-  this.whenSkippable = whenSkippable;
+  castPlayer.whenSkippable = whenSkippable;
 };
 
 /**
@@ -1376,13 +1322,13 @@ CastPlayer.prototype.onCurrentBreakClipTimeChanged = function (currentBreakClipT
   let skip = document.getElementById('skip');
 
   // Unskippable
-  if (this.whenSkippable == undefined || this.whenSkippable < 0) {
+  if (castPlayer.whenSkippable == undefined || castPlayer.whenSkippable < 0) {
     // Hide skip button    
     if (skip && skip.style && skip.style.display)
       skip.style.display = 'none';
   }
   // Skippable
-  else if (this.whenSkippable !== undefined || currentBreakClipTime >= this.whenSkippable) {
+  else if (castPlayer.whenSkippable !== undefined || currentBreakClipTime >= castPlayer.whenSkippable) {
     // Show skip button    
     if (skip && skip.style && skip.style.display)
       skip.style.display = 'block';
@@ -1399,7 +1345,7 @@ CastPlayer.prototype.onCurrentBreakClipTimeChanged = function (currentBreakClipT
  * Skip the current Ad
  */
 CastPlayer.prototype.skipAd = function () {
-  this.remotePlayerController.skipAd();
+  castPlayer.remotePlayerController.skipAd();
 };
 
 /**
@@ -1419,9 +1365,9 @@ CastPlayer.prototype.enableProgressBar = function (enable) {
     progress_indicator.draggable = true;
 
     // Add listeners
-    progress.addEventListener('click', this.seekMediaListener);
-    seekable_window.addEventListener('click', this.seekMediaListener);
-    progress_indicator.addEventListener('dragend', this.seekMediaListener);
+    progress.addEventListener('click', castPlayer.seekMediaListener);
+    seekable_window.addEventListener('click', castPlayer.seekMediaListener);
+    progress_indicator.addEventListener('dragend', castPlayer.seekMediaListener);
   } else {
     // Disable UI
     progress.style.backgroundImage = "url('./assets/imagefiles/timeline_bg_buffer.png')";
@@ -1431,9 +1377,9 @@ CastPlayer.prototype.enableProgressBar = function (enable) {
     progress_indicator.draggable = false;
 
     // Remove listeners
-    progress.removeEventListener('click', this.seekMediaListener);
-    seekable_window.removeEventListener('click', this.seekMediaListener);
-    progress_indicator.removeEventListener('dragend', this.seekMediaListener);
+    progress.removeEventListener('click', castPlayer.seekMediaListener);
+    seekable_window.removeEventListener('click', castPlayer.seekMediaListener);
+    progress_indicator.removeEventListener('dragend', castPlayer.seekMediaListener);
   }
 };
 
@@ -1470,7 +1416,7 @@ CastPlayer.prototype.cancelFullScreen = function () {
  * Exit fullscreen mode by escape
  */
 CastPlayer.prototype.fullscreenChangeHandler = function () {
-  this.fullscreen = !this.fullscreen;
+  castPlayer.fullscreen = !castPlayer.fullscreen;
 };
 
 /**
@@ -1480,12 +1426,12 @@ CastPlayer.prototype.showFullscreenButton = function () {
   let fullscreen_expand = document.getElementById('fullscreen_expand');
   let fullscreen_collapse = document.getElementById('fullscreen_collapse');
 
-  if (this.fullscreen) {
+  if (castPlayer.fullscreen) {
     if (fullscreen_expand && fullscreen_expand.style && fullscreen_expand.style.display)
       fullscreen_expand.style.display = 'none';
 
     if (fullscreen_collapse && fullscreen_collapse.style && fullscreen_collapse.style.display)
-      fullscreen_collapse.style.display = 'block';      
+      fullscreen_collapse.style.display = 'block';
   } else {
     if (fullscreen_expand && fullscreen_expand.style && fullscreen_expand.style.display)
       fullscreen_expand.style.display = 'block';
@@ -1503,10 +1449,10 @@ CastPlayer.prototype.hideFullscreenButton = function () {
   let fullscreen_collapse = document.getElementById('fullscreen_collapse');
 
   if (fullscreen_expand && fullscreen_expand.style && fullscreen_expand.style.display)
-      fullscreen_expand.style.display = 'none';
+    fullscreen_expand.style.display = 'none';
 
   if (fullscreen_collapse && fullscreen_collapse.style && fullscreen_collapse.style.display)
-      fullscreen_collapse.style.display = 'none';
+    fullscreen_collapse.style.display = 'none';
 };
 
 /**
@@ -1537,7 +1483,7 @@ CastPlayer.prototype.hideMediaControl = function () {
  * Show the volume slider
  */
 CastPlayer.prototype.showVolumeSlider = function () {
-  if (!this.playerHandler.isMuted()) {
+  if (!castPlayer.playerHandler.isMuted()) {
     document.getElementById('audio_bg').style.opacity = 1;
     document.getElementById('audio_bg_track').style.opacity = 1;
     document.getElementById('audio_bg_level').style.opacity = 1;
@@ -1570,93 +1516,96 @@ CastPlayer.prototype.resetVolumeSlider = function () {
 /**
  * Initialize UI components and add event listeners
  */
-CastPlayer.prototype.initializeUI = function () {
-    // Set initial values for title, subtitle, and description
-    document.getElementById('media_title').innerHTML =
-        this.mediaContents[0]['title'];
-    document.getElementById('media_subtitle').innerHTML =
-        this.mediaContents[this.currentMediaIndex]['subtitle'];
-    document.getElementById('media_desc').innerHTML =
-        this.mediaContents[this.currentMediaIndex]['description'];
+CastPlayer.prototype.initializeUI = () => {
+  // Set initial values for title, subtitle, and description
+  document.getElementById('media_title').innerHTML =
+    castPlayer.mediaContents[0]['title'];
+  document.getElementById('media_subtitle').innerHTML =
+    castPlayer.mediaContents[castPlayer.currentMediaIndex]['subtitle'];
+  document.getElementById('media_desc').innerHTML =
+    castPlayer.mediaContents[castPlayer.currentMediaIndex]['description'];
 
-    // Add event handlers to UI components
-    document.getElementById('progress_bg').addEventListener(
-        'click', this.seekMedia.bind(this));
-    document.getElementById('progress').addEventListener(
-        'click', this.seekMedia.bind(this));
-    document.getElementById('progress_indicator').addEventListener(
-       'dragend', this.seekMedia.bind(this));
-    document.getElementById('audio_on').addEventListener(
-        'click', this.playerHandler.mute.bind(this.playerHandler));
-    document.getElementById('audio_off').addEventListener(
-        'click', this.playerHandler.unMute.bind(this.playerHandler));
-    document.getElementById('audio_bg').addEventListener(
-        'mouseover', this.showVolumeSlider.bind(this));
-    document.getElementById('audio_on').addEventListener(
-        'mouseover', this.showVolumeSlider.bind(this));
-    document.getElementById('audio_bg_level').addEventListener(
-        'mouseover', this.showVolumeSlider.bind(this));
-    document.getElementById('audio_bg_track').addEventListener(
-        'mouseover', this.showVolumeSlider.bind(this));
-    document.getElementById('audio_bg_level').addEventListener(
-        'click', this.setVolume.bind(this));
-    document.getElementById('audio_bg_track').addEventListener(
-        'click', this.setVolume.bind(this));
-    document.getElementById('audio_bg').addEventListener(
-        'mouseout', this.hideVolumeSlider.bind(this));
-    document.getElementById('audio_on').addEventListener(
-        'mouseout', this.hideVolumeSlider.bind(this));
-    document.getElementById('main_video').addEventListener(
-        'mouseover', this.showMediaControl.bind(this));
-    document.getElementById('main_video').addEventListener(
-        'mouseout', this.hideMediaControl.bind(this));
-    document.getElementById('media_control').addEventListener(
-        'mouseover', this.showMediaControl.bind(this));
-    document.getElementById('media_control').addEventListener(
-        'mouseout', this.hideMediaControl.bind(this));
-    document.getElementById('fullscreen_expand').addEventListener(
-        'click', this.requestFullScreen.bind(this));
-    document.getElementById('fullscreen_collapse').addEventListener(
-        'click', this.cancelFullScreen.bind(this));
-    document.addEventListener(
-        'fullscreenchange', this.fullscreenChangeHandler.bind(this), false);
-    document.addEventListener(
-        'webkitfullscreenchange', this.fullscreenChangeHandler.bind(this), false);
+  // Add event handlers to UI components
+  document.getElementById('progress_bg').addEventListener(
+    'click', castPlayer.seekMedia.bind(castPlayer));
+  document.getElementById('progress').addEventListener(
+    'click', castPlayer.seekMedia.bind(castPlayer));
+  document.getElementById('progress_indicator').addEventListener(
+    'dragend', castPlayer.seekMedia.bind(castPlayer));
+  document.getElementById('audio_on').addEventListener(
+    'click', castPlayer.playerHandler.mute.bind(castPlayer.playerHandler));
+  document.getElementById('audio_off').addEventListener(
+    'click', castPlayer.playerHandler.unMute.bind(castPlayer.playerHandler));
+  document.getElementById('audio_bg').addEventListener(
+    'mouseover', castPlayer.showVolumeSlider.bind(castPlayer));
+  document.getElementById('audio_on').addEventListener(
+    'mouseover', castPlayer.showVolumeSlider.bind(castPlayer));
+  document.getElementById('audio_bg_level').addEventListener(
+    'mouseover', castPlayer.showVolumeSlider.bind(castPlayer));
+  document.getElementById('audio_bg_track').addEventListener(
+    'mouseover', castPlayer.showVolumeSlider.bind(castPlayer));
+  document.getElementById('audio_bg_level').addEventListener(
+    'click', castPlayer.setVolume.bind(castPlayer));
+  document.getElementById('audio_bg_track').addEventListener(
+    'click', castPlayer.setVolume.bind(castPlayer));
+  document.getElementById('audio_bg').addEventListener(
+    'mouseout', castPlayer.hideVolumeSlider.bind(castPlayer));
+  document.getElementById('audio_on').addEventListener(
+    'mouseout', castPlayer.hideVolumeSlider.bind(castPlayer));
+  document.getElementById('main_video').addEventListener(
+    'mouseover', castPlayer.showMediaControl.bind(castPlayer));
+  document.getElementById('main_video').addEventListener(
+    'mouseout', castPlayer.hideMediaControl.bind(castPlayer));
+  document.getElementById('media_control').addEventListener(
+    'mouseover', castPlayer.showMediaControl.bind(castPlayer));
+  document.getElementById('media_control').addEventListener(
+    'mouseout', castPlayer.hideMediaControl.bind(castPlayer));
+  document.getElementById('fullscreen_expand').addEventListener(
+    'click', castPlayer.requestFullScreen.bind(castPlayer));
+  document.getElementById('fullscreen_collapse').addEventListener(
+    'click', castPlayer.cancelFullScreen.bind(castPlayer));
+  document.addEventListener(
+    'fullscreenchange', castPlayer.fullscreenChangeHandler.bind(castPlayer), false);
+  document.addEventListener(
+    'webkitfullscreenchange', castPlayer.fullscreenChangeHandler.bind(castPlayer), false);
 
-    // Enable play/pause buttons
-    document.getElementById('play').addEventListener(
-        'click', this.playerHandler.play.bind(this.playerHandler));
-    document.getElementById('pause').addEventListener(
-        'click', this.playerHandler.pause.bind(this.playerHandler));
-    document.getElementById('progress_indicator').draggable = true;
+  // Enable play/pause buttons
+  document.getElementById('play').addEventListener(
+    'click', castPlayer.playerHandler.play.bind(castPlayer.playerHandler));
+  document.getElementById('pause').addEventListener(
+    'click', castPlayer.playerHandler.pause.bind(castPlayer.playerHandler));
+  document.getElementById('progress_indicator').draggable = true;
 };
 
 /**
  * Add video thumbnails div's to UI for media JSON contents
  */
 CastPlayer.prototype.addVideoThumbs = function () {
-  if (typeof this.mediaJSON !== 'undefined' && this.mediaJSON['categories'] && this.mediaJSON['categories'].length > 0) {
-    this.mediaContents = this.mediaJSON['categories'][0]['videos'];
+  if (typeof castPlayer.mediaJSON !== 'undefined' && castPlayer.mediaJSON['categories'] && castPlayer.mediaJSON['categories'].length > 0) {
+    castPlayer.mediaContents = castPlayer.mediaJSON['categories'][0]['videos'];
     var ni = document.getElementById('carousel');
     var newdiv = null;
     var divIdName = null;
-    for (var i = 0; i < this.mediaContents.length; i++) {
+    for (var i = 0; i < castPlayer.mediaContents.length; i++) {
       newdiv = document.createElement('div');
       divIdName = 'thumb' + i + 'Div';
       newdiv.setAttribute('id', divIdName);
       newdiv.setAttribute('class', 'thumb');
       newdiv.innerHTML =
-        '<img src="' + MEDIA_SOURCE_ROOT + this.mediaContents[i]['thumb'] +
+        '<img src="' + MEDIA_SOURCE_ROOT + castPlayer.mediaContents[i]['thumb'] +
         '" class="thumbnail">';
-      newdiv.addEventListener('click', this.selectMedia.bind(this, i));
+      newdiv.addEventListener('click', castPlayer.selectMedia.bind(this, i));
       ni.appendChild(newdiv);
     }
   }
 };
 
-CastPlayer.prototype.addMediaContents = function () {
-  if (typeof this.mediaJSON !== 'undefined' && this.mediaJSON['categories'] && this.mediaJSON['categories'].length > 0) {
-    this.mediaContents = this.mediaJSON['categories'][0]['videos'];    
+CastPlayer.prototype.addMediaContents = () => {
+  if (typeof castPlayer.mediaJSON !== 'undefined' && castPlayer.mediaJSON['categories'] && castPlayer.mediaJSON['categories'].length > 0) {
+    castPlayer.mediaContents = castPlayer.mediaJSON['categories'][0]['videos'];
+    return castPlayer.mediaContents;
+  } else {
+    return null;
   }
 };
 
