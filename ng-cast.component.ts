@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { NgCastService } from './shared/ng-cast.service';
 
@@ -12,6 +12,10 @@ import { NgCastService } from './shared/ng-cast.service';
 export class NgCastComponent implements OnInit {
   castingStatus: any;
   window: any;
+
+  @Input() videoImage = '';
+  @Input() imageOffline = false;
+  @Input() srcImageOffline = '';
 
   constructor(
     private ngCastService: NgCastService

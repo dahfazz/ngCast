@@ -4,6 +4,9 @@ export declare class NgCastComponent implements OnInit {
     private ngCastService;
     castingStatus: any;
     window: any;
+    videoImage: string;
+    imageOffline: boolean;
+    srcImageOffline: string;
     constructor(ngCastService: NgCastService);
     ngOnInit(): void;
     openSession(): void;

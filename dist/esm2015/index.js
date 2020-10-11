@@ -1,5 +1,5 @@
-// ------ project path -------- | --- lib ---
-import "/home/thinker/dev/thinkam/ngCast/CastVideos.js";
 export * from './ng.cast.module';
 export * from './shared/ng-cast.service';
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiL2hvbWUvdGhpbmtlci9kZXYvdGhpbmthbS9uZ0Nhc3QvIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBUSw2Q0FBNkM7QUFDckQsT0FBTyxnREFBZ0QsQ0FBQztBQUV4RCxjQUFjLGtCQUFrQixDQUFDO0FBQ2pDLGNBQWMsMEJBQTBCLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyIgICAgICAgIC8vIC0tLS0tLSBwcm9qZWN0IHBhdGggLS0tLS0tLS0gfCAtLS0gbGliIC0tLVxuaW1wb3J0IFwiL2hvbWUvdGhpbmtlci9kZXYvdGhpbmthbS9uZ0Nhc3QvQ2FzdFZpZGVvcy5qc1wiO1xuXG5leHBvcnQgKiBmcm9tICcuL25nLmNhc3QubW9kdWxlJztcbmV4cG9ydCAqIGZyb20gJy4vc2hhcmVkL25nLWNhc3Quc2VydmljZSc7XG4iXX0=
+// ------ project path -------- | --- lib ---
+import "/home/thinker/dev/thinkam/ngCast/CastVideos.js";
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiL2hvbWUvdGhpbmtlci9kZXYvdGhpbmthbS9uZ0Nhc3QvIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxjQUFjLGtCQUFrQixDQUFDO0FBQ2pDLGNBQWMsMEJBQTBCLENBQUM7QUFFekMsNkNBQTZDO0FBQzdDLE9BQU8sZ0RBQWdELENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgKiBmcm9tICcuL25nLmNhc3QubW9kdWxlJztcbmV4cG9ydCAqIGZyb20gJy4vc2hhcmVkL25nLWNhc3Quc2VydmljZSc7XG5cbi8vIC0tLS0tLSBwcm9qZWN0IHBhdGggLS0tLS0tLS0gfCAtLS0gbGliIC0tLVxuaW1wb3J0IFwiL2hvbWUvdGhpbmtlci9kZXYvdGhpbmthbS9uZ0Nhc3QvQ2FzdFZpZGVvcy5qc1wiO1xuIl19

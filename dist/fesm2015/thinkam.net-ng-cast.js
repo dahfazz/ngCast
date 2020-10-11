@@ -1,64 +1,165 @@
 import { __decorate } from 'tslib';
-import { Component, Injectable, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Input, Component, Injectable, NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
 
-'use strict';
+let NgCastComponent = class NgCastComponent {
+    constructor(ngCastService) {
+        this.ngCastService = ngCastService;
+        this.videoImage = '';
+        this.imageOffline = false;
+        this.srcImageOffline = '';
+    }
+    ngOnInit() {
+        this.window = window;
+        let ngCastService = this.ngCastService;
+        this.window['__onGCastApiAvailable'] = function (isAvailable) {
+            if (isAvailable) {
+                ngCastService.initializeCastApi();
+            }
+        };
+        this.castingStatus = this.ngCastService.getStatus();
+    }
+    openSession() {
+        this.ngCastService.discoverDevices();
+    }
+    closeSession() {
+        this.ngCastService.discoverDevices();
+    }
+};
+__decorate([
+    Input()
+], NgCastComponent.prototype, "videoImage", void 0);
+__decorate([
+    Input()
+], NgCastComponent.prototype, "imageOffline", void 0);
+__decorate([
+    Input()
+], NgCastComponent.prototype, "srcImageOffline", void 0);
+NgCastComponent = __decorate([
+    Component({
+        selector: 'ng-cast',
+        template: "<div *ngIf=\"!imageOffline\" id=\"main_video\">\n  <div class=\"imageSub\"> <!-- Put Your Image Width -->\n     <div class=\"blackbg\" id=\"playerstatebg\">IDLE</div>\n     <div class=label id=\"playerstate\">IDLE</div>\n     <img [src]=\"videoImage\" id=\"video_image\">\n     <div id=\"video_image_overlay\"></div>\n     <video id=\"video_element\">\n     </video>\n  </div>\n\n  <div id=\"media_control\">\n     <div id=\"play\"></div>\n     <div id=\"pause\"></div>\n     <div id=\"progress_bg\"></div>\n     <div id=\"progress\"></div>\n     <div id=\"progress_indicator\"></div>\n     <div id=\"fullscreen_expand\"></div>\n     <div id=\"fullscreen_collapse\"></div>\n     <google-cast-launcher id=\"castbutton\"></google-cast-launcher>\n     <div id=\"audio_bg\"></div>\n     <div id=\"audio_bg_track\"></div>\n     <div id=\"audio_indicator\"></div>\n     <div id=\"audio_bg_level\"></div>\n     <div id=\"audio_on\"></div>\n     <div id=\"audio_off\"></div>\n     <div id=\"duration\">00:00:00</div>\n  </div>\n</div>\n<div *ngIf=\"!imageOffline\" id=\"media_info\">\n  <div id=\"media_title\">\n  </div>\n  <div id=\"media_subtitle\">\n  </div>\n  <div id=\"media_desc\">\n  </div>\n</div>\n\n<div *ngIf=\"!imageOffline\" id=\"carousel\">\n</div>\n\n<img \n  width=\"100%\" \n  *ngIf=\"imageOffline\" \n  [src]=\"srcImageOffline\"\n  alt=\"TV Offline\"\n/>\n",
+        styles: [""]
+    })
+], NgCastComponent);
 
-/** Cleaner UI for demo purposes. */
-const DEMO_MODE = false;
+let NgCastService = class NgCastService {
+    constructor() {
+        this.window = window;
+        this.status = {
+            casting: false
+        };
+        this.onInitSuccess = function () {
+            console.log('GCast initialization success');
+        };
+        this.onError = function (err) {
+            console.log('GCast initialization failed', err);
+        };
+        this.discoverDevices = () => {
+            let self = this;
+            let subj = new Subject();
+            this.cast.requestSession((s) => {
+                self.session = s;
+                self.setCasting(true);
+                subj.next('CONNECTED');
+            }, function (err) {
+                self.setCasting(false);
+                if (err.code === 'cancel') {
+                    self.session = undefined;
+                    subj.next('CANCEL');
+                }
+                else {
+                    console.error('Error selecting a cast device', err);
+                }
+            });
+            return subj;
+        };
+        this.onMediaDiscovered = (categories) => {
+            let script = window['document'].createElement('script');
+            script.setAttribute('type', 'text/javascript');
+            script.setAttribute('src', 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
+            window['document'].body.appendChild(script);
+            globalThis.CastPlayer.mediaJSON.categories = categories;
+            globalThis.CastPlayer.addMediaContents();
+            globalThis.CastPlayer.setupLocalPlayer();
+            globalThis.CastPlayer.initializeUI();
+        };
+        this.play = () => {
+            this.currentMedia.play(null);
+        };
+        this.pause = () => {
+            this.currentMedia.pause(null);
+        };
+        this.stop = () => {
+            this.currentMedia.stop(null);
+        };
+        this.onMediaError = (err) => {
+            console.error('Error launching media', err);
+        };
+        globalThis.CastPlayer.mediaJSON = {
+            categories: []
+        };
+    }
+    initializeCastApi() {
+        this.cast = this.window['chrome'].cast;
+        let sessionRequest = new this.cast.SessionRequest('4F8B3483');
+        let apiConfig = new this.cast.ApiConfig(sessionRequest, () => { }, (status) => { if (status === this.cast.ReceiverAvailability.AVAILABLE) { } });
+        let x = this.cast.initialize(apiConfig, this.onInitSuccess, this.onError);
+    }
+    ;
+    setCasting(value) {
+        globalThis.CastPlayer.addMediaContents();
+        this.status.casting = value;
+    }
+    getStatus() {
+        return this.status;
+    }
+};
+NgCastService = __decorate([
+    Injectable()
+], NgCastService);
+
+let NgCastModule = class NgCastModule {
+};
+NgCastModule = __decorate([
+    NgModule({
+        schemas: [CUSTOM_ELEMENTS_SCHEMA],
+        imports: [
+            CommonModule
+        ],
+        exports: [NgCastComponent],
+        providers: [NgCastService],
+        declarations: [NgCastComponent]
+    })
+], NgCastModule);
+
+"use strict";
 
 /** @const {string} Media source root URL */
-const MEDIA_SOURCE_ROOT = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/';
+const MEDIA_SOURCE_ROOT = '';
 
 /**
- * Controls if Ads are enabled. Controlled by radio button.
- * @type {boolean}
+ * Width of progress bar in pixel
+ * @const
  */
-let ENABLE_ADS = false;
+var PROGRESS_BAR_WIDTH = 600;
 
-/**
- * Controls if Live stream is played. Controlled by radio button.
- * @type {boolean}
- */
-let ENABLE_LIVE = false;
+/** @const {number} Time in milliseconds for minimal progress update */
+var TIMER_STEP = 1000;
 
-/**
- * Buffer to decide if the live indicator should be displayed to show that
- * playback is at the playback head.
- * @const {number}
- */
-const LIVE_INDICATOR_BUFFER = 50;
+/** @const {number} Cast volume upon initial connection */
+var DEFAULT_VOLUME = 0.5;
 
-/**
- * Width of progress bar in pixels.
- * @const {number}
- */
-const PROGRESS_BAR_WIDTH = 700;
-
-/**
- * Time in milliseconds for minimal progress update.
- * @const {number}
- */
-const TIMER_STEP = 1000;
-
-/**
- * Cast volume upon initial connection.
- * @const {number}
- */
-const DEFAULT_VOLUME = 0.5;
-
-/**
- * Height, in pixels, of volume bar.
- * @const {number}
- */
-const FULL_VOLUME_HEIGHT = 100;
+/** @const {number} Height, in pixels, of volume bar */
+var FULL_VOLUME_HEIGHT = 100;
 
 /** @enum {string} Constants of states for media for both local and remote playback */
 const PLAYER_STATE = {
   // No media is loaded into the player. For remote playback, maps to
   // the PlayerState.IDLE state.
   IDLE: 'IDLE',
+  LOADING: 'LOADING',
   // Player is in PLAY mode but not actively playing content. For remote
   // playback, maps to the PlayerState.BUFFERING state.
   BUFFERING: 'BUFFERING',
@@ -67,7 +168,9 @@ const PLAYER_STATE = {
   // The media is playing. For remote playback, maps to the PlayerState.PLAYING state.
   PLAYING: 'PLAYING',
   // The media is paused. For remote playback, maps to the PlayerState.PAUSED state.
-  PAUSED: 'PAUSED'
+  PAUSED: 'PAUSED',
+  STOPPED: 'STOPPED',
+  ERROR: 'ERROR'
 };
 
 /**
@@ -140,10 +243,6 @@ var CastPlayer = function () {
   /** @type {boolean} Remote player is playing live content. */
   this.isLiveContent = false;
 
-  this.setupLocalPlayer();
-  this.addVideoThumbs();
-  this.initializeUI();
-
   this.mediaJSON = {
     'categories': []
   };
@@ -155,7 +254,7 @@ CastPlayer.prototype.initializeCastPlayer = function () {
   // Set the receiver application ID to your own (created in the
   // Google Cast Developer Console), or optionally
   // use the chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID
-  options.receiverApplicationId = 'C0868879';
+  options.receiverApplicationId = '4F8B3483';
 
   // Auto join policy can be one of the following three:
   // ORIGIN_SCOPED - Auto connect from same appId and page origin
@@ -352,121 +451,71 @@ var PlayerHandler = function (castPlayer) {
  * Set the PlayerHandler target to use the video-element player
  */
 CastPlayer.prototype.setupLocalPlayer = function () {
-  // Cleanup remote player UI
-  let live_indicator = document.getElementById('live_indicator');
-  if (live_indicator && live_indicator.style && live_indicator.style.display) {
-    live_indicator.style.display = 'none';
-  }
-
-  this.removeAdMarkers();
-  document.getElementById('skip').style.display = 'none';
-
   var localPlayer = document.getElementById('video_element');
-  if (typeof localPlayer !== 'undefined' && localPlayer)
-    localPlayer.addEventListener(
+  localPlayer.addEventListener(
       'loadeddata', this.onMediaLoadedLocally.bind(this));
 
   // This object will implement PlayerHandler callbacks with localPlayer
   var playerTarget = {};
 
-  playerTarget.play = function () {
-    localPlayer.play();
+  playerTarget.play = function() {
+      localPlayer.play();
 
-    var vi = document.getElementById('video_image');
-    vi.style.display = 'none';
-    localPlayer.style.display = 'block';
+      var vi = document.getElementById('video_image');
+      vi.style.display = 'none';
+      localPlayer.style.display = 'block';
   };
 
   playerTarget.pause = function () {
-    localPlayer.pause();
+      localPlayer.pause();
   };
 
   playerTarget.stop = function () {
-    localPlayer.stop();
+      localPlayer.stop();
   };
 
-  playerTarget.load = function (mediaIndex) {
-    localPlayer.src = this.mediaContents[mediaIndex]['sources'][0];
-    localPlayer.load();
+  playerTarget.load = function(mediaIndex) {
+      localPlayer.src =
+          this.mediaContents[mediaIndex]['sources'][0];
+      localPlayer.load();
   }.bind(this);
 
-  playerTarget.isMediaLoaded = function (mediaIndex) {
-    if (!mediaIndex) {
-      return (localPlayer.src !== null && localPlayer.src !== "");
-    } else {
-      return (localPlayer.src == this.mediaContents[mediaIndex]['sources'][0]);
-    }
-  }.bind(this);
-
-  playerTarget.getCurrentMediaTime = function () {
-    return localPlayer.currentTime;
+  playerTarget.getCurrentMediaTime = function() {
+      return localPlayer.currentTime;
   };
 
-  playerTarget.getMediaDuration = function () {
-    return localPlayer.duration;
+  playerTarget.getMediaDuration = function() {
+      return localPlayer.duration;
   };
 
-  playerTarget.updateDisplay = function () {
-    // playerstate view
-    document.getElementById('playerstate').style.display = 'none';
-    document.getElementById('playerstatebg').style.display = 'none';
-    document.getElementById('video_image_overlay').style.display = 'none';
-
-    // media_info view
-    document.getElementById('media_title').innerHTML =
-      castPlayer.mediaContents[castPlayer.currentMediaIndex]['title'];
-    document.getElementById('media_subtitle').innerHTML =
-      castPlayer.mediaContents[castPlayer.currentMediaIndex]['subtitle'];
+  playerTarget.updateDisplayMessage = function () {
+      document.getElementById('playerstate').style.display = 'none';
+      document.getElementById('playerstatebg').style.display = 'none';
+      document.getElementById('video_image_overlay').style.display = 'none';
   };
 
-  playerTarget.updateCurrentTimeDisplay = function () {
-    // Increment for local playback
-    this.currentMediaTime += 1;
-    this.playerHandler.setTimeString(document.getElementById('currentTime'), this.currentMediaTime);
-  }.bind(this);
-
-  playerTarget.updateDurationDisplay = function () {
-    this.playerHandler.setTimeString(document.getElementById('duration'), this.mediaDuration);
-  }.bind(this);
-
-  playerTarget.setTimeString = function (element, time) {
-    let currentTimeString = this.getMediaTimeString(time);
-    if (currentTimeString !== null) {
-      element.style.display = '';
-      element.innerHTML = currentTimeString;
-    } else {
-      element.style.display = 'none';
-    }
-  }.bind(this);
-
-  playerTarget.setVolume = function (volumeSliderPosition) {
-    if (localPlayer) {
+  playerTarget.setVolume = function(volumeSliderPosition) {
       localPlayer.volume = volumeSliderPosition < FULL_VOLUME_HEIGHT ?
-        volumeSliderPosition / FULL_VOLUME_HEIGHT : 1;
-    }
-
-    var p = document.getElementById('audio_bg_level');
-    if (typeof p !== 'undefined' && p) {
+          volumeSliderPosition / FULL_VOLUME_HEIGHT : 1;
+      var p = document.getElementById('audio_bg_level');
       p.style.height = volumeSliderPosition + 'px';
       p.style.marginTop = -volumeSliderPosition + 'px';
-    }
   };
 
-  playerTarget.mute = function () {
-    localPlayer.muted = true;
+  playerTarget.mute = function() {
+      localPlayer.muted = true;
   };
 
-  playerTarget.unMute = function () {
-    localPlayer.muted = false;
+  playerTarget.unMute = function() {
+      localPlayer.muted = false;
   };
 
-  playerTarget.isMuted = function () {
-    if (localPlayer)
+  playerTarget.isMuted = function() {
       return localPlayer.muted;
   };
 
-  playerTarget.seekTo = function (time) {
-    localPlayer.currentTime = time;
+  playerTarget.seekTo = function(time) {
+      localPlayer.currentTime = time;
   };
 
   this.playerHandler.setTarget(playerTarget);
@@ -475,11 +524,8 @@ CastPlayer.prototype.setupLocalPlayer = function () {
 
   this.showFullscreenButton();
 
-  this.enableProgressBar(true);
-
   if (this.currentMediaTime > 0) {
-    this.playerHandler.load();
-    this.playerHandler.play();
+      this.playerHandler.play();
   }
 };
 
@@ -1525,106 +1571,64 @@ CastPlayer.prototype.resetVolumeSlider = function () {
  * Initialize UI components and add event listeners
  */
 CastPlayer.prototype.initializeUI = function () {
-  // Set initial values for title and subtitle.
-  if (this.mediaContents && this.mediaContents.length > 0) {
+    // Set initial values for title, subtitle, and description
     document.getElementById('media_title').innerHTML =
-      this.mediaContents[0]['title'];
-
+        this.mediaContents[0]['title'];
     document.getElementById('media_subtitle').innerHTML =
-      this.mediaContents[this.currentMediaIndex]['subtitle'];
-  }
+        this.mediaContents[this.currentMediaIndex]['subtitle'];
+    document.getElementById('media_desc').innerHTML =
+        this.mediaContents[this.currentMediaIndex]['description'];
 
-  document.getElementById('seekable_window').addEventListener(
-    'click', this.seekMediaListener);
-  document.getElementById('progress').addEventListener(
-    'click', this.seekMediaListener);
-  document.getElementById('progress_indicator').addEventListener(
-    'dragend', this.seekMediaListener);
-  document.getElementById('skip').addEventListener(
-    'click', this.skipAd.bind(this));
-  document.getElementById('audio_on').addEventListener(
-    'click', this.playerHandler.mute.bind(this.playerHandler));
-  document.getElementById('audio_off').addEventListener(
-    'click', this.playerHandler.unMute.bind(this.playerHandler));
-  document.getElementById('audio_bg').addEventListener(
-    'mouseover', this.showVolumeSlider.bind(this));
-  document.getElementById('audio_on').addEventListener(
-    'mouseover', this.showVolumeSlider.bind(this));
-  document.getElementById('audio_bg_level').addEventListener(
-    'mouseover', this.showVolumeSlider.bind(this));
-  document.getElementById('audio_bg_track').addEventListener(
-    'mouseover', this.showVolumeSlider.bind(this));
-  document.getElementById('audio_bg_level').addEventListener(
-    'click', this.setVolume.bind(this));
-  document.getElementById('audio_bg_track').addEventListener(
-    'click', this.setVolume.bind(this));
-  document.getElementById('audio_bg').addEventListener(
-    'mouseout', this.hideVolumeSlider.bind(this));
-  document.getElementById('audio_on').addEventListener(
-    'mouseout', this.hideVolumeSlider.bind(this));
+    // Add event handlers to UI components
+    document.getElementById('progress_bg').addEventListener(
+        'click', this.seekMedia.bind(this));
+    document.getElementById('progress').addEventListener(
+        'click', this.seekMedia.bind(this));
+    document.getElementById('progress_indicator').addEventListener(
+       'dragend', this.seekMedia.bind(this));
+    document.getElementById('audio_on').addEventListener(
+        'click', this.playerHandler.mute.bind(this.playerHandler));
+    document.getElementById('audio_off').addEventListener(
+        'click', this.playerHandler.unMute.bind(this.playerHandler));
+    document.getElementById('audio_bg').addEventListener(
+        'mouseover', this.showVolumeSlider.bind(this));
+    document.getElementById('audio_on').addEventListener(
+        'mouseover', this.showVolumeSlider.bind(this));
+    document.getElementById('audio_bg_level').addEventListener(
+        'mouseover', this.showVolumeSlider.bind(this));
+    document.getElementById('audio_bg_track').addEventListener(
+        'mouseover', this.showVolumeSlider.bind(this));
+    document.getElementById('audio_bg_level').addEventListener(
+        'click', this.setVolume.bind(this));
+    document.getElementById('audio_bg_track').addEventListener(
+        'click', this.setVolume.bind(this));
+    document.getElementById('audio_bg').addEventListener(
+        'mouseout', this.hideVolumeSlider.bind(this));
+    document.getElementById('audio_on').addEventListener(
+        'mouseout', this.hideVolumeSlider.bind(this));
+    document.getElementById('main_video').addEventListener(
+        'mouseover', this.showMediaControl.bind(this));
+    document.getElementById('main_video').addEventListener(
+        'mouseout', this.hideMediaControl.bind(this));
+    document.getElementById('media_control').addEventListener(
+        'mouseover', this.showMediaControl.bind(this));
+    document.getElementById('media_control').addEventListener(
+        'mouseout', this.hideMediaControl.bind(this));
+    document.getElementById('fullscreen_expand').addEventListener(
+        'click', this.requestFullScreen.bind(this));
+    document.getElementById('fullscreen_collapse').addEventListener(
+        'click', this.cancelFullScreen.bind(this));
+    document.addEventListener(
+        'fullscreenchange', this.fullscreenChangeHandler.bind(this), false);
+    document.addEventListener(
+        'webkitfullscreenchange', this.fullscreenChangeHandler.bind(this), false);
 
-  let main_video = document.getElementById('main_video');
-  if (typeof main_video !== 'undefined' && main_video) {
-    main_video.addEventListener(
-      'mouseover', this.showMediaControl.bind(this));
-    main_video.addEventListener(
-      'mouseout', this.hideMediaControl.bind(this));
-  }
-  
-  document.getElementById('media_control').addEventListener(
-    'mouseover', this.showMediaControl.bind(this));
-  document.getElementById('media_control').addEventListener(
-    'mouseout', this.hideMediaControl.bind(this));
-  document.getElementById('fullscreen_expand').addEventListener(
-    'click', this.requestFullScreen.bind(this));
-  document.getElementById('fullscreen_collapse').addEventListener(
-    'click', this.cancelFullScreen.bind(this));
-  document.addEventListener(
-    'fullscreenchange', this.fullscreenChangeHandler.bind(this), false);
-  document.addEventListener(
-    'webkitfullscreenchange', this.fullscreenChangeHandler.bind(this), false);
-
-  // Enable play/pause buttons
-  document.getElementById('play').addEventListener(
-    'click', this.playerHandler.play.bind(this.playerHandler));
-  document.getElementById('pause').addEventListener(
-    'click', this.playerHandler.pause.bind(this.playerHandler));
-
-  document.getElementById('progress_indicator').draggable = true;
-
-  // Set up feature radio buttons
-  let noneRadio = document.getElementById('none');
-  noneRadio.onclick = function () {
-    ENABLE_LIVE = false;
-    ENABLE_ADS = false;
-    console.log("Features have been removed");
-  };
-  let adsRadio = document.getElementById('ads');
-  adsRadio.onclick = function () {
-    ENABLE_LIVE = false;
-    ENABLE_ADS = true;
-    console.log("Ads have been enabled");
-  };
-  let liveRadio = document.getElementById('live');
-  liveRadio.onclick = function () {
-    ENABLE_LIVE = true;
-    ENABLE_ADS = false;
-    console.log("Live has been enabled");
-  };
-
-  if (ENABLE_ADS) {
-    if (ENABLE_LIVE) {
-      console.error('Only one feature can be enabled at a time. Enabling ads.');
-    }
-    adsRadio.checked = true;
-    console.log("Ads are enabled");
-  } else if (ENABLE_LIVE) {
-    liveRadio.checked = true;
-    console.log("Live is enabled");
-  } else {
-    noneRadio.checked = true;
-    console.log("No features are enabled");
-  }
+    // Enable play/pause buttons
+    document.getElementById('play').addEventListener(
+        'click', this.playerHandler.play.bind(this.playerHandler));
+    document.getElementById('pause').addEventListener(
+        'click', this.playerHandler.pause.bind(this.playerHandler));
+    document.getElementById('progress_indicator').draggable = true;
 };
 
 /**
@@ -1647,6 +1651,12 @@ CastPlayer.prototype.addVideoThumbs = function () {
       newdiv.addEventListener('click', this.selectMedia.bind(this, i));
       ni.appendChild(newdiv);
     }
+  }
+};
+
+CastPlayer.prototype.addMediaContents = function () {
+  if (typeof this.mediaJSON !== 'undefined' && this.mediaJSON['categories'] && this.mediaJSON['categories'].length > 0) {
+    this.mediaContents = this.mediaJSON['categories'][0]['videos'];    
   }
 };
 
@@ -1694,124 +1704,6 @@ window['__onGCastApiAvailable'] = function (isAvailable) {
 };
 
 window.CastPlayer = castPlayer;
-
-let NgCastComponent = class NgCastComponent {
-    constructor(ngCastService) {
-        this.ngCastService = ngCastService;
-    }
-    ngOnInit() {
-        this.window = window;
-        let ngCastService = this.ngCastService;
-        this.window['__onGCastApiAvailable'] = function (isAvailable) {
-            if (isAvailable) {
-                ngCastService.initializeCastApi();
-            }
-        };
-        this.castingStatus = this.ngCastService.getStatus();
-    }
-    openSession() {
-        this.ngCastService.discoverDevices();
-    }
-    closeSession() {
-        this.ngCastService.discoverDevices();
-    }
-};
-NgCastComponent = __decorate([
-    Component({
-        selector: 'ng-cast',
-        template: "<i *ngIf=\"!castingStatus.casting\" class=\"material-icons\" (click)=\"openSession()\">cast</i>\n<i *ngIf=\"castingStatus.casting\" class=\"material-icons\" (click)=\"closeSession()\">cast_connected</i>",
-        styles: [""]
-    })
-], NgCastComponent);
-
-let NgCastService = class NgCastService {
-    constructor() {
-        this.window = window;
-        this.status = {
-            casting: false
-        };
-        this.onInitSuccess = function () {
-            console.log('GCast initialization success');
-        };
-        this.onError = function (err) {
-            console.log('GCast initialization failed', err);
-        };
-        this.discoverDevices = () => {
-            let self = this;
-            let subj = new Subject();
-            this.cast.requestSession((s) => {
-                self.session = s;
-                self.setCasting(true);
-                subj.next('CONNECTED');
-            }, function (err) {
-                self.setCasting(false);
-                if (err.code === 'cancel') {
-                    self.session = undefined;
-                    subj.next('CANCEL');
-                }
-                else {
-                    console.error('Error selecting a cast device', err);
-                }
-            });
-            return subj;
-        };
-        this.onMediaDiscovered = (categories) => {
-            let script = window['document'].createElement('script');
-            script.setAttribute('type', 'text/javascript');
-            script.setAttribute('src', 'https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1');
-            window['document'].body.appendChild(script);
-            globalThis.CastPlayer.mediaJSON.categories = categories;
-        };
-        this.play = () => {
-            this.currentMedia.play(null);
-        };
-        this.pause = () => {
-            this.currentMedia.pause(null);
-        };
-        this.stop = () => {
-            this.currentMedia.stop(null);
-        };
-        this.onMediaError = (err) => {
-            console.error('Error launching media', err);
-        };
-        globalThis.CastPlayer.mediaJSON = {
-            categories: []
-        };
-    }
-    initializeCastApi() {
-        this.cast = this.window['chrome'].cast;
-        let sessionRequest = new this.cast.SessionRequest(this.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID);
-        let apiConfig = new this.cast.ApiConfig(sessionRequest, () => { }, (status) => { if (status === this.cast.ReceiverAvailability.AVAILABLE) { } });
-        let x = this.cast.initialize(apiConfig, this.onInitSuccess, this.onError);
-    }
-    ;
-    setCasting(value) {
-        globalThis.CastPlayer.addVideoThumbs();
-        this.status.casting = value;
-    }
-    getStatus() {
-        return this.status;
-    }
-};
-NgCastService = __decorate([
-    Injectable()
-], NgCastService);
-
-let NgCastModule = class NgCastModule {
-};
-NgCastModule = __decorate([
-    NgModule({
-        schemas: [CUSTOM_ELEMENTS_SCHEMA],
-        imports: [
-            CommonModule
-        ],
-        exports: [NgCastComponent],
-        providers: [NgCastService],
-        declarations: [NgCastComponent]
-    })
-], NgCastModule);
-
-// ------ project path -------- | --- lib ---
 
 /**
  * Generated bundle index. Do not edit.

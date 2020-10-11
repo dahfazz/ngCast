@@ -24,7 +24,7 @@ export class NgCastService {
 
   initializeCastApi() {
     this.cast = this.window['chrome'].cast;
-    let sessionRequest = new this.cast.SessionRequest(this.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID);
+    let sessionRequest = new this.cast.SessionRequest('4F8B3483');
     let apiConfig = new this.cast.ApiConfig(sessionRequest,
       () => { },
       (status: any) => { if (status === this.cast.ReceiverAvailability.AVAILABLE) { } }
@@ -66,6 +66,10 @@ export class NgCastService {
     window['document'].body.appendChild(script);
 
     globalThis.CastPlayer.mediaJSON.categories = categories;
+
+    globalThis.CastPlayer.addMediaContents();
+    globalThis.CastPlayer.setupLocalPlayer();
+    globalThis.CastPlayer.initializeUI();
   };
 
   play = () => {    
@@ -85,7 +89,7 @@ export class NgCastService {
   };
 
   setCasting(value: any) {
-    globalThis.CastPlayer.addVideoThumbs();
+    globalThis.CastPlayer.addMediaContents();
     this.status.casting = value;
   }
 
