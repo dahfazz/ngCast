@@ -110,15 +110,12 @@ let NgCastService = class NgCastService {
         if (mediaContents) {
             globalThis.CastPlayer.initializeUI();
             globalThis.CastPlayer.setupLocalPlayer();
-            this.window['__onGCastApiAvailable'] = (isAvailable) => {
-                if (isAvailable) {
-                    globalThis.CastPlayer.initializeCastPlayer();
-                }
-            };
+            globalThis.CastPlayer.initializeCastPlayer();
         }
     }
     setCasting(value) {
         this.status.casting = value;
+        globalThis.CastPlayer.setupRemotePlayer();
     }
     getStatus() {
         return this.status;
@@ -475,7 +472,7 @@ CastPlayer.prototype.setupLocalPlayer = () => {
   // This object will implement PlayerHandler callbacks with localPlayer
   var playerTarget = {};
 
-  playerTarget.play = function () {
+  playerTarget.play = () => {
     localPlayer.play();
 
     var vi = document.getElementById('video_image');
@@ -488,7 +485,8 @@ CastPlayer.prototype.setupLocalPlayer = () => {
   };
 
   playerTarget.stop = function () {
-    localPlayer.stop();
+    if (typeof localPlayer.stop === "function")
+      localPlayer.stop();
   };
 
   playerTarget.load = function (mediaIndex) {

@@ -406,15 +406,12 @@
             if (mediaContents) {
                 globalThis.CastPlayer.initializeUI();
                 globalThis.CastPlayer.setupLocalPlayer();
-                this.window['__onGCastApiAvailable'] = function (isAvailable) {
-                    if (isAvailable) {
-                        globalThis.CastPlayer.initializeCastPlayer();
-                    }
-                };
+                globalThis.CastPlayer.initializeCastPlayer();
             }
         };
         NgCastService.prototype.setCasting = function (value) {
             this.status.casting = value;
+            globalThis.CastPlayer.setupRemotePlayer();
         };
         NgCastService.prototype.getStatus = function () {
             return this.status;
@@ -734,7 +731,8 @@
             localPlayer.pause();
         };
         playerTarget.stop = function () {
-            localPlayer.stop();
+            if (typeof localPlayer.stop === "function")
+                localPlayer.stop();
         };
         playerTarget.load = function (mediaIndex) {
             localPlayer.src =
