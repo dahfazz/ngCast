@@ -74,6 +74,11 @@ export class NgCastService {
     if (mediaContents) {
       globalThis.CastPlayer.initializeUI();
       globalThis.CastPlayer.setupLocalPlayer();
+      this.window['__onGCastApiAvailable'] = (isAvailable: boolean) => {
+        if (isAvailable) {
+          globalThis.CastPlayer.initializeCastPlayer();
+        }
+      };
     }
   }
 

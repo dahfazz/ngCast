@@ -406,6 +406,11 @@
             if (mediaContents) {
                 globalThis.CastPlayer.initializeUI();
                 globalThis.CastPlayer.setupLocalPlayer();
+                this.window['__onGCastApiAvailable'] = function (isAvailable) {
+                    if (isAvailable) {
+                        globalThis.CastPlayer.initializeCastPlayer();
+                    }
+                };
             }
         };
         NgCastService.prototype.setCasting = function (value) {
@@ -604,15 +609,20 @@
             this.target = target;
         };
         this.play = function () {
-            if (castPlayer.playerState == PLAYER_STATE.IDLE ||
-                !this.target.isMediaLoaded(castPlayer.currentMediaIndex)) {
+            if (castPlayer.playerState !== PLAYER_STATE.PLAYING &&
+                castPlayer.playerState !== PLAYER_STATE.PAUSED &&
+                castPlayer.playerState !== PLAYER_STATE.LOADED) {
                 this.load(castPlayer.currentMediaIndex);
                 return;
             }
-            castPlayer.playerState = PLAYER_STATE.PLAYING;
             this.target.play();
+            castPlayer.playerState = PLAYER_STATE.PLAYING;
             document.getElementById('play').style.display = 'none';
             document.getElementById('pause').style.display = 'block';
+            this.updateDisplayMessage();
+        };
+        this.updateDisplayMessage = function () {
+            this.target.updateDisplayMessage();
         };
         this.pause = function () {
             this.target.pause();
@@ -653,6 +663,17 @@
             this.play();
             castPlayer.startProgressTimer();
             this.updateDisplay();
+        };
+        this.loaded = function () {
+            castPlayer.currentMediaDuration = this.getMediaDuration();
+            castPlayer.updateMediaDuration();
+            castPlayer.playerState = PLAYER_STATE.LOADED;
+            if (castPlayer.currentMediaTime > 0) {
+                this.seekTo(castPlayer.currentMediaTime);
+            }
+            this.play();
+            castPlayer.startProgressTimer();
+            this.updateDisplayMessage();
         };
         this.getCurrentMediaTime = function () {
             return this.target.getCurrentMediaTime();
@@ -762,48 +783,13 @@
      * Add event listeners for player changes which may occur outside sender app.
      */
     CastPlayer.prototype.setupRemotePlayer = function () {
-        // Triggers when the media info or the player state changes
-        castPlayer.remotePlayerController.addEventListener(cast.framework.RemotePlayerEventType.MEDIA_INFO_CHANGED, function (event) {
-            var session = cast.framework.CastContext.getInstance().getCurrentSession();
-            if (!session) {
-                castPlayer.mediaInfo = null;
-                castPlayer.isLiveContent = false;
-                castPlayer.playerHandler.updateDisplay();
-                return;
-            }
-            var media = session.getMediaSession();
-            if (!media) {
-                castPlayer.mediaInfo = null;
-                castPlayer.isLiveContent = false;
-                castPlayer.playerHandler.updateDisplay();
-                return;
-            }
-            castPlayer.mediaInfo = media.media;
-            if (castPlayer.mediaInfo) {
-                castPlayer.isLiveContent = (castPlayer.mediaInfo.streamType ==
-                    chrome.cast.media.StreamType.LIVE);
-            }
-            else {
-                castPlayer.isLiveContent = false;
-            }
-            if (media.playerState == PLAYER_STATE.PLAYING && castPlayer.playerState !== PLAYER_STATE.PLAYING) {
-                castPlayer.playerHandler.prepareToPlay();
-            }
-            castPlayer.removeAdMarkers();
-            castPlayer.updateAdMarkers();
-            castPlayer.playerHandler.updateDisplay();
-        }.bind(castPlayer));
-        castPlayer.remotePlayerController.addEventListener(cast.framework.RemotePlayerEventType.CAN_SEEK_CHANGED, function (event) {
-            castPlayer.enableProgressBar(event.value);
-        }.bind(castPlayer));
+        var castSession = cast.framework.CastContext.getInstance().getCurrentSession();
+        // Add event listeners for player changes which may occur outside sender app
         castPlayer.remotePlayerController.addEventListener(cast.framework.RemotePlayerEventType.IS_PAUSED_CHANGED, function () {
             if (castPlayer.remotePlayer.isPaused) {
                 castPlayer.playerHandler.pause();
             }
-            else if (castPlayer.playerState !== PLAYER_STATE.PLAYING) {
-                // If currently not playing, start to play.
-                // This occurs if starting to play from local, but this check is
-                // required if the state is changed remotely.
+            else {
                 castPlayer.playerHandler.play();
             }
         }.bind(castPlayer));
@@ -821,32 +807,16 @@
             p.style.height = newVolume + 'px';
             p.style.marginTop = -newVolume + 'px';
         }.bind(castPlayer));
-        castPlayer.remotePlayerController.addEventListener(cast.framework.RemotePlayerEventType.IS_PLAYING_BREAK_CHANGED, function (event) {
-            castPlayer.isPlayingBreak(event.value);
-        }.bind(castPlayer));
-        castPlayer.remotePlayerController.addEventListener(cast.framework.RemotePlayerEventType.WHEN_SKIPPABLE_CHANGED, function (event) {
-            castPlayer.onWhenSkippableChanged(event.value);
-        }.bind(castPlayer));
-        castPlayer.remotePlayerController.addEventListener(cast.framework.RemotePlayerEventType.CURRENT_BREAK_CLIP_TIME_CHANGED, function (event) {
-            castPlayer.onCurrentBreakClipTimeChanged(event.value);
-        }.bind(castPlayer));
-        castPlayer.remotePlayerController.addEventListener(cast.framework.RemotePlayerEventType.BREAK_CLIP_ID_CHANGED, function (event) {
-            castPlayer.onBreakClipIdChanged(event.value);
-        }.bind(castPlayer));
-        castPlayer.remotePlayerController.addEventListener(cast.framework.RemotePlayerEventType.LIVE_SEEKABLE_RANGE_CHANGED, function (event) {
-            console.log('LIVE_SEEKABLE_RANGE_CHANGED');
-            castPlayer.liveSeekableRange = event.value;
-        }.bind(castPlayer));
-        // This object will implement PlayerHandler callbacks with
+        // castPlayer object will implement PlayerHandler callbacks with
         // remotePlayerController, and makes necessary UI updates specific
-        // to remote playback.
+        // to remote playback
         var playerTarget = {};
         playerTarget.play = function () {
             if (castPlayer.remotePlayer.isPaused) {
                 castPlayer.remotePlayerController.playOrPause();
             }
             var vi = document.getElementById('video_image');
-            vi.style.display = '';
+            vi.style.display = 'block';
             var localPlayer = document.getElementById('video_element');
             localPlayer.style.display = 'none';
         }.bind(castPlayer);
@@ -858,174 +828,45 @@
         playerTarget.stop = function () {
             castPlayer.remotePlayerController.stop();
         }.bind(castPlayer);
-        // Load request for local -> remote
         playerTarget.load = function (mediaIndex) {
-            console.log('Loading...' + this.mediaContents[mediaIndex]['title']);
-            var mediaInfo = new chrome.cast.media.MediaInfo(this.mediaContents[mediaIndex]['sources'][0], 'video/mp4');
+            console.log('Loading...' + castPlayer.mediaContents[mediaIndex]['title']);
+            var mediaInfo = new chrome.cast.media.MediaInfo(castPlayer.mediaContents[mediaIndex]['sources'][0], 'video/mp4');
             mediaInfo.metadata = new chrome.cast.media.GenericMediaMetadata();
             mediaInfo.metadata.metadataType = chrome.cast.media.MetadataType.GENERIC;
-            mediaInfo.metadata.title = this.mediaContents[mediaIndex]['title'];
+            mediaInfo.metadata.title = castPlayer.mediaContents[mediaIndex]['title'];
             mediaInfo.metadata.images = [
-                { 'url': MEDIA_SOURCE_ROOT + this.mediaContents[mediaIndex]['thumb'] }
+                { 'url': MEDIA_SOURCE_ROOT + castPlayer.mediaContents[mediaIndex]['thumb'] }
             ];
             var request = new chrome.cast.media.LoadRequest(mediaInfo);
-            castSession.loadMedia(request).then(this.playerHandler.loaded.bind(this.playerHandler), function (errorCode) {
-                this.playerState = PLAYER_STATE.ERROR;
+            castSession.loadMedia(request).then(castPlayer.playerHandler.loaded.bind(castPlayer.playerHandler), function (errorCode) {
+                castPlayer.playerState = PLAYER_STATE.ERROR;
                 console.log('Remote media load error: ' +
                     CastPlayer.getErrorMessage(errorCode));
             }.bind(castPlayer));
         }.bind(castPlayer);
-        playerTarget.isMediaLoaded = function (mediaIndex) {
-            var session = cast.framework.CastContext.getInstance().getCurrentSession();
-            if (!session)
-                return false;
-            var media = session.getMediaSession();
-            if (!media)
-                return false;
-            if (media.playerState == PLAYER_STATE.IDLE) {
-                return false;
-            }
-            // No need to verify local mediaIndex content.
-            return true;
-        }.bind(castPlayer);
-        /**
-         * @return {number?} Current media time for the content. Always returns
-         *      media time even if in clock time (conversion done when displaying).
-         */
         playerTarget.getCurrentMediaTime = function () {
-            if (castPlayer.isLiveContent && castPlayer.mediaInfo.metadata &&
-                castPlayer.mediaInfo.metadata.sectionStartTimeInMedia) {
-                return castPlayer.remotePlayer.currentTime - castPlayer.mediaInfo.metadata.sectionStartTimeInMedia;
-            }
-            else {
-                // VOD and live scenerios where live metadata is not provided.
-                return castPlayer.remotePlayer.currentTime;
-            }
+            return castPlayer.remotePlayer.currentTime;
         }.bind(castPlayer);
-        /**
-         * @return {number?} media time duration for the content. Always returns
-         *      media time even if in clock time (conversion done when displaying).
-         */
         playerTarget.getMediaDuration = function () {
-            if (castPlayer.isLiveContent) {
-                // Scenerios when live metadata is not provided.
-                if (castPlayer.mediaInfo.metadata == undefined ||
-                    castPlayer.mediaInfo.metadata.sectionDuration == undefined ||
-                    castPlayer.mediaInfo.metadata.sectionStartTimeInMedia == undefined) {
-                    return null;
-                }
-                return castPlayer.mediaInfo.metadata.sectionDuration;
-            }
-            else {
-                return castPlayer.remotePlayer.duration;
-            }
+            return castPlayer.remotePlayer.duration;
         }.bind(castPlayer);
-        playerTarget.updateDisplay = function () {
-            var castSession = cast.framework.CastContext.getInstance().getCurrentSession();
-            if (castSession && castSession.getMediaSession() && castSession.getMediaSession().media) {
-                var media = castSession.getMediaSession();
-                var mediaInfo = media.media;
-                // image placeholder for video view
-                var vi = document.getElementById('video_image');
-                if (mediaInfo.metadata && mediaInfo.metadata.images &&
-                    mediaInfo.metadata.images.length > 0) {
-                    vi.src = mediaInfo.metadata.images[0].url;
-                }
-                // playerstate view
-                document.getElementById('playerstate').style.display = 'block';
-                document.getElementById('playerstatebg').style.display = 'block';
-                document.getElementById('video_image_overlay').style.display = 'block';
-                var mediaTitle = '';
-                var mediaEpisodeTitle = '';
-                var mediaSubtitle = '';
-                if (mediaInfo.metadata) {
-                    mediaTitle = mediaInfo.metadata.title;
-                    mediaEpisodeTitle = mediaInfo.metadata.episodeTitle;
-                    // Append episode title if present
-                    mediaTitle = mediaEpisodeTitle ? mediaTitle + ': ' + mediaEpisodeTitle : mediaTitle;
-                    // Do not display mediaTitle if not defined.
-                    mediaTitle = (mediaTitle) ? mediaTitle + ' ' : '';
-                    mediaSubtitle = mediaInfo.metadata.subtitle;
-                    mediaSubtitle = (mediaSubtitle) ? mediaSubtitle + ' ' : '';
-                }
-                if (DEMO_MODE) {
-                    document.getElementById('playerstate').innerHTML =
-                        (ENABLE_LIVE ? 'Live Content ' : 'Sample Video ') + media.playerState + ' on Chromecast';
-                    // media_info view
-                    document.getElementById('media_title').innerHTML = (ENABLE_LIVE ? 'Live Content' : 'Sample Video');
-                    document.getElementById('media_subtitle').innerHTML = '';
-                }
-                else {
-                    document.getElementById('playerstate').innerHTML =
-                        mediaTitle + media.playerState + ' on ' +
-                            castSession.getCastDevice().friendlyName;
-                    // media_info view
-                    document.getElementById('media_title').innerHTML = mediaTitle;
-                    document.getElementById('media_subtitle').innerHTML = mediaSubtitle;
-                }
-                // live information
-                if (mediaInfo.streamType == chrome.cast.media.StreamType.LIVE) {
-                    castPlayer.liveSeekableRange = media.liveSeekableRange;
-                    var live_indicator = document.getElementById('live_indicator');
-                    live_indicator.style.display = 'block';
-                    // Display indicator if current time is close to the end of
-                    // the seekable range.
-                    if (castPlayer.liveSeekableRange && (Math.abs(media.getEstimatedTime() - castPlayer.liveSeekableRange.end) < LIVE_INDICATOR_BUFFER)) {
-                        live_indicator.src = "imagefiles/live_indicator_active.png";
-                    }
-                    else {
-                        live_indicator.src = "imagefiles/live_indicator_inactive.png";
-                    }
-                }
-                else {
-                    document.getElementById('live_indicator').style.display = 'none';
-                }
-            }
-            else {
-                // playerstate view
-                document.getElementById('playerstate').style.display = 'none';
-                document.getElementById('playerstatebg').style.display = 'none';
-                document.getElementById('video_image_overlay').style.display = 'none';
-                // media_info view
-                document.getElementById('media_title').innerHTML = "";
-                document.getElementById('media_subtitle').innerHTML = "";
-            }
-        }.bind(castPlayer);
-        playerTarget.updateCurrentTimeDisplay = function () {
-            castPlayer.playerHandler.setTimeString(document.getElementById('currentTime'), castPlayer.playerHandler.getCurrentMediaTime());
-        }.bind(castPlayer);
-        playerTarget.setTimeString = function (element, time) {
-            var currentTimeString = castPlayer.getMediaTimeString(time);
-            if (castPlayer.isLiveContent) {
-                if (currentTimeString == null) {
-                    element.style.display = 'none';
-                    return;
-                }
-                // clock time
-                if (castPlayer.mediaInfo.metadata && castPlayer.mediaInfo.metadata.sectionStartAbsoluteTime !== undefined) {
-                    element.style.display = 'flex';
-                    element.innerHTML = castPlayer.getClockTimeString(time + castPlayer.mediaInfo.metadata.sectionStartAbsoluteTime);
-                }
-                else {
-                    // media time
-                    element.style.display = 'flex';
-                    element.innerHTML = currentTimeString;
-                }
-            }
-            else {
-                if (currentTimeString !== null) {
-                    element.style.display = 'flex';
-                    element.innerHTML = currentTimeString;
-                }
-                else {
-                    element.style.display = 'none';
-                }
-            }
+        playerTarget.updateDisplayMessage = function () {
+            document.getElementById('playerstate').style.display = 'block';
+            document.getElementById('playerstatebg').style.display = 'block';
+            document.getElementById('video_image_overlay').style.display = 'block';
+            document.getElementById('playerstate').innerHTML =
+                castPlayer.mediaContents[castPlayer.currentMediaIndex]['title'] + ' ' +
+                    castPlayer.playerState + ' on ' + castSession.getCastDevice().friendlyName;
         }.bind(castPlayer);
         playerTarget.setVolume = function (volumeSliderPosition) {
+            // Add resistance to avoid loud volume
             var currentVolume = castPlayer.remotePlayer.volumeLevel;
             var p = document.getElementById('audio_bg_level');
             if (volumeSliderPosition < FULL_VOLUME_HEIGHT) {
+                var vScale = castPlayer.currentVolume * FULL_VOLUME_HEIGHT;
+                if (volumeSliderPosition > vScale) {
+                    volumeSliderPosition = vScale + (pos - vScale) / 2;
+                }
                 p.style.height = volumeSliderPosition + 'px';
                 p.style.marginTop = -volumeSliderPosition + 'px';
                 currentVolume = volumeSliderPosition / FULL_VOLUME_HEIGHT;
@@ -1054,33 +895,17 @@
             castPlayer.remotePlayerController.seek();
         }.bind(castPlayer);
         castPlayer.playerHandler.setTarget(playerTarget);
-        // Setup remote player properties on setup
+        // Setup remote player volume right on setup
+        // The remote player may have had a volume set from previous playback
         if (castPlayer.remotePlayer.isMuted) {
             castPlayer.playerHandler.mute();
         }
-        castPlayer.enableProgressBar(castPlayer.remotePlayer.canSeek);
-        // The remote player may have had a volume set from previous playback
         var currentVolume = castPlayer.remotePlayer.volumeLevel * FULL_VOLUME_HEIGHT;
         var p = document.getElementById('audio_bg_level');
         p.style.height = currentVolume + 'px';
         p.style.marginTop = -currentVolume + 'px';
-        // Show media_control
-        document.getElementById('media_control').style.opacity = 0.7;
         castPlayer.hideFullscreenButton();
-        // If resuming a session, take the remote properties and continue the existing
-        // playback. Otherwise, load local content.
-        if (cast.framework.CastContext.getInstance().getCurrentSession().getSessionState() ==
-            cast.framework.SessionState.SESSION_RESUMED) {
-            console.log('Resuming session');
-            castPlayer.playerHandler.prepareToPlay();
-            // New media has been loaded so the previous ad markers should
-            // be removed.
-            castPlayer.removeAdMarkers();
-            castPlayer.updateAdMarkers();
-        }
-        else {
-            castPlayer.playerHandler.load();
-        }
+        castPlayer.playerHandler.play();
     };
     /**
      * Callback when media is loaded in local player
@@ -1088,7 +913,7 @@
     CastPlayer.prototype.onMediaLoadedLocally = function () {
         var localPlayer = document.getElementById('video_element');
         localPlayer.currentTime = castPlayer.currentMediaTime;
-        castPlayer.playerHandler.prepareToPlay();
+        castPlayer.playerHandler.loaded();
     };
     /**
      * Select a media content
@@ -1198,96 +1023,32 @@
     CastPlayer.prototype.incrementMediaTime = function () {
         // First sync with the current player's time
         castPlayer.currentMediaTime = castPlayer.playerHandler.getCurrentMediaTime();
-        castPlayer.mediaDuration = castPlayer.playerHandler.getMediaDuration();
-        castPlayer.playerHandler.updateDurationDisplay();
-        if (castPlayer.mediaDuration == null || castPlayer.currentMediaTime < castPlayer.mediaDuration || castPlayer.isLiveContent) {
-            castPlayer.playerHandler.updateCurrentTimeDisplay();
-            castPlayer.updateProgressBarByTimer();
-        }
-        else if (castPlayer.mediaDuration > 0) {
-            castPlayer.endPlayback();
+        castPlayer.currentMediaDuration = castPlayer.playerHandler.getMediaDuration();
+        if (castPlayer.playerState === PLAYER_STATE.PLAYING) {
+            if (castPlayer.currentMediaTime < castPlayer.currentMediaDuration) {
+                castPlayer.currentMediaTime += 1;
+                castPlayer.updateProgressBarByTimer();
+            }
+            else {
+                castPlayer.endPlayback();
+            }
         }
     };
     /**
      * Update progress bar and currentTime based on timer
      */
     CastPlayer.prototype.updateProgressBarByTimer = function () {
-        var progressBar = document.getElementById('progress');
+        var p = document.getElementById('progress');
+        if (isNaN(parseInt(p.style.width, 10))) {
+            p.style.width = 0;
+        }
+        if (castPlayer.currentMediaDuration > 0) {
+            var pp = Math.floor(PROGRESS_BAR_WIDTH * castPlayer.currentMediaTime / castPlayer.currentMediaDuration);
+        }
+        p.style.width = pp + 'px';
         var pi = document.getElementById('progress_indicator');
-        // Live situation where the progress and duration is unknown.
-        if (castPlayer.mediaDuration == null) {
-            if (!castPlayer.isLiveContent) {
-                console.log('Error - Duration is not defined for a VOD stream.');
-            }
-            progressBar.style.width = '0px';
-            var skip = document.getElementById('skip');
-            if (skip && skip.style && skip.style.display) {
-                skip.style.display = 'none';
-            }
-            pi.style.display = 'none';
-            var seekable_window_1 = document.getElementById('seekable_window');
-            if (seekable_window_1 && seekable_window_1.style && seekable_window_1.style.width)
-                seekable_window_1.style.width = '0px';
-            var unseekable_overlay_1 = document.getElementById('unseekable_overlay');
-            if (unseekable_overlay_1 && unseekable_overlay_1.style && unseekable_overlay_1.style.width)
-                unseekable_overlay_1.style.width = '0px';
-            return;
-        }
-        else {
-            pi.style.display = '';
-        }
-        if (isNaN(parseInt(progressBar.style.width, 10))) {
-            progressBar.style.width = '0px';
-        }
-        // Prevent indicator from exceeding the max width. Happens during
-        // short media when each progress step is large
-        var pp = Math.floor(PROGRESS_BAR_WIDTH * castPlayer.currentMediaTime / castPlayer.mediaDuration);
-        if (pp > PROGRESS_BAR_WIDTH) {
-            pp = PROGRESS_BAR_WIDTH;
-        }
-        else if (pp < 0) {
-            pp = 0;
-        }
-        progressBar.style.width = pp + 'px';
-        pi.style.marginLeft = pp + 'px';
-        var seekable_window = document.getElementById('seekable_window');
-        var unseekable_overlay = document.getElementById('unseekable_overlay');
-        if (castPlayer.isLiveContent) {
-            if (castPlayer.liveSeekableRange) {
-                // Use the liveSeekableRange to draw the seekable and unseekable windows
-                var seekableMediaPosition = Math.max(castPlayer.mediaInfo.metadata.sectionStartTimeInMedia, castPlayer.liveSeekableRange.end) -
-                    castPlayer.mediaInfo.metadata.sectionStartTimeInMedia;
-                var seekableWidth = Math.floor(PROGRESS_BAR_WIDTH * seekableMediaPosition / castPlayer.mediaDuration);
-                if (seekableWidth > PROGRESS_BAR_WIDTH) {
-                    seekableWidth = PROGRESS_BAR_WIDTH;
-                }
-                else if (seekableWidth < 0) {
-                    seekableWidth = 0;
-                }
-                seekable_window.style.width = seekableWidth + 'px';
-                var unseekableMediaPosition = Math.max(castPlayer.mediaInfo.metadata.sectionStartTimeInMedia, castPlayer.liveSeekableRange.start) -
-                    castPlayer.mediaInfo.metadata.sectionStartTimeInMedia;
-                var unseekableWidth = Math.floor(PROGRESS_BAR_WIDTH * unseekableMediaPosition / castPlayer.mediaDuration);
-                if (unseekableWidth > PROGRESS_BAR_WIDTH) {
-                    unseekableWidth = PROGRESS_BAR_WIDTH;
-                }
-                else if (unseekableWidth < 0) {
-                    unseekableWidth = 0;
-                }
-                unseekable_overlay.style.width = unseekableWidth + 'px';
-            }
-            else {
-                // Nothing is seekable if no liveSeekableRange
-                seekable_window.style.width = '0px';
-                unseekable_overlay.style.width = PROGRESS_BAR_WIDTH + 'px';
-            }
-        }
-        else {
-            // Default to everything seekable
-            seekable_window.style.width = PROGRESS_BAR_WIDTH + 'px';
-            unseekable_overlay.style.width = '0px';
-        }
-        if (pp >= PROGRESS_BAR_WIDTH && !castPlayer.isLiveContent) {
+        pi.style.marginLeft = -21 - PROGRESS_BAR_WIDTH + pp + 'px';
+        if (pp >= PROGRESS_BAR_WIDTH) {
             castPlayer.endPlayback();
         }
     };
@@ -1492,6 +1253,30 @@
         }
     };
     /**
+     * Updates media duration text in UI
+     */
+    CastPlayer.prototype.updateMediaDuration = function () {
+        document.getElementById('duration').innerHTML =
+            CastPlayer.getDurationString(castPlayer.currentMediaDuration);
+    };
+    /**
+     * @param {number} durationInSec
+     * @return {string}
+     */
+    CastPlayer.getDurationString = function (durationInSec) {
+        var durationString = '' + Math.floor(durationInSec % 60);
+        var durationInMin = Math.floor(durationInSec / 60);
+        if (durationInMin === 0) {
+            return durationString;
+        }
+        durationString = (durationInMin % 60) + ':' + durationString;
+        var durationInHour = Math.floor(durationInMin / 60);
+        if (durationInHour === 0) {
+            return durationString;
+        }
+        return durationInHour + ':' + durationString;
+    };
+    /**
      * Request full screen mode
      */
     CastPlayer.prototype.requestFullScreen = function () {
@@ -1555,7 +1340,7 @@
      */
     CastPlayer.prototype.showMediaControl = function () {
         var media_control = document.getElementById('media_control');
-        if (media_control && media_control.style && media_control.opacity)
+        if (media_control && media_control.style && media_control.style.opacity)
             media_control.style.opacity = 0.7;
     };
     /**
@@ -1659,7 +1444,7 @@
                 newdiv.innerHTML =
                     '<img src="' + MEDIA_SOURCE_ROOT + castPlayer.mediaContents[i]['thumb'] +
                         '" class="thumbnail">';
-                newdiv.addEventListener('click', castPlayer.selectMedia.bind(this, i));
+                newdiv.addEventListener('click', castPlayer.selectMedia.bind(castPlayer, i));
                 ni.appendChild(newdiv);
             }
         }
