@@ -35,12 +35,12 @@
   },
   "homepage": "https://github.com/ThinkAM/ngCast#readme",
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.1001.7",
+    "@angular-devkit/build-angular": "0.1002.0",
     "@angular/cli": "10.2.0",
-    "@angular/common": "8.2.14",
-    "@angular/compiler": "8.2.14",
-    "@angular/compiler-cli": "8.2.14",
-    "@angular/core": "8.2.14",
+    "@angular/common": "10.2.0",
+    "@angular/compiler": "10.2.0",
+    "@angular/compiler-cli": "10.2.0",
+    "@angular/core": "10.2.0",
     "ng-packagr": "10.1.2",
     "typescript": "3.9.7",
     "wrench": "1.5.9"
