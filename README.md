@@ -42,7 +42,7 @@ this.ngCastService.launchMedia(mediaUrl);
 // ex. this.ngCastService.launchMedia('http://25.media.tumblr.com/tumblr_m4c8cxLOQv1rwa0vgo1_250.gif')
 ```
 
-## Customisation
+## Customization
 You can modify cast button appearance editing ng-cast/ng-cast.component.scss
 *If you use CSS files in your project, you just need to change ng-cast.component.scss file extension*
 
