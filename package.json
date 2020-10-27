@@ -1,10 +1,18 @@
 {
   "$schema": "./node_modules/ng-packagr/package.schema.json",
   "name": "@thinkam.net/ng-cast",
-  "version": "0.3.7",
+  "version": "0.4.2",
   "ngPackage": {
     "lib": {
-      "entryFile": "index.ts"
+      "entryFile": "index.ts",
+      "umdModuleIds": {
+        "videogular2/compiled/core": "VgCoreModule",
+        "videogular2/compiled/controls": "VgControlsModule",
+        "videogular2/compiled/streaming": "VgStreamingModule",
+        "videogular2/compiled/buffering": "VgBufferingModule",
+        "videogular2/compiled/overlay-play": "VgOverlayPlayModule",
+        "videogular2/compiled/src/streaming/vg-dash/vg-dash": "VgDASH"
+      }
     }
   },
   "description": "Broadcast media on your TV from your Angular app",
@@ -33,12 +41,17 @@
   "homepage": "https://github.com/ThinkAM/ngCast#readme",
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.1001.5",
-    "@angular/cli": "^8.3.29",
-    "@angular/common": "^8.2.5",
-    "@angular/core": "^8.2.5",
+    "@angular/cli": "^10.2.0",
+    "@angular/common": "^10.2.0",
+    "@angular/core": "^10.2.0",
+    "@angular/compiler": "^10.2.0",
+    "@angular/compiler-cli": "^10.2.0",
     "ng-packagr": "^10.1.2",
-    "typescript": "^3.4.5",
+    "typescript": "^4.0.5",
+    "moment": "^2.24.0",
+    "videogular2": "^7.0.1",
     "wrench": "^1.5.9"
   },
-  "dependencies": {}
+  "dependencies": {
+  }
 }

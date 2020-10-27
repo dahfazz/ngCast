@@ -1,14 +1,54 @@
-import { OnInit } from '@angular/core';
+import { OnInit, ElementRef } from '@angular/core';
 import { NgCastService } from './shared/ng-cast.service';
+import { VgDASH } from 'videogular2/compiled/src/streaming/vg-dash/vg-dash';
+import { IDRMLicenseServer } from 'videogular2/compiled/src/streaming/streaming';
+import { VgAPI, BitrateOption } from 'videogular2/compiled/core';
+import { ScheduleDto } from './dto/schedule-dto';
+export interface IMediaStream {
+    type: 'vod' | 'dash';
+    source: string;
+    label: string;
+    token?: string;
+    licenseServers?: IDRMLicenseServer;
+}
 export declare class NgCastComponent implements OnInit {
     private ngCastService;
+    vgDash: VgDASH;
+    media: ElementRef<HTMLVideoElement>;
     castingStatus: any;
     window: any;
     videoImage: string;
     imageOffline: boolean;
+    premium: boolean;
     srcImageOffline: string;
+    currentStream: IMediaStream;
+    api: VgAPI;
+    isDebug: boolean;
+    paused: boolean;
+    streams: IMediaStream[];
+    playlist: Array<ScheduleDto>;
+    play: boolean;
+    isHidden: boolean;
+    isShow: boolean;
+    currentIndex: number;
+    video: ScheduleDto;
+    appBaseUrl: String;
     constructor(ngCastService: NgCastService);
     ngOnInit(): void;
+    onPlayerReady(api: VgAPI): void;
+    setBitrate(option: BitrateOption): void;
+    nextVideo(): void;
+    getPaused(): boolean;
+    pause(): void;
     openSession(): void;
     closeSession(): void;
+    tryAgain(): void;
+    getVideos(): void;
+    getPosition(result: ScheduleDto): void;
+    getMuted(): boolean;
+    getMaximized(): boolean;
+    toggleSound(): void;
+    toggleMaximize(): void;
+    showVideoControls(): void;
+    hideVideoControls(): void;
 }

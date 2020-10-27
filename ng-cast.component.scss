@@ -1,3 +1,228 @@
+
+#video-container {
+  background-color: #272C34;
+  margin: 0 auto;
+  z-index: -1;
+
+  vg-scrub-bar-current-time {
+      .background {
+          background-color: red;
+      }
+  }
+
+  .hidden {
+      display: none;
+  }
+
+  .show {
+      display: block;
+  }
+
+  .video-controls {
+      right: 0;
+      left: 0;
+      position: absolute;
+      bottom: 0;
+      transition: all 0.2s ease;
+      background: rgba(0, 0, 0, 0.5);
+      height: 45px;
+  }
+
+  .video-controls.hide {
+      opacity: 0;
+      pointer-events: none;
+  }
+
+  .video-progress {
+      position: relative;
+      height: 8.4px;
+      align-items: right;
+
+      #seek-tooltip {
+          position: absolute;
+      }
+
+      /*Chrome*/
+      @media screen and (-webkit-min-device-pixel-ratio:0) {
+          input[type='range'] {
+              overflow: hidden;
+              -webkit-appearance: none;
+              background-color: var(--youtube-red);
+          }
+
+          input[type='range']::-webkit-slider-runnable-track {
+              height: 10px;
+              -webkit-appearance: none;
+              color: var(--youtube-red);
+              margin-top: -1px;
+          }
+
+          input[type='range']::-webkit-slider-thumb {
+              width: 10px;
+              -webkit-appearance: none;
+              height: 10px;
+              cursor: ew-resize;
+              background: var(--youtube-red);
+          }
+      }
+
+      input[type="range"] {
+          background-color: var(--youtube-red);
+      }
+
+      /** FF*/
+      input[type="range"]::-moz-range-progress {
+          background-color: var(--youtube-red);
+      }
+
+      input[type="range"]::-moz-range-track {
+          background-color: var(--youtube-red);
+      }
+
+      /* IE*/
+      input[type="range"]::-ms-fill-lower {
+          background-color: var(--youtube-red);
+      }
+
+      input[type="range"]::-ms-fill-upper {
+          background-color: var(--youtube-red);
+      }
+  }
+
+  progress {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      border-radius: 2px;
+      width: 100%;
+      height: 0.5vh;
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+  }
+
+  .buttons {
+      .video-control {
+          background: none;
+          border: #fff 2px solid;
+          border-radius: 16px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 32px;
+          height: 32px;
+          color: white;
+
+          i {
+              line-height: 16px;
+              color: white;
+          }
+      }
+
+      .video-control-paused {
+          position: absolute;
+          left: 1vw;
+          bottom: 8px;
+          z-index: 1000;
+      }
+
+      .video-control-muted {
+          position: absolute;
+          right: 5vw;
+          bottom: 8px;
+          z-index: 1000;
+      }
+
+      .video-control-maximized {
+          position: absolute;
+          right: 1vw;
+          bottom: 8px;
+          z-index: 1000;
+      }
+  }
+
+  progress::-webkit-progress-bar {
+      background-color: var(--youtube-red);
+      border-radius: 2px;
+  }
+
+  progress::-webkit-progress-value {
+      background: white;
+      border-radius: 2px;
+  }
+
+  progress::-moz-progress-bar {
+      border: 1px solid white;
+      background: white;
+  }
+
+  .seek {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 0.5vh;
+      cursor: pointer;
+      margin: 0;
+  }
+
+  .seek-tooltip {
+      display: block;
+      position: absolute;
+      top: 10px;
+      margin-left: 5vw;
+      font-size: 12px;
+      padding: 3px;
+      content: attr(data-title);
+      font-weight: bold;
+      color: #fff;
+      background-color: var(--youtube-red);
+  }
+}
+
+.playlist-item {
+  li {
+      color: white;
+  }
+}
+
+.kt-content.kt-grid__item.kt-grid__item--fluid.kt-grid.kt-grid--hor {
+  background-color: #272C34;
+}
+
+#kt_header_menu_wrapper {
+  display: none;
+}
+
+.kt-header__bottom {
+  display: none !important;
+}
+
+.player-wrapper {
+  max-width: 500px;
+  margin: auto;
+
+  video {
+      width: 100%;
+  }
+}
+
+ul {
+  padding: 0px;
+
+  li.playlist-item {
+      padding: 10px;
+      list-style: none;
+      background: #673AB7;
+      margin-bottom: 2px;
+      cursor: pointer;
+  }
+
+  li.playlist-item.selected {
+      background-color: #ccc;
+  }
+}
+
+// Premium
 body {
   background-color: #F2F2F2;
   font-family: 'Roboto', "OpenSans", "Verdana", Georgia, Serif;

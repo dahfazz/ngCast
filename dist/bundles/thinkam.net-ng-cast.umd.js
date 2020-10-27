@@ -1,344 +1,10 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('rxjs')) :
-    typeof define === 'function' && define.amd ? define('@thinkam.net/ng-cast', ['exports', '@angular/core', '@angular/common', 'rxjs'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.thinkam = global.thinkam || {}, global.thinkam.net = global.thinkam.net || {}, global.thinkam.net['ng-cast'] = {}), global.ng.core, global.ng.common, global.rxjs));
-}(this, (function (exports, core, common, rxjs) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('rxjs'), require('videogular2/compiled/src/streaming/vg-dash/vg-dash'), require('videogular2/compiled/core'), require('videogular2/compiled/controls'), require('videogular2/compiled/streaming'), require('videogular2/compiled/buffering'), require('videogular2/compiled/overlay-play')) :
+    typeof define === 'function' && define.amd ? define('@thinkam.net/ng-cast', ['exports', '@angular/core', '@angular/common', 'rxjs', 'videogular2/compiled/src/streaming/vg-dash/vg-dash', 'videogular2/compiled/core', 'videogular2/compiled/controls', 'videogular2/compiled/streaming', 'videogular2/compiled/buffering', 'videogular2/compiled/overlay-play'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.thinkam = global.thinkam || {}, global.thinkam.net = global.thinkam.net || {}, global.thinkam.net['ng-cast'] = {}), global.ng.core, global.ng.common, global.rxjs, global.VgDASH, global.VgCoreModule, global.VgControlsModule, global.VgStreamingModule, global.VgBufferingModule, global.VgOverlayPlayModule));
+}(this, (function (exports, core, common, rxjs, vgDash, core$1, controls, streaming, buffering, overlayPlay) { 'use strict';
 
-    /*! *****************************************************************************
-    Copyright (c) Microsoft Corporation.
-
-    Permission to use, copy, modify, and/or distribute this software for any
-    purpose with or without fee is hereby granted.
-
-    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-    REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-    AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-    INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-    LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-    OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-    PERFORMANCE OF THIS SOFTWARE.
-    ***************************************************************************** */
-    /* global Reflect, Promise */
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b)
-                if (b.hasOwnProperty(p))
-                    d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    function __extends(d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    }
-    var __assign = function () {
-        __assign = Object.assign || function __assign(t) {
-            for (var s, i = 1, n = arguments.length; i < n; i++) {
-                s = arguments[i];
-                for (var p in s)
-                    if (Object.prototype.hasOwnProperty.call(s, p))
-                        t[p] = s[p];
-            }
-            return t;
-        };
-        return __assign.apply(this, arguments);
-    };
-    function __rest(s, e) {
-        var t = {};
-        for (var p in s)
-            if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-                t[p] = s[p];
-        if (s != null && typeof Object.getOwnPropertySymbols === "function")
-            for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-                if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                    t[p[i]] = s[p[i]];
-            }
-        return t;
-    }
-    function __decorate(decorators, target, key, desc) {
-        var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
-            r = Reflect.decorate(decorators, target, key, desc);
-        else
-            for (var i = decorators.length - 1; i >= 0; i--)
-                if (d = decorators[i])
-                    r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    }
-    function __param(paramIndex, decorator) {
-        return function (target, key) { decorator(target, key, paramIndex); };
-    }
-    function __metadata(metadataKey, metadataValue) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
-            return Reflect.metadata(metadataKey, metadataValue);
-    }
-    function __awaiter(thisArg, _arguments, P, generator) {
-        function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-        return new (P || (P = Promise))(function (resolve, reject) {
-            function fulfilled(value) { try {
-                step(generator.next(value));
-            }
-            catch (e) {
-                reject(e);
-            } }
-            function rejected(value) { try {
-                step(generator["throw"](value));
-            }
-            catch (e) {
-                reject(e);
-            } }
-            function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-            step((generator = generator.apply(thisArg, _arguments || [])).next());
-        });
-    }
-    function __generator(thisArg, body) {
-        var _ = { label: 0, sent: function () { if (t[0] & 1)
-                throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-        return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function () { return this; }), g;
-        function verb(n) { return function (v) { return step([n, v]); }; }
-        function step(op) {
-            if (f)
-                throw new TypeError("Generator is already executing.");
-            while (_)
-                try {
-                    if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done)
-                        return t;
-                    if (y = 0, t)
-                        op = [op[0] & 2, t.value];
-                    switch (op[0]) {
-                        case 0:
-                        case 1:
-                            t = op;
-                            break;
-                        case 4:
-                            _.label++;
-                            return { value: op[1], done: false };
-                        case 5:
-                            _.label++;
-                            y = op[1];
-                            op = [0];
-                            continue;
-                        case 7:
-                            op = _.ops.pop();
-                            _.trys.pop();
-                            continue;
-                        default:
-                            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
-                                _ = 0;
-                                continue;
-                            }
-                            if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) {
-                                _.label = op[1];
-                                break;
-                            }
-                            if (op[0] === 6 && _.label < t[1]) {
-                                _.label = t[1];
-                                t = op;
-                                break;
-                            }
-                            if (t && _.label < t[2]) {
-                                _.label = t[2];
-                                _.ops.push(op);
-                                break;
-                            }
-                            if (t[2])
-                                _.ops.pop();
-                            _.trys.pop();
-                            continue;
-                    }
-                    op = body.call(thisArg, _);
-                }
-                catch (e) {
-                    op = [6, e];
-                    y = 0;
-                }
-                finally {
-                    f = t = 0;
-                }
-            if (op[0] & 5)
-                throw op[1];
-            return { value: op[0] ? op[1] : void 0, done: true };
-        }
-    }
-    function __createBinding(o, m, k, k2) {
-        if (k2 === undefined)
-            k2 = k;
-        o[k2] = m[k];
-    }
-    function __exportStar(m, exports) {
-        for (var p in m)
-            if (p !== "default" && !exports.hasOwnProperty(p))
-                exports[p] = m[p];
-    }
-    function __values(o) {
-        var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
-        if (m)
-            return m.call(o);
-        if (o && typeof o.length === "number")
-            return {
-                next: function () {
-                    if (o && i >= o.length)
-                        o = void 0;
-                    return { value: o && o[i++], done: !o };
-                }
-            };
-        throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-    }
-    function __read(o, n) {
-        var m = typeof Symbol === "function" && o[Symbol.iterator];
-        if (!m)
-            return o;
-        var i = m.call(o), r, ar = [], e;
-        try {
-            while ((n === void 0 || n-- > 0) && !(r = i.next()).done)
-                ar.push(r.value);
-        }
-        catch (error) {
-            e = { error: error };
-        }
-        finally {
-            try {
-                if (r && !r.done && (m = i["return"]))
-                    m.call(i);
-            }
-            finally {
-                if (e)
-                    throw e.error;
-            }
-        }
-        return ar;
-    }
-    function __spread() {
-        for (var ar = [], i = 0; i < arguments.length; i++)
-            ar = ar.concat(__read(arguments[i]));
-        return ar;
-    }
-    function __spreadArrays() {
-        for (var s = 0, i = 0, il = arguments.length; i < il; i++)
-            s += arguments[i].length;
-        for (var r = Array(s), k = 0, i = 0; i < il; i++)
-            for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-                r[k] = a[j];
-        return r;
-    }
-    ;
-    function __await(v) {
-        return this instanceof __await ? (this.v = v, this) : new __await(v);
-    }
-    function __asyncGenerator(thisArg, _arguments, generator) {
-        if (!Symbol.asyncIterator)
-            throw new TypeError("Symbol.asyncIterator is not defined.");
-        var g = generator.apply(thisArg, _arguments || []), i, q = [];
-        return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-        function verb(n) { if (g[n])
-            i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
-        function resume(n, v) { try {
-            step(g[n](v));
-        }
-        catch (e) {
-            settle(q[0][3], e);
-        } }
-        function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
-        function fulfill(value) { resume("next", value); }
-        function reject(value) { resume("throw", value); }
-        function settle(f, v) { if (f(v), q.shift(), q.length)
-            resume(q[0][0], q[0][1]); }
-    }
-    function __asyncDelegator(o) {
-        var i, p;
-        return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
-        function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
-    }
-    function __asyncValues(o) {
-        if (!Symbol.asyncIterator)
-            throw new TypeError("Symbol.asyncIterator is not defined.");
-        var m = o[Symbol.asyncIterator], i;
-        return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
-        function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
-        function settle(resolve, reject, d, v) { Promise.resolve(v).then(function (v) { resolve({ value: v, done: d }); }, reject); }
-    }
-    function __makeTemplateObject(cooked, raw) {
-        if (Object.defineProperty) {
-            Object.defineProperty(cooked, "raw", { value: raw });
-        }
-        else {
-            cooked.raw = raw;
-        }
-        return cooked;
-    }
-    ;
-    function __importStar(mod) {
-        if (mod && mod.__esModule)
-            return mod;
-        var result = {};
-        if (mod != null)
-            for (var k in mod)
-                if (Object.hasOwnProperty.call(mod, k))
-                    result[k] = mod[k];
-        result.default = mod;
-        return result;
-    }
-    function __importDefault(mod) {
-        return (mod && mod.__esModule) ? mod : { default: mod };
-    }
-    function __classPrivateFieldGet(receiver, privateMap) {
-        if (!privateMap.has(receiver)) {
-            throw new TypeError("attempted to get private field on non-instance");
-        }
-        return privateMap.get(receiver);
-    }
-    function __classPrivateFieldSet(receiver, privateMap, value) {
-        if (!privateMap.has(receiver)) {
-            throw new TypeError("attempted to set private field on non-instance");
-        }
-        privateMap.set(receiver, value);
-        return value;
-    }
-
-    exports.ɵa = /** @class */ (function () {
-        function NgCastComponent(ngCastService) {
-            this.ngCastService = ngCastService;
-            this.videoImage = '';
-            this.imageOffline = false;
-            this.srcImageOffline = '';
-        }
-        NgCastComponent.prototype.ngOnInit = function () {
-            this.window = window;
-            var ngCastService = this.ngCastService;
-            this.window['__onGCastApiAvailable'] = function (isAvailable) {
-                if (isAvailable) {
-                    ngCastService.initializeCastApi();
-                }
-            };
-            this.castingStatus = this.ngCastService.getStatus();
-        };
-        NgCastComponent.prototype.openSession = function () {
-            this.ngCastService.discoverDevices();
-        };
-        NgCastComponent.prototype.closeSession = function () {
-            this.ngCastService.discoverDevices();
-        };
-        return NgCastComponent;
-    }());
-    __decorate([
-        core.Input()
-    ], exports.ɵa.prototype, "videoImage", void 0);
-    __decorate([
-        core.Input()
-    ], exports.ɵa.prototype, "imageOffline", void 0);
-    __decorate([
-        core.Input()
-    ], exports.ɵa.prototype, "srcImageOffline", void 0);
-    exports.ɵa = __decorate([
-        core.Component({
-            selector: 'ng-cast',
-            template: "<div *ngIf=\"!imageOffline\" id=\"main_video\">\n  <div class=\"imageSub\"> <!-- Put Your Image Width -->\n     <div class=\"blackbg\" id=\"playerstatebg\">IDLE</div>\n     <div class=label id=\"playerstate\">IDLE</div>\n     <img [src]=\"videoImage\" id=\"video_image\">\n     <div id=\"video_image_overlay\"></div>\n     <video id=\"video_element\">\n     </video>\n  </div>\n\n  <div id=\"media_control\">\n     <div id=\"play\"></div>\n     <div id=\"pause\"></div>\n     <div id=\"progress_bg\"></div>\n     <div id=\"progress\"></div>\n     <div id=\"progress_indicator\"></div>\n     <div id=\"fullscreen_expand\"></div>\n     <div id=\"fullscreen_collapse\"></div>\n     <google-cast-launcher id=\"castbutton\"></google-cast-launcher>\n     <div id=\"audio_bg\"></div>\n     <div id=\"audio_bg_track\"></div>\n     <div id=\"audio_indicator\"></div>\n     <div id=\"audio_bg_level\"></div>\n     <div id=\"audio_on\"></div>\n     <div id=\"audio_off\"></div>\n     <div id=\"duration\">00:00:00</div>\n  </div>\n</div>\n<div *ngIf=\"!imageOffline\" id=\"media_info\">\n  <div id=\"media_title\">\n  </div>\n  <div id=\"media_subtitle\">\n  </div>\n  <div id=\"media_desc\">\n  </div>\n</div>\n\n<div *ngIf=\"!imageOffline\" id=\"carousel\">\n</div>\n\n<img \n  width=\"100%\" \n  *ngIf=\"imageOffline\" \n  [src]=\"srcImageOffline\"\n  alt=\"TV Offline\"\n/>\n",
-            styles: ["body{background-color:#f2f2f2;font-family:Roboto,OpenSans,Verdana,Georgia,Serif}#msg{-webkit-transition:opacity 0 2s;color:#fff;display:none;font-size:90%;font-weight:400;margin-left:200px;transition:opacity 0 2s}#top_header_bar{background-image:url(/assets/imagefiles/header_bg-top.png);background-repeat:repeat-x;height:10px;margin:0;width:100%}#top_header{background-image:url(/assets/imagefiles/header_bg.png);height:71px;z-index:1000}#footer,#top_header{background-repeat:repeat-x;float:left;margin:0;width:100%}#footer{background-image:url(/assets/imagefiles/footer_bg.png);height:81px}#copyright{width:300px}#copyright,#footer_content{color:#fff;float:left;font-size:13px;margin:10px}#footer_content{width:400px}#footer_content_link{color:#fff}#footer_language{color:#fff;float:right;font-size:13px;margin:10px;width:200px}#logo{background-image:url(/assets/imagefiles/logo.png);float:left;height:71px;margin:10px 25px 0;width:201px}.header_tab{-moz-transition:all .6s ease-in-out;-o-transition:all .6s ease-in-out;-webkit-transition:all .6s ease-in-out;float:left;font-family:Roboto,OpenSans;font-size:20px;font-weight:700;height:31px;margin-top:10px;padding:20px}#title_text{text-align:center;width:100%}#main_video{float:left;width:100%}#video_image{height:536px;margin-bottom:0;margin-right:auto;margin-top:20px;width:100%}#video_image_overlay{background:linear-gradient(0deg,rgba(0,0,0,.9),transparent 72%,transparent);margin-right:0;margin-top:0;position:absolute;z-index:0}#video_element,#video_image_overlay{display:none;height:540px;margin-bottom:0;width:100%}#video_element{background-color:#000;margin-right:auto;margin-top:20px}#media_info{background-color:#dde0e5;clear:both;color:#000;display:block;float:left;height:116px;margin-top:10px;opacity:.9;padding:10px;width:100%}#media_title{font-size:30px;font-weight:700;margin:0 10px 0 0}#media_subtitle,#media_title{float:left;font-family:Roboto,Open Sans,Verdana,Georgia,Serif;padding:0}#media_subtitle{font-size:18px;margin:13px 0 0 30px}#media_desc{float:left;font-size:12px;margin:5px}#media_control,#media_desc{font-family:Roboto,Open Sans,Verdana,Georgia,Serif;width:100%}#media_control{-webkit-transition:opacity 1s;background-color:#000;height:60px;opacity:.7;padding:0;position:absolute;top:595px;transition:opacity 1s;z-index:1000}#media_control:hover{opacity:.7}#play{background-image:url(/assets/imagefiles/play.png);float:left;height:40px;margin:10px 20px 10px 10px;width:65px}#play:hover{background-image:url(/assets/imagefiles/play-hover.png)}#play:press{background-image:url(/assets/imagefiles/play-press.png)}#pause{background-image:url(/assets/imagefiles/pause.png);display:none;float:left;height:40px;margin:10px 20px 10px 10px;width:65px}#pause:hover{background-image:url(/assets/imagefiles/pause-hover.png)}.button{font-family:Roboto,Open Sans,Verdana,Georgia,Serif;font-size:100%;margin:5px}.volume{margin-left:8px;width:60px}#muteText{margin-left:3px;width:30px}.muteButton{font-family:Roboto,Open Sans,Verdana,Georgia,Serif;font-size:110%}.imageIcon{padding:3px 0 0;width:25px}#progress{background-image:url(/assets/imagefiles/timeline_bg_progress.png);width:1px;z-index:10}#progress,#progress_indicator{background-repeat:repeat-x;cursor:pointer;float:left;height:36px;margin:20px 0 10px -620px}#progress_indicator{background-image:url(/assets/imagefiles/timeline_indicator.png);width:6px;z-index:1000}#progress_bg{background-image:url(/assets/imagefiles/timeline_bg_track.png);background-repeat:repeat-x;cursor:pointer;float:left;height:36px;margin:20px 20px 10px 0;width:600px}#castbutton{background-color:#000;border:none;float:right;height:32px;margin:10px 6px 14px 0;opacity:.7;outline:none;width:40px}#castbutton:hover{--connected-color:#fff;--disconnected-color:#fff}#audio_off{background-image:url(/assets/imagefiles/audio_off.png);display:none}#audio_off,#audio_on{float:right;height:32px;margin:10px 4px 10px 0;width:32px}#audio_on{background-image:url(/assets/imagefiles/audio_on.png);display:block}#audio_bg{background-image:url(/assets/imagefiles/audio_bg.png);height:124px;margin:-115px 8px -10px 0;opacity:.1;width:41px;z-index:10}#audio_bg,#audio_bg_track{display:block;float:right;position:relative}#audio_bg_track{background-image:url(/assets/imagefiles/audio_bg_track.png);height:100px;margin:-100px 20px -30px 0;opacity:0;width:16px;z-index:1000}#audio_indicator{background-image:url(/assets/imagefiles/audio_indicator.png);display:none;height:5px}#audio_bg_level,#audio_indicator{float:right;margin:-50px 20px -30px 0;opacity:0;position:relative;width:16px;z-index:1000}#audio_bg_level{background-image:url(/assets/imagefiles/audio_bg_level.png);display:block;height:50px}#fullscreen_expand{background-image:url(/assets/imagefiles/fullscreen_expand.png);display:block}#fullscreen_collapse,#fullscreen_expand{cursor:pointer;float:right;height:32px;margin:10px 20px 10px 0;width:32px}#fullscreen_collapse{background-image:url(/assets/imagefiles/fullscreen_collapse.png);display:none}#duration{color:#fff;display:block;float:right;height:32px;margin:18px 15px 10px;width:60px}div.imageSub{position:relative}div.imageSub img{z-index:1}div.imageSub div{bottom:0;left:0;padding:0;position:absolute;right:0}div.imageSub div.blackbg{-ms-filter:\"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)\";background-color:#000;color:#000;filter:alpha(opacity=50);opacity:.5;z-index:2000}div.imageSub div.blackbg,div.imageSub div.label{bottom:60px;display:none;font-size:120%;height:30px;left:300px;padding:10px;width:400px}div.imageSub div.label{color:#fff;z-index:3000}#carousel{margin:20px 10px 10px 40px;width:990px}.thumb{cursor:pointer;float:left;margin:10px 10px 10px 0}.thumbnail{height:127px;margin-right:10px;width:225px}.vertical{-webkit-transform:rotate(90deg)}"]
-        })
-    ], exports.ɵa);
-
-    exports.NgCastService = /** @class */ (function () {
+    var NgCastService = /** @class */ (function () {
         function NgCastService() {
             var _this = this;
             this.window = window;
@@ -418,26 +84,254 @@
         };
         return NgCastService;
     }());
-    exports.NgCastService = __decorate([
-        core.Injectable()
-    ], exports.NgCastService);
+    NgCastService.decorators = [
+        { type: core.Injectable }
+    ];
+    NgCastService.ctorParameters = function () { return []; };
 
-    exports.NgCastModule = /** @class */ (function () {
+    var ScheduleDto = /** @class */ (function () {
+        function ScheduleDto(data) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property)) {
+                        this[property] = data[property];
+                    }
+                }
+            }
+        }
+        ScheduleDto.fromJS = function (data) {
+            data = typeof data === 'object' ? data : {};
+            var result = new ScheduleDto();
+            result.init(data);
+            return result;
+        };
+        ScheduleDto.prototype.init = function (data) {
+            if (data) {
+                this.id = data['id'];
+                this.tenant = data['tenant'];
+                this.name = data['name'];
+                this.description = data['description'];
+                this.url = data['url'];
+                this.duration = data['duration'];
+                this.actualStart = data['actualStart'];
+                this.realEnd = data['realEnd'];
+                this.isActive = data['isActive'];
+            }
+        };
+        ScheduleDto.prototype.toJSON = function (data) {
+            data = typeof data === 'object' ? data : {};
+            data['id'] = this.id;
+            data['tenant'] = this.tenant;
+            data['name'] = this.name;
+            data['description'] = this.description;
+            data['url'] = this.url;
+            data['duration'] = this.duration;
+            data['actualStart'] = this.actualStart;
+            data['realEnd'] = this.realEnd;
+            data['isActive'] = this.isActive;
+            return data;
+        };
+        return ScheduleDto;
+    }());
+
+    var NgCastComponent = /** @class */ (function () {
+        function NgCastComponent(ngCastService) {
+            this.ngCastService = ngCastService;
+            this.videoImage = '';
+            this.imageOffline = false;
+            this.premium = false;
+            this.srcImageOffline = '';
+            this.currentStream = {
+                type: 'dash',
+                label: 'DASH: Media Stream test',
+                source: 'http://livesim.dashif.org/livesim/testpic_2s/Manifest.mpd'
+            };
+            this.api = new core$1.VgAPI();
+            this.isDebug = false;
+            this.paused = false;
+            this.streams = [
+                {
+                    type: 'dash',
+                    label: 'DASH: Media Stream test',
+                    source: 'http://livesim.dashif.org/livesim/testpic_2s/Manifest.mpd'
+                }
+            ];
+            this.playlist = [];
+            this.play = false;
+            this.isHidden = false;
+            this.isShow = true;
+            this.currentIndex = 0;
+            this.video = new ScheduleDto();
+            this.appBaseUrl = '';
+        }
+        NgCastComponent.prototype.ngOnInit = function () {
+            this.window = window;
+            this.currentStream = this.streams[0];
+            var ngCastService = this.ngCastService;
+            this.window['__onGCastApiAvailable'] = function (isAvailable) {
+                if (isAvailable) {
+                    ngCastService.initializeCastApi();
+                }
+            };
+            this.castingStatus = this.ngCastService.getStatus();
+        };
+        NgCastComponent.prototype.onPlayerReady = function (api) {
+            this.api = api;
+            this.api.getDefaultMedia().subscriptions.ended.subscribe(this.nextVideo.bind(this));
+        };
+        NgCastComponent.prototype.setBitrate = function (option) {
+            switch (this.currentStream.type) {
+                case 'dash':
+                    this.vgDash.setBitrate(option);
+                    break;
+            }
+        };
+        NgCastComponent.prototype.nextVideo = function () {
+            this.currentIndex++;
+            if (this.currentIndex === this.playlist.length) {
+                this.currentIndex = 0;
+            }
+            this.video = this.playlist[this.currentIndex];
+        };
+        NgCastComponent.prototype.getPaused = function () {
+            var _this = this;
+            if (this.media && this.media.nativeElement) {
+                this.paused = this.media.nativeElement.paused;
+                return this.media.nativeElement.paused;
+            }
+            else {
+                setTimeout(function () {
+                    return _this.getPaused();
+                }, 2000);
+            }
+        };
+        NgCastComponent.prototype.pause = function () {
+            this.media.nativeElement.pause();
+            this.getPaused();
+        };
+        NgCastComponent.prototype.openSession = function () {
+            this.ngCastService.discoverDevices();
+        };
+        NgCastComponent.prototype.closeSession = function () {
+            this.ngCastService.discoverDevices();
+        };
+        NgCastComponent.prototype.tryAgain = function () {
+            var _this = this;
+            this.imageOffline = true;
+            this.isHidden = true;
+            console.log('loading...');
+            setTimeout(function () {
+                _this.getVideos();
+            }, 500);
+        };
+        NgCastComponent.prototype.getVideos = function () {
+            if (this.playlist && this.playlist.length > 0) {
+                this.imageOffline = false;
+                this.video = this.playlist[this.currentIndex];
+                this.getPosition(this.video);
+            }
+            else {
+                this.video = new ScheduleDto();
+                this.tryAgain();
+            }
+        };
+        NgCastComponent.prototype.getPosition = function (result) {
+            var _this = this;
+            setTimeout(function () {
+                var vid = document.getElementById('video_element');
+                vid.load();
+                var now = new Date();
+                var currentTime = Math.abs(now.getTime() - new Date(_this.video.actualStart).getTime());
+                console.log('Temos no player: ' + result.url);
+                console.log('Início em: ' + currentTime);
+                _this.video.url = result.url;
+                vid['currentTime'] = currentTime / 1000;
+                var promise = vid.play();
+                if (promise !== undefined) {
+                    promise.then(function (_) {
+                        // Autoplay started!
+                        console.log('Estamos ao vivo!');
+                    }).catch(function () {
+                        // Autoplay was prevented.
+                        // Show a "Play" button so that user can start playback.
+                        _this.play = true;
+                    });
+                }
+            }, 1000);
+        };
+        NgCastComponent.prototype.getMuted = function () {
+            return this.media && this.media.nativeElement && this.media.nativeElement.muted || false;
+        };
+        NgCastComponent.prototype.getMaximized = function () {
+            return this.api && this.api.fsAPI && this.api.fsAPI.isFullscreen && this.api.fsAPI.isFullscreen || false;
+        };
+        NgCastComponent.prototype.toggleSound = function () {
+            this.media.nativeElement.muted = !this.media.nativeElement.muted;
+        };
+        NgCastComponent.prototype.toggleMaximize = function () {
+            this.api.fsAPI.toggleFullscreen(this.media);
+        };
+        NgCastComponent.prototype.showVideoControls = function () {
+            this.isHidden = false;
+            this.isShow = true;
+        };
+        NgCastComponent.prototype.hideVideoControls = function () {
+            this.isHidden = true;
+            this.isShow = false;
+        };
+        return NgCastComponent;
+    }());
+    NgCastComponent.decorators = [
+        { type: core.Component, args: [{
+                    selector: 'ng-cast',
+                    template: "<div *ngIf=\"!imageOffline && !premium\">\n  <div\n      id=\"video-container\">\n      <vg-player\n          *ngIf=\"!imageOffline\"\n          [style.height.px]=\"815\"\n          (onPlayerReady)=\"onPlayerReady($event)\"\n          (mousemove)=\"showVideoControls()\"\n          (mouseleave)=\"hideVideoControls()\"\n          (mousestop)=\"hideVideoControls()\">\n          <vg-overlay-play></vg-overlay-play>\n          <video muted autoplay #media [vgMedia]=\"media\" [vgDash]=\"video.url\" crossorigin id=\"myVideo\">\n          </video>\n          <div\n              *ngIf=\"!imageOffline\"\n              class=\"video-controls\"\n              [ngClass]=\"{\n                  'hidden': isHidden,\n                  'show': isShow\n              }\"\n              id=\"video-controls\">\n              <div class=\"video-progress\">\n                  <progress id=\"progress-bar\" value=\"100\" min=\"0\"></progress>\n                  <input class=\"seek\" id=\"seek\" value=\"99.5\" min=\"0\" type=\"range\" step=\"1\">\n                  <div class=\"seek-tooltip\" id=\"seek-tooltip\">AGORA</div>\n              </div>\n              <div class=\"buttons\">\n                  <button *ngIf=\"!getPaused()\" type=\"button\" class=\"video-control video-control-paused\" (click)=\"pause()\">\n                      <i class=\"pi pi-pause\"></i>\n                  </button>\n                  <button *ngIf=\"getPaused()\" type=\"button\" class=\"video-control video-control-paused\" (click)=\"tryAgain()\">\n                      <i class=\"pi pi-caret-right\"></i>\n                  </button>\n                  <button type=\"button\" class=\"video-control video-control-muted\" (click)=\"toggleSound()\">\n                      <i *ngIf=\"getMuted()\" class=\"pi pi-volume-off\"></i>\n                      <i *ngIf=\"!getMuted()\" class=\"pi pi-volume-up\"></i>\n                  </button>\n                  <button type=\"button\" class=\"video-control video-control-maximized\" (click)=\"toggleMaximize()\">\n                      <i *ngIf=\"getMaximized()\" class=\"pi pi-window-minimize\"></i>\n                      <i *ngIf=\"!getMaximized()\" class=\"pi pi-window-maximize\"></i>\n                  </button>\n              </div>\n          </div>\n      </vg-player>\n      <img width=\"100%\" *ngIf=\"imageOffline\" [src]=\"appBaseUrl + '/assets/common/images/tv-offline.jpg'\"\n      alt=\"TV Offline\" />\n  </div>\n</div>\n\n<div *ngIf=\"!imageOffline && premium\" id=\"main_video\">\n  <div class=\"imageSub\"> <!-- Put Your Image Width -->\n     <div class=\"blackbg\" id=\"playerstatebg\">IDLE</div>\n     <div class=label id=\"playerstate\">IDLE</div>\n     <img [src]=\"videoImage\" id=\"video_image\">\n     <div id=\"video_image_overlay\"></div>\n     <video id=\"video_element\">\n     </video>\n  </div>\n\n  <div id=\"media_control\">\n     <div id=\"play\"></div>\n     <div id=\"pause\"></div>\n     <div id=\"progress_bg\"></div>\n     <div id=\"progress\"></div>\n     <div id=\"progress_indicator\"></div>\n     <div id=\"fullscreen_expand\"></div>\n     <div id=\"fullscreen_collapse\"></div>\n     <google-cast-launcher id=\"castbutton\"></google-cast-launcher>\n     <div id=\"audio_bg\"></div>\n     <div id=\"audio_bg_track\"></div>\n     <div id=\"audio_indicator\"></div>\n     <div id=\"audio_bg_level\"></div>\n     <div id=\"audio_on\"></div>\n     <div id=\"audio_off\"></div>\n     <div id=\"duration\">00:00:00</div>\n  </div>\n</div>\n<div *ngIf=\"!imageOffline\" id=\"media_info\">\n  <div id=\"media_title\">\n  </div>\n  <div id=\"media_subtitle\">\n  </div>\n  <div id=\"media_desc\">\n  </div>\n</div>\n\n<div *ngIf=\"!imageOffline\" id=\"carousel\">\n</div>\n\n<img \n  width=\"100%\" \n  *ngIf=\"imageOffline\" \n  [src]=\"srcImageOffline\"\n  alt=\"TV Offline\"\n/>\n",
+                    styles: ["#video-container{background-color:#272c34;margin:0 auto;z-index:-1}#video-container vg-scrub-bar-current-time .background{background-color:red}#video-container .hidden{display:none}#video-container .show{display:block}#video-container .video-controls{background:rgba(0,0,0,.5);bottom:0;height:45px;left:0;position:absolute;right:0;transition:all .2s ease}#video-container .video-controls.hide{opacity:0;pointer-events:none}#video-container .video-progress{align-items:right;height:8.4px;position:relative}#video-container .video-progress #seek-tooltip{position:absolute}@media screen and (-webkit-min-device-pixel-ratio:0){#video-container .video-progress input[type=range]{-webkit-appearance:none;background-color:var(--youtube-red);overflow:hidden}#video-container .video-progress input[type=range]::-webkit-slider-runnable-track{-webkit-appearance:none;color:var(--youtube-red);height:10px;margin-top:-1px}#video-container .video-progress input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;background:var(--youtube-red);cursor:ew-resize;height:10px;width:10px}}#video-container .video-progress input[type=range]{background-color:var(--youtube-red)}#video-container .video-progress input[type=range]::-moz-range-progress,#video-container .video-progress input[type=range]::-moz-range-track{background-color:var(--youtube-red)}#video-container .video-progress input[type=range]::-ms-fill-lower,#video-container .video-progress input[type=range]::-ms-fill-upper{background-color:var(--youtube-red)}#video-container progress{-moz-appearance:none;-webkit-appearance:none;appearance:none;border-radius:2px;height:.5vh;pointer-events:none;position:absolute;top:0;width:100%}#video-container .buttons .video-control{align-items:center;background:none;border:2px solid #fff;border-radius:16px;color:#fff;display:flex;height:32px;justify-content:center;width:32px}#video-container .buttons .video-control i{color:#fff;line-height:16px}#video-container .buttons .video-control-paused{bottom:8px;left:1vw;position:absolute;z-index:1000}#video-container .buttons .video-control-muted{bottom:8px;position:absolute;right:5vw;z-index:1000}#video-container .buttons .video-control-maximized{bottom:8px;position:absolute;right:1vw;z-index:1000}#video-container progress::-webkit-progress-bar{background-color:var(--youtube-red);border-radius:2px}#video-container progress::-webkit-progress-value{background:#fff;border-radius:2px}#video-container progress::-moz-progress-bar{background:#fff;border:1px solid #fff}#video-container .seek{cursor:pointer;height:.5vh;margin:0;position:absolute;top:0;width:100%}#video-container .seek-tooltip{background-color:var(--youtube-red);color:#fff;content:attr(data-title);display:block;font-size:12px;font-weight:700;margin-left:5vw;padding:3px;position:absolute;top:10px}.playlist-item li{color:#fff}.kt-content.kt-grid__item.kt-grid__item--fluid.kt-grid.kt-grid--hor{background-color:#272c34}#kt_header_menu_wrapper{display:none}.kt-header__bottom{display:none!important}.player-wrapper{margin:auto;max-width:500px}.player-wrapper video{width:100%}ul{padding:0}ul li.playlist-item{background:#673ab7;cursor:pointer;list-style:none;margin-bottom:2px;padding:10px}ul li.playlist-item.selected{background-color:#ccc}body{background-color:#f2f2f2;font-family:Roboto,OpenSans,Verdana,Georgia,Serif}#msg{-webkit-transition:opacity 0 2s;color:#fff;display:none;font-size:90%;font-weight:400;margin-left:200px;transition:opacity 0 2s}#top_header_bar{background-image:url(/assets/imagefiles/header_bg-top.png);background-repeat:repeat-x;height:10px;margin:0;width:100%}#top_header{background-image:url(/assets/imagefiles/header_bg.png);height:71px;z-index:1000}#footer,#top_header{background-repeat:repeat-x;float:left;margin:0;width:100%}#footer{background-image:url(/assets/imagefiles/footer_bg.png);height:81px}#copyright{width:300px}#copyright,#footer_content{color:#fff;float:left;font-size:13px;margin:10px}#footer_content{width:400px}#footer_content_link{color:#fff}#footer_language{color:#fff;float:right;font-size:13px;margin:10px;width:200px}#logo{background-image:url(/assets/imagefiles/logo.png);float:left;height:71px;margin:10px 25px 0;width:201px}.header_tab{-moz-transition:all .6s ease-in-out;-o-transition:all .6s ease-in-out;-webkit-transition:all .6s ease-in-out;float:left;font-family:Roboto,OpenSans;font-size:20px;font-weight:700;height:31px;margin-top:10px;padding:20px}#title_text{text-align:center;width:100%}#main_video{float:left;width:100%}#video_image{height:536px;margin-bottom:0;margin-right:auto;margin-top:20px;width:100%}#video_image_overlay{background:linear-gradient(0deg,rgba(0,0,0,.9),transparent 72%,transparent);margin-right:0;margin-top:0;position:absolute;z-index:0}#video_element,#video_image_overlay{display:none;height:540px;margin-bottom:0;width:100%}#video_element{background-color:#000;margin-right:auto;margin-top:20px}#media_info{background-color:#dde0e5;clear:both;color:#000;display:block;float:left;height:116px;margin-top:10px;opacity:.9;padding:10px;width:100%}#media_title{font-size:30px;font-weight:700;margin:0 10px 0 0}#media_subtitle,#media_title{float:left;font-family:Roboto,Open Sans,Verdana,Georgia,Serif;padding:0}#media_subtitle{font-size:18px;margin:13px 0 0 30px}#media_desc{float:left;font-size:12px;margin:5px}#media_control,#media_desc{font-family:Roboto,Open Sans,Verdana,Georgia,Serif;width:100%}#media_control{-webkit-transition:opacity 1s;background-color:#000;height:60px;opacity:.7;padding:0;position:absolute;top:595px;transition:opacity 1s;z-index:1000}#media_control:hover{opacity:.7}#play{background-image:url(/assets/imagefiles/play.png);float:left;height:40px;margin:10px 20px 10px 10px;width:65px}#play:hover{background-image:url(/assets/imagefiles/play-hover.png)}#play:press{background-image:url(/assets/imagefiles/play-press.png)}#pause{background-image:url(/assets/imagefiles/pause.png);display:none;float:left;height:40px;margin:10px 20px 10px 10px;width:65px}#pause:hover{background-image:url(/assets/imagefiles/pause-hover.png)}.button{font-family:Roboto,Open Sans,Verdana,Georgia,Serif;font-size:100%;margin:5px}.volume{margin-left:8px;width:60px}#muteText{margin-left:3px;width:30px}.muteButton{font-family:Roboto,Open Sans,Verdana,Georgia,Serif;font-size:110%}.imageIcon{padding:3px 0 0;width:25px}#progress{background-image:url(/assets/imagefiles/timeline_bg_progress.png);width:1px;z-index:10}#progress,#progress_indicator{background-repeat:repeat-x;cursor:pointer;float:left;height:36px;margin:20px 0 10px -620px}#progress_indicator{background-image:url(/assets/imagefiles/timeline_indicator.png);width:6px;z-index:1000}#progress_bg{background-image:url(/assets/imagefiles/timeline_bg_track.png);background-repeat:repeat-x;cursor:pointer;float:left;height:36px;margin:20px 20px 10px 0;width:600px}#castbutton{background-color:#000;border:none;float:right;height:32px;margin:10px 6px 14px 0;opacity:.7;outline:none;width:40px}#castbutton:hover{--connected-color:#fff;--disconnected-color:#fff}#audio_off{background-image:url(/assets/imagefiles/audio_off.png);display:none}#audio_off,#audio_on{float:right;height:32px;margin:10px 4px 10px 0;width:32px}#audio_on{background-image:url(/assets/imagefiles/audio_on.png);display:block}#audio_bg{background-image:url(/assets/imagefiles/audio_bg.png);height:124px;margin:-115px 8px -10px 0;opacity:.1;width:41px;z-index:10}#audio_bg,#audio_bg_track{display:block;float:right;position:relative}#audio_bg_track{background-image:url(/assets/imagefiles/audio_bg_track.png);height:100px;margin:-100px 20px -30px 0;opacity:0;width:16px;z-index:1000}#audio_indicator{background-image:url(/assets/imagefiles/audio_indicator.png);display:none;height:5px}#audio_bg_level,#audio_indicator{float:right;margin:-50px 20px -30px 0;opacity:0;position:relative;width:16px;z-index:1000}#audio_bg_level{background-image:url(/assets/imagefiles/audio_bg_level.png);display:block;height:50px}#fullscreen_expand{background-image:url(/assets/imagefiles/fullscreen_expand.png);display:block}#fullscreen_collapse,#fullscreen_expand{cursor:pointer;float:right;height:32px;margin:10px 20px 10px 0;width:32px}#fullscreen_collapse{background-image:url(/assets/imagefiles/fullscreen_collapse.png);display:none}#duration{color:#fff;display:block;float:right;height:32px;margin:18px 15px 10px;width:60px}div.imageSub{position:relative}div.imageSub img{z-index:1}div.imageSub div{bottom:0;left:0;padding:0;position:absolute;right:0}div.imageSub div.blackbg{-ms-filter:\"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)\";background-color:#000;color:#000;filter:alpha(opacity=50);opacity:.5;z-index:2000}div.imageSub div.blackbg,div.imageSub div.label{bottom:60px;display:none;font-size:120%;height:30px;left:300px;padding:10px;width:400px}div.imageSub div.label{color:#fff;z-index:3000}#carousel{margin:20px 10px 10px 40px;width:990px}.thumb{cursor:pointer;float:left;margin:10px 10px 10px 0}.thumbnail{height:127px;margin-right:10px;width:225px}.vertical{-webkit-transform:rotate(90deg)}"]
+                },] }
+    ];
+    NgCastComponent.ctorParameters = function () { return [
+        { type: NgCastService }
+    ]; };
+    NgCastComponent.propDecorators = {
+        vgDash: [{ type: core.ViewChild, args: [vgDash.VgDASH, { static: false },] }],
+        media: [{ type: core.ViewChild, args: ['media', { static: false },] }],
+        videoImage: [{ type: core.Input }],
+        imageOffline: [{ type: core.Input }],
+        premium: [{ type: core.Input }],
+        srcImageOffline: [{ type: core.Input }],
+        currentStream: [{ type: core.Input }],
+        isDebug: [{ type: core.Input }],
+        paused: [{ type: core.Input }],
+        streams: [{ type: core.Input }],
+        playlist: [{ type: core.Input }],
+        play: [{ type: core.Input }],
+        isHidden: [{ type: core.Input }],
+        isShow: [{ type: core.Input }],
+        currentIndex: [{ type: core.Input }],
+        video: [{ type: core.Input }],
+        appBaseUrl: [{ type: core.Input }]
+    };
+
+    var NgCastModule = /** @class */ (function () {
         function NgCastModule() {
         }
         return NgCastModule;
     }());
-    exports.NgCastModule = __decorate([
-        core.NgModule({
-            schemas: [core.CUSTOM_ELEMENTS_SCHEMA],
-            imports: [
-                common.CommonModule
-            ],
-            exports: [exports.ɵa],
-            providers: [exports.NgCastService],
-            declarations: [exports.ɵa]
-        })
-    ], exports.NgCastModule);
+    NgCastModule.decorators = [
+        { type: core.NgModule, args: [{
+                    schemas: [core.CUSTOM_ELEMENTS_SCHEMA],
+                    imports: [
+                        common.CommonModule,
+                        core$1.VgCoreModule,
+                        controls.VgControlsModule,
+                        streaming.VgStreamingModule,
+                        buffering.VgBufferingModule,
+                        overlayPlay.VgOverlayPlayModule,
+                    ],
+                    exports: [NgCastComponent],
+                    providers: [NgCastService],
+                    declarations: [NgCastComponent]
+                },] }
+    ];
 
     "use strict";
     /** @const {string} Media source root URL */
@@ -1502,6 +1396,10 @@
     /**
      * Generated bundle index. Do not edit.
      */
+
+    exports.NgCastModule = NgCastModule;
+    exports.NgCastService = NgCastService;
+    exports.ɵa = NgCastComponent;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

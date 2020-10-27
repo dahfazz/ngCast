@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/ng-packagr/package.schema.json",
   "name": "@thinkam.net/ng-cast",
-  "version": "0.3.7",
+  "version": "0.4.2",
   "description": "Broadcast media on your TV from your Angular app",
   "main": "bundles/thinkam.net-ng-cast.umd.js",
   "repository": {
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/ThinkAM/ngCast#readme",
   "dependencies": {
-    "tslib": "^1.9.0"
+    "tslib": "^2.0.0"
   },
   "module": "fesm2015/thinkam.net-ng-cast.js",
   "es2015": "fesm2015/thinkam.net-ng-cast.js",

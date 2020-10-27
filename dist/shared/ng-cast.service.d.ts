@@ -13,7 +13,7 @@ export declare class NgCastService {
     initializeCastApi(): void;
     onInitSuccess: () => void;
     onError: (err: any) => void;
-    discoverDevices: () => Subject<{}>;
+    discoverDevices: () => Subject<unknown>;
     onMediaDiscovered: (categories: any[]) => any;
     initialize(mediaContents: any): void;
     play: () => void;
