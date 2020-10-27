@@ -9,7 +9,7 @@
           (mouseleave)="hideVideoControls()"
           (mousestop)="hideVideoControls()">
           <vg-overlay-play></vg-overlay-play>
-          <video muted autoplay #media [vgMedia]="media" [vgDash]="video.url" crossorigin id="myVideo">
+          <video muted autoplay #media [vgMedia]="media" [vgDash]="video.url" crossorigin id="video_element">
           </video>
           <div
               *ngIf="!imageOffline"
@@ -25,10 +25,10 @@
                   <div class="seek-tooltip" id="seek-tooltip">AGORA</div>
               </div>
               <div class="buttons">
-                  <button *ngIf="!getPaused()" type="button" class="video-control video-control-paused" (click)="pause()">
+                  <button *ngIf="!paused" type="button" class="video-control video-control-paused" (click)="pause()">
                       <i class="pi pi-pause"></i>
                   </button>
-                  <button *ngIf="getPaused()" type="button" class="video-control video-control-paused" (click)="tryAgain()">
+                  <button *ngIf="paused" type="button" class="video-control video-control-paused" (click)="tryAgain()">
                       <i class="pi pi-caret-right"></i>
                   </button>
                   <button type="button" class="video-control video-control-muted" (click)="toggleSound()">

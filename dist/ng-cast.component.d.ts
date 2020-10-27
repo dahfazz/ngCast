@@ -1,4 +1,4 @@
-import { OnInit, ElementRef } from '@angular/core';
+import { OnInit, ElementRef, AfterViewChecked } from '@angular/core';
 import { NgCastService } from './shared/ng-cast.service';
 import { VgDASH } from 'videogular2/compiled/src/streaming/vg-dash/vg-dash';
 import { IDRMLicenseServer } from 'videogular2/compiled/src/streaming/streaming';
@@ -11,7 +11,7 @@ export interface IMediaStream {
     token?: string;
     licenseServers?: IDRMLicenseServer;
 }
-export declare class NgCastComponent implements OnInit {
+export declare class NgCastComponent implements OnInit, AfterViewChecked {
     private ngCastService;
     vgDash: VgDASH;
     media: ElementRef<HTMLVideoElement>;
@@ -35,6 +35,7 @@ export declare class NgCastComponent implements OnInit {
     appBaseUrl: String;
     constructor(ngCastService: NgCastService);
     ngOnInit(): void;
+    ngAfterViewChecked(): void;
     onPlayerReady(api: VgAPI): void;
     setBitrate(option: BitrateOption): void;
     nextVideo(): void;

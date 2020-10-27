@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 
 import { NgCastService } from './shared/ng-cast.service';
 
@@ -23,7 +23,7 @@ export interface IMediaStream {
     './ng-cast.component.scss'
   ]
 })
-export class NgCastComponent implements OnInit {
+export class NgCastComponent implements OnInit, AfterViewChecked {
   @ViewChild(VgDASH, { static: false }) vgDash!: VgDASH;
   @ViewChild('media', { static: false }) media!: ElementRef<HTMLVideoElement>;
 
@@ -45,7 +45,7 @@ export class NgCastComponent implements OnInit {
 
   @Input() isDebug = false;
 
-  @Input() paused = false;
+  @Input() paused!: boolean;
 
   @Input() streams: IMediaStream[] = [
     {
@@ -81,6 +81,12 @@ export class NgCastComponent implements OnInit {
     };
 
     this.castingStatus = this.ngCastService.getStatus();
+  }
+
+  ngAfterViewChecked() { 
+    setInterval(() => {
+      this.getPaused();
+    }, 500);
   }
 
   onPlayerReady(api: VgAPI) {
