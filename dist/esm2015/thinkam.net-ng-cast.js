@@ -1,6 +1,0 @@
-/**
- * Generated bundle index. Do not edit.
- */
-export * from './index';
-export { NgCastComponent as ɵa } from './ng-cast.component';
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGhpbmthbS5uZXQtbmctY2FzdC5qcyIsInNvdXJjZVJvb3QiOiIvaG9tZS90aGlua2VyL2Rldi90aGlua2FtL25nQ2FzdC8iLCJzb3VyY2VzIjpbInRoaW5rYW0ubmV0LW5nLWNhc3QudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7O0dBRUc7QUFFSCxjQUFjLFNBQVMsQ0FBQztBQUV4QixPQUFPLEVBQUMsZUFBZSxJQUFJLEVBQUUsRUFBQyxNQUFNLHFCQUFxQixDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBHZW5lcmF0ZWQgYnVuZGxlIGluZGV4LiBEbyBub3QgZWRpdC5cbiAqL1xuXG5leHBvcnQgKiBmcm9tICcuL2luZGV4JztcblxuZXhwb3J0IHtOZ0Nhc3RDb21wb25lbnQgYXMgybVhfSBmcm9tICcuL25nLWNhc3QuY29tcG9uZW50JzsiXX0=

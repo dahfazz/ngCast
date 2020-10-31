@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/ng-packagr/package.schema.json",
-  "name": "@thinkam.net/ng-cast",
+  "name": "ng-cast",
   "version": "0.4.17",
   "ngPackage": {
     "lib": {
