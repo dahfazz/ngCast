@@ -1,5 +1,5 @@
 
-#video-container {
+#main_video {
   background-color: #272C34;
   margin: 0 auto;
   z-index: -1;
@@ -25,7 +25,7 @@
       bottom: 0;
       transition: all 0.2s ease;
       background: rgba(0, 0, 0, 0.5);
-      height: 45px;
+      height: 50px;
   }
 
   .video-controls.hide {
@@ -388,7 +388,7 @@ body {
 
 #media_control {
   position: absolute;
-  top: 595px;
+  margin-bottom: 8px;
   width: 100%;
   height: 60px;
   z-index: 1000;
@@ -460,26 +460,28 @@ body {
   width: 25px;
 }
 
+#media_desc {
+  pointer-events: none;
+}
+
 #progress {
   margin: 20px 0px 10px -620px;
   cursor: pointer;
   float: left;
   width: 1px;
-  height: 36px;
+  height: 10px;
   z-index: 10;
-  background-image: url('/assets/imagefiles/timeline_bg_progress.png');
-  background-repeat: repeat-x;
+  background-color: #27e7b9;
 }
 
 #progress_indicator {
   cursor: pointer;
-  margin: 20px 0px 10px -620px;
+  margin: 16px 0px 10px -620px;
   float: left;
   width: 6px;
-  height: 36px;
+  height: 18px;
   z-index: 1000;
-  background-image: url('/assets/imagefiles/timeline_indicator.png');
-  background-repeat: repeat-x;
+  background-color: var(--youtube-red);
 }
 
 #progress_bg {
@@ -487,20 +489,22 @@ body {
   cursor: pointer;
   float: left;
   width: 600px;
-  height: 36px;
-  background-image: url('/assets/imagefiles/timeline_bg_track.png');
+  background-color: white;
+  height: 10px;
   background-repeat: repeat-x;
 }
 
 #castbutton {
   float: right;
-  margin: 10px 6px 14px 0px;
+  margin: 15px 6px 14px 0px;
   width: 40px;
   height: 32px;
   opacity: 0.7;
   background-color: #000;
   border: none;
   outline: none;
+  position: absolute;
+  right: 110px;
 }
 
 #castbutton:hover {
@@ -510,18 +514,22 @@ body {
 
 #audio_off {
   float: right;
-  margin:10px 4px 10px 0px;
+  margin:15px 4px 10px 0px;
   width: 32px;
   height: 32px;
   display: none;
   background-image: url('/assets/imagefiles/audio_off.png');
+  position: absolute;
+  right: 60px;
 }
 
 #audio_on {
+  position: absolute;
+  right: 60px;
   float: right;
   width: 32px;
   height: 32px;
-  margin: 10px 4px 10px 0px;
+  margin: 15px 4px 10px 0px;
   display: block;
   background-image: url('/assets/imagefiles/audio_on.png');
 }
@@ -534,7 +542,8 @@ body {
   margin: -115px 8px -10px 0px;
   display: block;
   background-image: url('/assets/imagefiles/audio_bg.png');
-  position: relative;
+  position: absolute;
+  right: 60px;
   z-index: 10;
 }
 
@@ -546,7 +555,8 @@ body {
   margin: -100px 20px -30px 0px;
   display: block;
   background-image: url('/assets/imagefiles/audio_bg_track.png');
-  position: relative;
+  position: absolute;
+  right: 60px;
   z-index: 1000;
 }
 
@@ -558,7 +568,8 @@ body {
   margin:-50px 20px -30px 0px;
   display: none;
   background-image: url('/assets/imagefiles/audio_indicator.png');
-  position: relative;
+  position: absolute;
+  right: 60px;
   z-index: 1000;
 }
 
@@ -570,7 +581,8 @@ body {
   margin: -50px 20px -30px 0px;
   display: block;
   background-image: url('/assets/imagefiles/audio_bg_level.png');
-  position: relative;
+  position: absolute;
+  right: 60px;
   z-index: 1000;
 }
 

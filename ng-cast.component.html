@@ -1,95 +1,90 @@
 <div *ngIf="!imageOffline && !premium">
-  <div
-      id="video-container">
-      <vg-player
-          *ngIf="!imageOffline"
-          [style.height.px]="815"
-          (onPlayerReady)="onPlayerReady($event)"
-          (mousemove)="showVideoControls()"
-          (mouseleave)="hideVideoControls()"
-          (mousestop)="hideVideoControls()">
-          <vg-overlay-play></vg-overlay-play>
-          <video muted autoplay #media [vgMedia]="media" [vgDash]="video.url" crossorigin id="video_element">
-          </video>
-          <div
-              *ngIf="!imageOffline"
-              class="video-controls"
-              [ngClass]="{
+    <div id="main_video">
+        <vg-player *ngIf="!imageOffline" [style.height.px]="815" (onPlayerReady)="onPlayerReady($event)"
+            (mousemove)="showVideoControls()" (mouseleave)="hideVideoControls()" (mousestop)="hideVideoControls()">
+            <vg-overlay-play></vg-overlay-play>
+            <video muted autoplay #media [vgMedia]="media" [vgDash]="video.url" crossorigin id="video_element">
+            </video>
+            <div id="media_control" class="video-controls">
+                <google-cast-launcher id="castbutton"></google-cast-launcher>
+                <div id="audio_bg"></div>
+                <div id="audio_bg_track"></div>
+                <div id="audio_indicator"></div>
+                <div id="audio_bg_level"></div>
+                <div id="audio_on"></div>
+                <div id="audio_off"></div>
+            </div>
+            <div *ngIf="!imageOffline" class="video-controls" [ngClass]="{
                   'hidden': isHidden,
                   'show': isShow
-              }"
-              id="video-controls">
-              <div class="video-progress">
-                  <progress id="progress-bar" value="100" min="0"></progress>
-                  <input class="seek" id="seek" value="99.5" min="0" type="range" step="1">
-                  <div class="seek-tooltip" id="seek-tooltip">AGORA</div>
-              </div>
-              <div class="buttons">
-                  <button *ngIf="!paused" type="button" class="video-control video-control-paused" (click)="pause()">
-                      <i class="pi pi-pause"></i>
-                  </button>
-                  <button *ngIf="paused" type="button" class="video-control video-control-paused" (click)="tryAgain()">
-                      <i class="pi pi-caret-right"></i>
-                  </button>
-                  <button type="button" class="video-control video-control-muted" (click)="toggleSound()">
-                      <i *ngIf="getMuted()" class="pi pi-volume-off"></i>
-                      <i *ngIf="!getMuted()" class="pi pi-volume-up"></i>
-                  </button>
-                  <button type="button" class="video-control video-control-maximized" (click)="toggleMaximize()">
-                      <i *ngIf="getMaximized()" class="pi pi-window-minimize"></i>
-                      <i *ngIf="!getMaximized()" class="pi pi-window-maximize"></i>
-                  </button>
-              </div>
-          </div>
-      </vg-player>
-      <img width="100%" *ngIf="imageOffline" [src]="appBaseUrl + '/assets/common/images/tv-offline.jpg'"
-      alt="TV Offline" />
-  </div>
+              }" id="video-controls">
+                <div class="video-progress">
+                    <progress id="progress-bar" value="100" min="0"></progress>
+                    <input class="seek" id="seek" value="99.5" min="0" type="range" step="1">
+                    <div class="seek-tooltip" id="seek-tooltip">AGORA</div>
+                </div>
+                <div class="buttons">
+                    <button *ngIf="!paused" type="button" class="video-control video-control-paused" (click)="pause()">
+                        <i class="pi pi-pause"></i>
+                    </button>
+                    <button *ngIf="paused" type="button" class="video-control video-control-paused" (click)="tryAgain()">
+                        <i class="pi pi-caret-right"></i>
+                    </button>
+                    <button type="button" class="video-control video-control-maximized" (click)="toggleMaximize()">
+                        <i *ngIf="getMaximized()" class="pi pi-window-minimize"></i>
+                        <i *ngIf="!getMaximized()" class="pi pi-window-maximize"></i>
+                    </button>
+                </div>
+            </div>
+        </vg-player>
+        <img width="100%" *ngIf="imageOffline" [src]="appBaseUrl + '/assets/common/images/tv-offline.jpg'"
+            alt="TV Offline" />
+    </div>
 </div>
 
 <div *ngIf="!imageOffline && premium" id="main_video">
-  <div class="imageSub"> <!-- Put Your Image Width -->
-     <div class="blackbg" id="playerstatebg">IDLE</div>
-     <div class=label id="playerstate">IDLE</div>
-     <img [src]="videoImage" id="video_image">
-     <div id="video_image_overlay"></div>
-     <video id="video_element">
-     </video>
-  </div>
+    <div class="imageSub">
+        <!-- Put Your Image Width -->
+        <div class="blackbg" id="playerstatebg">IDLE</div>
+        <div class=label id="playerstate">IDLE</div>
+        <img [src]="videoImage" id="video_image">
+        <div id="video_image_overlay"></div>
+        <video id="video_element">
+        </video>
+    </div>
 
-  <div id="media_control">
-     <div id="play"></div>
-     <div id="pause"></div>
-     <div id="progress_bg"></div>
-     <div id="progress"></div>
-     <div id="progress_indicator"></div>
-     <div id="fullscreen_expand"></div>
-     <div id="fullscreen_collapse"></div>
-     <google-cast-launcher id="castbutton"></google-cast-launcher>
-     <div id="audio_bg"></div>
-     <div id="audio_bg_track"></div>
-     <div id="audio_indicator"></div>
-     <div id="audio_bg_level"></div>
-     <div id="audio_on"></div>
-     <div id="audio_off"></div>
-     <div id="duration">00:00:00</div>
-  </div>
+    <div id="media_control">
+        <div id="play"></div>
+        <div id="pause"></div>
+        <div id="progress_bg"></div>
+        <div id="progress"></div>
+        <div id="progress_indicator"></div>
+        <div id="fullscreen_expand"></div>
+        <div id="fullscreen_collapse"></div>
+        <google-cast-launcher id="castbutton"></google-cast-launcher>
+        <div id="audio_bg"></div>
+        <div id="audio_bg_track"></div>
+        <div id="audio_indicator"></div>
+        <div id="audio_bg_level"></div>
+        <div id="audio_on"></div>
+        <div id="audio_off"></div>
+        <div id="duration">00:00:00</div>
+    </div>
 </div>
 <div *ngIf="!imageOffline" id="media_info">
-  <div id="media_title">
-  </div>
-  <div id="media_subtitle">
-  </div>
-  <div id="media_desc">
-  </div>
+    <div id="media_title">
+    </div>
+    <div id="media_subtitle">
+    </div>
+    <div id="media_desc">
+        <div id="duration">00:00:00</div>
+        <div id="progress_bg"></div>
+        <div id="progress"></div>
+        <div id="progress_indicator"></div>
+    </div>
 </div>
 
 <div *ngIf="!imageOffline" id="carousel">
 </div>
 
-<img 
-  width="100%" 
-  *ngIf="imageOffline" 
-  [src]="srcImageOffline"
-  alt="TV Offline"
-/>
+<img width="100%" *ngIf="imageOffline" [src]="srcImageOffline" alt="TV Offline" />

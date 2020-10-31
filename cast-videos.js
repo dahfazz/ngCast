@@ -202,8 +202,15 @@ var PlayerHandler = function (castPlayer) {
 
     this.target.play();
     castPlayer.playerState = PLAYER_STATE.PLAYING;
-    document.getElementById('play').style.display = 'none';
-    document.getElementById('pause').style.display = 'block';
+    
+    let play = document.getElementById('play');
+    if (play && play.style && play.style.display)
+      play.style.display = 'none';
+
+    let pause = document.getElementById('pause');
+    if (pause && pause.style && pause.style.display)
+      pause.style.display = 'block';
+      
     this.updateDisplayMessage();
   };
 
@@ -334,8 +341,6 @@ CastPlayer.prototype.setupLocalPlayer = () => {
   playerTarget.play = () => {
     localPlayer.play();
 
-    var vi = document.getElementById('video_image');
-    vi.style.display = 'none';
     localPlayer.style.display = 'block';
   };
 
@@ -1120,8 +1125,8 @@ CastPlayer.prototype.initializeUI = () => {
     castPlayer.mediaContents[0]['title'];
   document.getElementById('media_subtitle').innerHTML =
     castPlayer.mediaContents[castPlayer.currentMediaIndex]['subtitle'];
-  document.getElementById('media_desc').innerHTML =
-    castPlayer.mediaContents[castPlayer.currentMediaIndex]['description'];
+  // document.getElementById('media_desc').innerHTML =
+  //   castPlayer.mediaContents[castPlayer.currentMediaIndex]['description'];
 
   // Add event handlers to UI components
   document.getElementById('progress_bg').addEventListener(
@@ -1158,20 +1163,28 @@ CastPlayer.prototype.initializeUI = () => {
     'mouseover', castPlayer.showMediaControl.bind(castPlayer));
   document.getElementById('media_control').addEventListener(
     'mouseout', castPlayer.hideMediaControl.bind(castPlayer));
-  document.getElementById('fullscreen_expand').addEventListener(
+  
+  const fullscreen_expand = document.getElementById('fullscreen_expand');
+  if (fullscreen_expand){
+    fullscreen_expand.addEventListener(
     'click', castPlayer.requestFullScreen.bind(castPlayer));
-  document.getElementById('fullscreen_collapse').addEventListener(
-    'click', castPlayer.cancelFullScreen.bind(castPlayer));
+  }
+
+  const fullscreen_collapse = document.getElementById('fullscreen_collapse');
+  if (fullscreen_collapse) {
+    fullscreen_collapse.addEventListener(
+      'click', castPlayer.cancelFullScreen.bind(castPlayer));
+  }
+
   document.addEventListener(
     'fullscreenchange', castPlayer.fullscreenChangeHandler.bind(castPlayer), false);
   document.addEventListener(
     'webkitfullscreenchange', castPlayer.fullscreenChangeHandler.bind(castPlayer), false);
-
   // Enable play/pause buttons
-  document.getElementById('play').addEventListener(
-    'click', castPlayer.playerHandler.play.bind(castPlayer.playerHandler));
-  document.getElementById('pause').addEventListener(
-    'click', castPlayer.playerHandler.pause.bind(castPlayer.playerHandler));
+  // document.getElementById('play').addEventListener(
+  //   'click', castPlayer.playerHandler.play.bind(castPlayer.playerHandler));
+  // document.getElementById('pause').addEventListener(
+  //   'click', castPlayer.playerHandler.pause.bind(castPlayer.playerHandler));
   document.getElementById('progress_indicator').draggable = true;
 };
 
